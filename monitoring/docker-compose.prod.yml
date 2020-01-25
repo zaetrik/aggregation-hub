@@ -1,0 +1,63 @@
+version: "3.3"
+
+networks:
+  internal:
+  elasticsearch_network:
+    external:
+      name: store_elasticsearch_external
+  public:
+    external:
+      name: traefik_webgateway
+
+services:
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:7.4.0
+    container_name: kibana
+    restart: always
+    environment:
+      - SERVER_NAME=kibana.aggregationhub.${SERVER_HOST}
+      - ELASTICSEARCH_HOSTS=http://elasticsearch_1:9200
+    labels:
+      - traefik.enable=true
+      - traefik.backend=kibana
+      - traefik.docker.network=traefik_webgateway
+      - traefik.frontend.rule=Host:kibana.aggregationhub.${SERVER_HOST}
+      - traefik.port=5601
+      - traefik.frontend.rateLimit.rateSet.test.period=10s
+      - traefik.frontend.rateLimit.rateSet.test.burst=150
+      - traefik.frontend.rateLimit.rateSet.test.average=100
+      - traefik.frontend.rateLimit.extractorFunc=client.ip
+    networks:
+      - internal
+      - elasticsearch_network
+      - public
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat-oss:7.4.0
+    container_name: metricbeat
+    restart: always
+    command: metricbeat -e -system.hostfs=/hostfs
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch_1:9200
+    volumes:
+      - /proc:/hostfs/proc:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /:/hostfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - internal
+      - elasticsearch_network
+  filebeat:
+    image: docker.elastic.co/beats/filebeat-oss:7.4.0
+    container_name: filebeat
+    restart: always
+    networks:
+      - internal
+      - elasticsearch_network
+    volumes:
+      - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ../traefik/logs:/var/log/traefik
+      - ../store/logs:/var/log/store
+      - ../modules-server/logs:/var/log/modules-server
+      - ../ui/logs:/var/log/ui
+      - ./filebeat-data:/usr/share/filebeat/data/
+      - /var/run/docker.sock:/var/run/docker.sock

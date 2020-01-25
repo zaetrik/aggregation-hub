@@ -1,0 +1,36 @@
+version: "3.3"
+
+networks:
+  internal:
+  external:
+  public:
+    external:
+      name: traefik_webgateway
+
+services:
+  typescript-express-module-example:
+    build:
+      context: .
+      args:
+        PORT: ${PORT}
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.backend=typescript-express-module-example
+      - traefik.docker.network=traefik_webgateway
+      - traefik.frontend.rule=Host:typescript-express-module-example.aggregationhub.${SERVER_HOST}
+      - traefik.port=${PORT}
+      - traefik.frontend.rateLimit.rateSet.test.period=10s
+      - traefik.frontend.rateLimit.rateSet.test.burst=150
+      - traefik.frontend.rateLimit.rateSet.test.average=100
+      - traefik.frontend.rateLimit.extractorFunc=client.ip
+    volumes:
+      - ./logs/:/home/dockeruser/app/logs/
+    networks:
+      - public
+      - external
+      - internal

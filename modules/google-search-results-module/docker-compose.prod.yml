@@ -1,0 +1,38 @@
+version: "3.3"
+
+networks:
+  internal:
+  external:
+  public:
+    external:
+      name: traefik_webgateway
+
+services:
+  google-search-results-module:
+    container_name: google-search-results-module
+    labels:
+      - traefik.enable=true
+      - traefik.backend=google-search-results-module
+      - traefik.docker.network=traefik_webgateway
+      - traefik.frontend.rule=Host:google-search-results-module.aggregationhub.${SERVER_HOST}
+      - traefik.port=${PORT}
+      - traefik.frontend.rateLimit.rateSet.test.period=10s
+      - traefik.frontend.rateLimit.rateSet.test.burst=150
+      - traefik.frontend.rateLimit.rateSet.test.average=100
+      - traefik.frontend.rateLimit.extractorFunc=client.ip
+    build:
+      context: .
+      args:
+        PORT: ${PORT}
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    restart: always
+    volumes:
+      - ./logs/:/home/dockeruser/app/logs/
+      - ./config.json:/home/dockeruser/app/config.json
+    networks:
+      - public
+      - external
+      - internal

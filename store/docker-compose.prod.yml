@@ -1,0 +1,108 @@
+version: "3.3"
+
+networks:
+  internal:
+  external:
+  elasticsearch_external:
+  public:
+    external:
+      name: traefik_webgateway
+
+services:
+  store:
+    container_name: store
+    build:
+      context: .
+      args:
+        PORT: ${PORT}
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.backend=store
+      - traefik.docker.network=traefik_webgateway
+      - traefik.frontend.rule=Host:store.aggregationhub.${SERVER_HOST}
+      - traefik.port=${PORT}
+      - traefik.frontend.rateLimit.rateSet.test.period=10s
+      - traefik.frontend.rateLimit.rateSet.test.burst=150
+      - traefik.frontend.rateLimit.rateSet.test.average=100
+      - traefik.frontend.rateLimit.extractorFunc=client.ip
+    volumes:
+      - ./logs/:/home/dockeruser/app/logs/
+    networks:
+      - public
+      - external
+      - internal
+
+  elasticsearch_1:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.4.0
+    container_name: elasticsearch_1
+    restart: always
+    environment:
+      - node.name=elasticsearch_1
+      - discovery.seed_hosts=elasticsearch_2,elasticsearch_3
+      - cluster.initial_master_nodes=elasticsearch_1
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearch-data_1:/usr/share/elasticsearch/data
+      - ./elasticsearch-logs_1:/var/log
+    networks:
+      - internal
+      - elasticsearch_external
+    ports:
+      - "9200:9200"
+    healthcheck:
+      test: ["CMD", "curl", "-s", "-f", "http://localhost:9200/_cat/health"]
+
+  elasticsearch_2:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.4.0
+    container_name: elasticsearch_2
+    restart: always
+    environment:
+      - node.name=elasticsearch_2
+      - discovery.seed_hosts=elasticsearch_1,elasticsearch_3
+      - cluster.initial_master_nodes=elasticsearch_1
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearch-data_2:/usr/share/elasticsearch/data
+      - ./elasticsearch-logs_2:/var/log
+    networks:
+      - internal
+      - elasticsearch_external
+
+  elasticsearch_3:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.4.0
+    container_name: elasticsearch_3
+    restart: always
+    environment:
+      - node.name=elasticsearch_3
+      - discovery.seed_hosts=elasticsearch_1,elasticsearch_2
+      - cluster.initial_master_nodes=elasticsearch_1
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearch-data_3:/usr/share/elasticsearch/data
+      - ./elasticsearch-logs_3:/var/log
+    networks:
+      - internal
+      - elasticsearch_external

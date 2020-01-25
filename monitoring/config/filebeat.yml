@@ -1,0 +1,35 @@
+filebeat.modules:
+  - module: system
+    syslog:
+      var.paths: ["/var/log/host/system.log*"] #This directory is not mounted in any docker-compose file
+  - module: traefik
+    access:
+      enabled: true
+      var.paths: ["/var/log/traefik/*"]
+filebeat.inputs:
+  - type: log
+    paths:
+      - /var/log/store/accessLogs.json
+      - /var/log/store/combined.log
+      - /var/log/store/error.log
+      - /var/log/modules-server/accessLogs.json
+      - /var/log/modules-server/combined.log
+      - /var/log/modules-server/error.log
+      - /var/log/ui/logs.json
+json.keys_under_root: true
+json.add_error_key: true
+json.message_key: log
+
+output.elasticsearch:
+  hosts: ["elasticsearch_1:9200"]
+
+logging.to_files: false
+
+setup:
+  kibana.host: "kibana:5601"
+  dashboards:
+    enabled: true
+    always_kibana: true #Only talk to Kibana, which is important for the retry
+    retry:
+      enabled: true #Retry in case Kibana is not up yet
+      interval: 10s

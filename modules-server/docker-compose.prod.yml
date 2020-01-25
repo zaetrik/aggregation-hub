@@ -1,0 +1,49 @@
+version: "3.3"
+
+networks:
+  internal:
+  external:
+  public:
+    external:
+      name: traefik_webgateway
+
+services:
+  modules-server:
+    container_name: modules-server
+    build:
+      context: .
+      args:
+        PORT: ${PORT}
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.backend=modules-server
+      - traefik.docker.network=traefik_webgateway
+      - traefik.frontend.rule=Host:modules.${SERVER_HOST}
+      - traefik.port=${PORT}
+      - traefik.frontend.rateLimit.rateSet.test.period=10s
+      - traefik.frontend.rateLimit.rateSet.test.burst=150
+      - traefik.frontend.rateLimit.rateSet.test.average=100
+      - traefik.frontend.rateLimit.extractorFunc=client.ip
+    volumes:
+      - ./logs/:/home/dockeruser/app/logs/
+    networks:
+      - public
+      - external
+      - internal
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - ./postgres-data/postgres:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - internal

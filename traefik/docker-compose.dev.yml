@@ -1,0 +1,27 @@
+# traefik/docker-compose.yml
+version: "3.2"
+
+networks:
+  webgateway:
+    driver: bridge
+
+services:
+  traefik:
+    image: traefik:1.7.20
+    ports:
+      - "443:443"
+      - "80:80"
+    networks:
+      - webgateway
+    env_file:
+      - .env
+    labels:
+      traefik.enable: "true"
+      traefik.port: "8080"
+      traefik.frontend.rule: "Host:dashboard.localhost"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+      - ./traefik.dev.toml:/traefik.toml
+      - ./certs/:/certs/
+      - ./logs/:/logs/
+    restart: "always"

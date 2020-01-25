@@ -1,0 +1,26 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  image: gitlab/dind:latest
+  only:
+    - "deploy" # CHANGE TO "master" if it should be deployed
+  environment: production
+  services:
+    - docker:dind
+
+  # YOU NEED TO SET THE SERVER IP ADDRESS VARIABLE & THE SSH SECRET KEY VARIABLE IN REPOSITORY
+  before_script:
+    - rm -rf node_modules/
+    - rm -rf logs/
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOY_SERVER_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/gitlab_id_rsa
+    - chmod 600 ~/.ssh/gitlab_id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/gitlab_id_rsa
+    - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
+    - ssh root@$DEPLOYMENT_SERVER_IP "mkdir -p directory-name"
+  script:
+    - scp -r ./dist ./.env ./package.json ./package-lock.json ./docker-compose.prod.yml ./Dockerfile root@${DEPLOYMENT_SERVER_IP}:~/directory-name/
+    - ssh root@$DEPLOYMENT_SERVER_IP "mkdir -p logs; chmod -R 0777 logs; chmod +t logs; docker-compose -f docker-compose.prod.yml build; docker-compose -f docker-compose.prod.yml down; docker-compose -f docker-compose.prod.yml up -d"

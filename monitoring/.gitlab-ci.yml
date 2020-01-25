@@ -1,0 +1,22 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  image: gitlab/dind:latest
+  only:
+    - "master"
+  environment: production
+  services:
+    - docker:dind
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOY_SERVER_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/gitlab_id_rsa
+    - chmod 600 ~/.ssh/gitlab_id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/gitlab_id_rsa
+    - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
+    - ssh root@$DEPLOYMENT_SERVER_IP "mkdir -p monitoring; cd monitoring; mkdir -p filebeat-data"
+  script:
+    - scp -r ./* root@${DEPLOYMENT_SERVER_IP}:~/monitoring/
+    - ssh root@$DEPLOYMENT_SERVER_IP "cd monitoring; chmod -R 0777 filebeat-data; chmod +t filebeat-data; docker-compose -f docker-compose.prod.yml build; docker-compose -f docker-compose.prod.yml down; docker-compose -f docker-compose.prod.yml up --build -d"

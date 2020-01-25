@@ -1,0 +1,26 @@
+{
+  "routes": {
+    "/start": {
+      "description": "Example module",
+      "method": "POST",
+      "query": {},
+      "body": {
+        "searchQueries": {
+          "type": "string[]",
+          "description": "Array of search queries",
+          "required": true
+        }
+      },
+      "configurable": true
+    },
+    "/config": {
+      "description": "Get the config of the module",
+      "method": "GET",
+      "query": {},
+      "body": {},
+      "configurable": false
+    }
+  },
+  "description": "Lorem ipsum",
+  "author": "Cedomic"
+}

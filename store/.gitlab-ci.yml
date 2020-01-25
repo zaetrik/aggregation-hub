@@ -1,0 +1,24 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  image: gitlab/dind:latest
+  only:
+    - "master"
+  environment: production
+  services:
+    - docker:dind
+  before_script:
+    - rm -rf node_modules/
+    - rm -rf logs/
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOY_SERVER_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/gitlab_id_rsa
+    - chmod 600 ~/.ssh/gitlab_id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/gitlab_id_rsa
+    - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
+    - ssh root@$DEPLOYMENT_SERVER_IP "mkdir -p store; cd store; mkdir -p elasticsearch-data_1; mkdir -p elasticsearch-data_2; mkdir -p elasticsearch-logs_1; mkdir -p elasticsearch-logs_2; mkdir -p elasticsearch-data_3; mkdir -p elasticsearch-logs_3"
+  script:
+    - scp -r ./dist ./.env ./package.json ./package-lock.json ./docker-compose.prod.yml ./Dockerfile root@${DEPLOYMENT_SERVER_IP}:~/store/
+    - ssh root@$DEPLOYMENT_SERVER_IP "sysctl -w vm.max_map_count=262144; cd store; mkdir -p logs; chmod -R 0777 logs; chmod +t logs; chmod -R 0777 elasticsearch-data_1; chmod +t elasticsearch-data_1; chmod -R 0777 elasticsearch-data_2; chmod +t elasticsearch-data_2; chmod -R 0777 elasticsearch-logs_1; chmod +t elasticsearch-logs_1; chmod -R 0777 elasticsearch-logs_2; chmod +t elasticsearch-logs_2; chmod -R 0777 elasticsearch-data_3; chmod +t elasticsearch-data_3; chmod -R 0777 elasticsearch-logs_3; chmod +t elasticsearch-logs_3; docker-compose -f docker-compose.prod.yml build; docker-compose -f docker-compose.prod.yml down; docker-compose -f docker-compose.prod.yml up -d"

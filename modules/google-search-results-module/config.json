@@ -1,0 +1,26 @@
+{
+  "routes": {
+    "/start": {
+      "description": "Collect Google search results for multiple search queries",
+      "method": "POST",
+      "query": {},
+      "body": {
+        "searchQueries": {
+          "type": "string[]",
+          "description": "Array of search queries",
+          "required": true
+        }
+      },
+      "configurable": true
+    },
+    "/config": {
+      "description": "Get the config of the module",
+      "method": "GET",
+      "query": {},
+      "body": {},
+      "configurable": false
+    }
+  },
+  "description": "Scrapes the top 10 Google search results for given queries",
+  "author": "Cedomic"
+}
