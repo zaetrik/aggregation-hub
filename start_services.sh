@@ -26,11 +26,6 @@ cd ui
 mkdir -p logs
 docker-compose -f docker-compose.dev.yml up -d
 
-cd ..
-cd modules/typescript-express-module-example
-mkdir -p logs
-docker-compose -f docker-compose.dev.yml up -d
-
 cd ../..
 cd modules/google-search-results-module
 mkdir -p logs

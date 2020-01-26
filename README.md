@@ -78,6 +78,8 @@ You also need Docker Compose on your machine.
 
 To start the development environment you need to run `sh start_services.sh`
 
+If you just would like to quickly see the Aggregation Hub in action you can run `sh quick_start.sh`        
+
 ## Future Plans
 
 - Add authentication
