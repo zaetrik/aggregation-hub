@@ -76,9 +76,13 @@ Prerequisites:
 You need to set the environment variables in multiple locations. Example files are included where it is necessary to set those variables.
 You also need Docker Compose on your machine.
 
-To start the development environment you need to run `sh start_services.sh`
+To start the development environment you need to run `sh start_services.sh`.
 
-If you just would like to quickly see the Aggregation Hub in action you can run `sh quick_start.sh`        
+If you just would like to quickly see the Aggregation Hub in action you can run `sh quick_start.sh`.
+
+The UI is available at `http://localhost:3001`. To add the sample module you will have to use the address `http://google-search-results-module:3006`.
+
+On the overview page of your newly added module you will have to create a job and also define the search queries in the settings.
 
 ## Future Plans
 
