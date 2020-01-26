@@ -7,11 +7,11 @@ cd ../..
 cd modules/google-search-results-module
 docker-compose -f docker-compose.dev.yml down
 
-#cd ..
-#cd ui
-#docker-compose -f docker-compose.dev.yml down
-
 cd ../..
+cd ui
+docker-compose -f docker-compose.dev.yml down
+
+cd ..
 cd monitoring
 docker-compose -f docker-compose.dev.yml down
 

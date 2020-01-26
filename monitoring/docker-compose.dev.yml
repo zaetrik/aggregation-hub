@@ -14,6 +14,8 @@ services:
     image: docker.elastic.co/kibana/kibana-oss:7.4.0
     container_name: kibana
     restart: always
+    ports:
+      - "5601:5601"
     environment:
       - SERVER_NAME=kibana.localhost
       - ELASTICSEARCH_HOSTS=http://elasticsearch_1:9200

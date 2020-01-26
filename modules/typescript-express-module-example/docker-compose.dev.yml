@@ -17,6 +17,8 @@ services:
     env_file:
       - dev.env
     restart: always
+    ports:
+      - "${PORT}:${PORT}"
     labels:
       - traefik.enable=true
       - traefik.backend=typescript-express-module-example

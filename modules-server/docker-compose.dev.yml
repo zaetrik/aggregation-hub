@@ -20,7 +20,7 @@ services:
       - NODE_ENV=development
     restart: always
     ports:
-      - "3004:3004"
+      - "${PORT}:${PORT}"
     labels:
       - traefik.enable=true
       - traefik.backend=modules-server

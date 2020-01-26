@@ -86,6 +86,7 @@ To start the development environment you need to run `sh start_services.sh`
 - Add tests (shame on me)
 - Create more modules
 - Create dashboard to replace Kibana
+- Create a "store" for data aggregation modules
 
 ## Used Technologies
 

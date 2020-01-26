@@ -21,10 +21,10 @@ mkdir -p logs
 mkdir -p postgres-data
 docker-compose -f docker-compose.dev.yml up -d
 
-#cd ..
-#cd ui
-#mkdir -p logs
-#docker-compose -f docker-compose.dev.yml up -d
+cd ..
+cd ui
+mkdir -p logs
+docker-compose -f docker-compose.dev.yml up -d
 
 cd ..
 cd modules/typescript-express-module-example

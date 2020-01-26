@@ -91,7 +91,7 @@ logs/
 
 .DS_Store
 
-ui/
+#ui/
 
 postgres-data/
 
@@ -106,3 +106,5 @@ dev.env
 certs/
 
 traefik.prod.toml
+
+.next/
