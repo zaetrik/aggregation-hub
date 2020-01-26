@@ -89,7 +89,7 @@ To start the development environment you need to run `sh start_services.sh`
 
 ## Used Technologies
 
-Node.js, TypeScript, Postgres, React, Elasticsearch, Kibana
+Node.js, TypeScript, Postgres, React + Next.js, Elasticsearch, Kibana
 
 ## Disclaimer
 
