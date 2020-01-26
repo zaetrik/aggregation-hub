@@ -15,6 +15,58 @@ You can define jobs for each module. You can set an interval for the data aggreg
 
 The user can also set settings for a module, e.g. the Google Search Results Module has a setting for the search queries for which the module should aggregate data.
 
+### Modules
+
+You can create your own modules. Look at the examples in the `modules` folder to get started. Basically you need to have two mandatory API endpoints:
+
+`POST /start => starts the aggregation process`
+
+`GET /config => to expose the module config`
+
+#### Module Config
+
+Every module needs to have a `config.json` file.
+
+Example:
+
+    {
+        routes: {
+            [route: string]: {
+                description: string;
+                method: "GET" | "POST" | "PUT" | "DELETE";
+                query: {
+                    [queryParam: string]: {
+                        type:
+                        | "string[]"
+                        | "number[]"
+                        | "boolean"
+                        | "string"
+                        | "number"
+                        | "boolean[]";
+                        description: string;
+                        required: boolean;
+                    };
+                };
+                body: {
+                    [bodyParam: string]: {
+                        type:
+                        | "string[]"
+                        | "number[]"
+                        | "boolean"
+                        | "string"
+                        | "number"
+                        | "boolean[]";
+                        description: string;
+                        required: boolean;
+                    };
+                };
+                configurable: boolean; => True, if this route has settings that can be changed by the user
+            };
+        };
+        description: string;
+        author: string;
+    };
+
 ## Usage
 
 Prerequisites:
