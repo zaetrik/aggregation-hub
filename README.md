@@ -78,6 +78,19 @@ You also need Docker Compose on your machine.
 
 To start the development environment you need to run `sh start_services.sh`
 
+## Future Plans
+
+- Add authentication
+- Create shareable data streams
+  - User can select data sources and make this data accessible via a public or secured API endpoint
+- Add tests (shame on me)
+- Create more modules
+- Create dashboard to replace Kibana
+
+## Used Technologies
+
+Node.js, TypeScript, Postgres, React, Elasticsearch, Kibana
+
 ## Disclaimer
 
 Aggregation Hub is in semi active development and is not ready for usage yet.
