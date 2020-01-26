@@ -23,18 +23,15 @@ const logger_1 = __importDefault(require("../utils/logger"));
 const path_1 = __importDefault(require("path"));
 module.exports = (app) => {
     app.post("/start", (req, res) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            scraper
-                .startAggregation(req.body.dataStoreUrl, req.body.searchQueries, req.body.moduleId)
-                .then(() => {
-                scraper.stopAggregation(req.body.moduleServiceUrl, req.body.moduleId);
-            });
-            return res.sendStatus(http_status_1.default.OK);
-        }
-        catch (err) {
+        scraper
+            .startAggregation(req.body.dataStoreUrl, req.body.searchQueries, req.body.moduleId)
+            .then(() => {
+            scraper.stopAggregation(req.body.moduleServiceUrl, req.body.moduleId);
+        })
+            .catch(err => {
             logger_1.default.log("error", err, { route: req.originalUrl });
             scraper.stopAggregation(req.body.moduleServiceUrl, req.body.moduleId);
-        }
+        });
     }));
     app.get("/config", (req, res) => __awaiter(this, void 0, void 0, function* () {
         try {
