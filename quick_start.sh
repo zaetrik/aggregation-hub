@@ -1,4 +1,4 @@
-cd modules/google-search-results-modules
+cd modules/google-search-results-module
 cp example.env ./.env
 cp example.env ./dev.env
 
@@ -20,4 +20,5 @@ cd ..
 cd ui
 cp example.env ./.env
 
+cd ..
 sh start_services.sh
