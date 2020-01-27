@@ -18,9 +18,9 @@ module.exports = (app, repository) => {
     /**
      * INDEX ROUTES
      */
-    app.post("/index/create", validators_1.validateCreateDeleteIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/index/create/:moduleId", validators_1.validateCreateDeleteIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
         try {
-            const createIndexOperation = yield repository.createIndex(req.body.index);
+            const createIndexOperation = yield repository.createIndex(req.params.moduleId);
             res.status(http_status_1.default.OK).send(createIndexOperation);
         }
         catch (err) {
@@ -33,9 +33,9 @@ module.exports = (app, repository) => {
             }
         }
     }));
-    app.delete("/index/delete", validators_1.validateCreateDeleteIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.delete("/index/delete/:moduleId", validators_1.validateCreateDeleteIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
         try {
-            const deleteIndexOperation = yield repository.deleteIndex(req.body.index);
+            const deleteIndexOperation = yield repository.deleteIndex(req.params.moduleId);
             res.status(http_status_1.default.OK).send(deleteIndexOperation);
         }
         catch (err) {
@@ -48,9 +48,9 @@ module.exports = (app, repository) => {
             }
         }
     }));
-    app.get("/index/count/:index", validators_1.validateGetDocumentCountGetMappingFromIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/index/count/:moduleId", validators_1.validateGetDocumentCountGetMappingFromIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
         try {
-            const getDocumentCountOperation = yield repository.getDocumentCountFromIndex(req.params.index);
+            const getDocumentCountOperation = yield repository.getDocumentCountFromIndex(req.params.moduleId);
             res.status(http_status_1.default.OK).send(getDocumentCountOperation);
         }
         catch (err) {
@@ -58,9 +58,9 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.get("/index/mapping/:index", validators_1.validateGetDocumentCountGetMappingFromIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/index/mapping/:moduleId", validators_1.validateGetDocumentCountGetMappingFromIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
         try {
-            const getMappingOperation = yield repository.getMappingFromIndex(req.params.index);
+            const getMappingOperation = yield repository.getMappingFromIndex(req.params.moduleId);
             res.status(http_status_1.default.OK).send(getMappingOperation);
         }
         catch (err) {

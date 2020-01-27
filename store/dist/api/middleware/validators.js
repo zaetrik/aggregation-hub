@@ -18,7 +18,7 @@ const validate = (req, res, next, schema, dataToValidate) => {
 };
 const validateInsertDocument = (req, res, next) => {
     const schema = joi_1.default.object({
-        index: joi_1.default.number().required(),
+        moduleId: joi_1.default.number().required(),
         data: joi_1.default.object().required()
     });
     validate(req, res, next, schema, req.body);
@@ -26,7 +26,7 @@ const validateInsertDocument = (req, res, next) => {
 exports.validateInsertDocument = validateInsertDocument;
 const validateUpdateDocument = (req, res, next) => {
     const schema = joi_1.default.object({
-        index: joi_1.default.number().required(),
+        moduleId: joi_1.default.number().required(),
         id: joi_1.default.string().required(),
         data: joi_1.default.object().required()
     });
@@ -35,7 +35,7 @@ const validateUpdateDocument = (req, res, next) => {
 exports.validateUpdateDocument = validateUpdateDocument;
 const validateDeleteDocument = (req, res, next) => {
     const schema = joi_1.default.object({
-        index: joi_1.default.number().required(),
+        moduleId: joi_1.default.number().required(),
         id: joi_1.default.string().required()
     });
     validate(req, res, next, schema, req.body);
@@ -43,21 +43,21 @@ const validateDeleteDocument = (req, res, next) => {
 exports.validateDeleteDocument = validateDeleteDocument;
 const validateCreateDeleteIndex = (req, res, next) => {
     const schema = joi_1.default.object({
-        index: joi_1.default.number().required()
+        moduleId: joi_1.default.number().required()
     });
-    validate(req, res, next, schema, req.body);
+    validate(req, res, next, schema, req.params);
 };
 exports.validateCreateDeleteIndex = validateCreateDeleteIndex;
 const validateGetDocumentCountGetMappingFromIndex = (req, res, next) => {
     const schema = joi_1.default.object({
-        index: joi_1.default.number().required()
+        moduleId: joi_1.default.number().required()
     });
     validate(req, res, next, schema, req.params);
 };
 exports.validateGetDocumentCountGetMappingFromIndex = validateGetDocumentCountGetMappingFromIndex;
 const validateQueryAll = (req, res, next) => {
     const schema = joi_1.default.object({
-        index: joi_1.default.number().required(),
+        moduleId: joi_1.default.number().required(),
         start: joi_1.default.number()
     });
     validate(req, res, next, schema, req.query);

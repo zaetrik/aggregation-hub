@@ -13,8 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const http_status_1 = __importDefault(require("http-status"));
 const logger_1 = __importDefault(require("../utils/logger"));
 const validators_1 = require("./middleware/validators");
+const axios_1 = __importDefault(require("axios"));
 module.exports = (app, repository) => {
-    app.get("/modules/id/:moduleId", validators_1.validateGetDeleteModuleById, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/modules/id/:moduleId", validators_1.validateGetModuleById, (req, res) => __awaiter(this, void 0, void 0, function* () {
         try {
             const getModuleByIdOperation = yield repository.getModuleById(req.params.moduleId);
             return res.send(getModuleByIdOperation);
@@ -24,10 +25,14 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.delete("/modules/id/:moduleId", validators_1.validateGetDeleteModuleById, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.delete("/modules/id/:moduleId", validators_1.validateDeleteModuleById, (req, res) => __awaiter(this, void 0, void 0, function* () {
         try {
             const deleteModuleByIdOperation = yield repository.deleteModuleById(req.params.moduleId);
             const deleteJobsFromModuleOperation = yield repository.deleteJobByModuleId(req.params.moduleId);
+            const deleteData = req.query.deleteData || false;
+            if (deleteData) {
+                yield axios_1.default.delete(`${process.env.DATA_STORE_URL}/index/delete/${req.params.moduleId}`);
+            }
             return res.send(deleteModuleByIdOperation);
         }
         catch (err) {

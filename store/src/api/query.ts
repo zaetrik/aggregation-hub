@@ -16,7 +16,7 @@ export = (app: express.Application, repository: Repository) => {
           status: number;
           data: object[];
         } = await repository.queryAllFromIndex(
-          req.query.index,
+          req.query.moduleId,
           req.query.start
         );
 

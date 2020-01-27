@@ -1,15 +1,15 @@
 interface DeleteDocumentRequestData {
   id: string;
-  index: string;
+  moduleId: string;
 }
 
 interface InsertDocumentRequestData {
-  index: string;
+  moduleId: string;
   data: object;
 }
 
 interface UpdateDocumentRequestData {
-  index: string;
+  moduleId: string;
   id: string;
   data: object;
 }

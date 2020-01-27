@@ -17,7 +17,7 @@ const startAggregation = (dataStoreUrl, moduleId) => __awaiter(this, void 0, voi
         setTimeout(() => {
             for (let i = 0; i < 10; i++) {
                 axios_1.default.post(`${dataStoreUrl}/document/insert`, {
-                    index: moduleId,
+                    moduleId: moduleId,
                     data: { test: "hello", number: i }
                 });
             }

@@ -24,7 +24,7 @@ const startAggregation = async (
 
       flattenedSearchResults.map(searchResult => {
         axios.post(`${dataStoreUrl}/document/insert`, {
-          index: moduleId,
+          moduleId: moduleId,
           data: searchResult
         });
       });

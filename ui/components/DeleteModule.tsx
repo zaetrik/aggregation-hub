@@ -16,8 +16,8 @@ const DeleteModule = ({
   const deleteModule = async moduleId => {
     await axios.delete(
       process.env.NODE_ENV === "development"
-        ? `${process.env.MODULES_SERVICE_DEV}/modules/id/${moduleId}`
-        : `${process.env.MODULES_SERVICE_PROD}/modules/id/${moduleId}`
+        ? `${process.env.MODULES_SERVICE_DEV}/modules/id/${moduleId}?deleteData=true`
+        : `${process.env.MODULES_SERVICE_PROD}/modules/id/${moduleId}?deleteData=true`
     );
 
     const newModules = modules.filter(item => item.id !== moduleId);

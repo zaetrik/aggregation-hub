@@ -17,7 +17,7 @@ module.exports = (app, repository) => {
     app.get("/query", (req, res) => __awaiter(this, void 0, void 0, function* () { }));
     app.get("/query/all", validators_1.validateQueryAll, (req, res) => __awaiter(this, void 0, void 0, function* () {
         try {
-            const queryAllOperation = yield repository.queryAllFromIndex(req.query.index, req.query.start);
+            const queryAllOperation = yield repository.queryAllFromIndex(req.query.moduleId, req.query.start);
             return res.status(http_status_1.default.OK).send(queryAllOperation);
         }
         catch (err) {

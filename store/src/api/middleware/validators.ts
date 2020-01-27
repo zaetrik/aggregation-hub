@@ -28,7 +28,7 @@ const validate = (
 
 const validateInsertDocument = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
-    index: Joi.number().required(),
+    moduleId: Joi.number().required(),
     data: Joi.object().required()
   });
 
@@ -37,7 +37,7 @@ const validateInsertDocument = (req: Request, res: Response, next) => {
 
 const validateUpdateDocument = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
-    index: Joi.number().required(),
+    moduleId: Joi.number().required(),
     id: Joi.string().required(),
     data: Joi.object().required()
   });
@@ -47,7 +47,7 @@ const validateUpdateDocument = (req: Request, res: Response, next) => {
 
 const validateDeleteDocument = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
-    index: Joi.number().required(),
+    moduleId: Joi.number().required(),
     id: Joi.string().required()
   });
 
@@ -56,10 +56,10 @@ const validateDeleteDocument = (req: Request, res: Response, next) => {
 
 const validateCreateDeleteIndex = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
-    index: Joi.number().required()
+    moduleId: Joi.number().required()
   });
 
-  validate(req, res, next, schema, req.body);
+  validate(req, res, next, schema, req.params);
 };
 
 const validateGetDocumentCountGetMappingFromIndex = (
@@ -68,7 +68,7 @@ const validateGetDocumentCountGetMappingFromIndex = (
   next
 ) => {
   const schema: JoiTypes.Schema = Joi.object({
-    index: Joi.number().required()
+    moduleId: Joi.number().required()
   });
 
   validate(req, res, next, schema, req.params);
@@ -76,7 +76,7 @@ const validateGetDocumentCountGetMappingFromIndex = (
 
 const validateQueryAll = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
-    index: Joi.number().required(),
+    moduleId: Joi.number().required(),
     start: Joi.number()
   });
 

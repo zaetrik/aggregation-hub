@@ -27,7 +27,7 @@ module.exports = (app, repository) => {
             if (err.message === "index_not_found_exception") {
                 res
                     .status(http_status_1.default.BAD_REQUEST)
-                    .send(`INDEX ${req.body.index} DOES NOT EXIST`);
+                    .send(`INDEX FOR MODULE WITH ID ${req.body.moduleId} DOES NOT EXIST`);
             }
             else {
                 logger_1.default.log("error", err, { route: req.originalUrl });
@@ -44,13 +44,13 @@ module.exports = (app, repository) => {
             if (err.message === "index_not_found_exception") {
                 res
                     .status(http_status_1.default.BAD_REQUEST)
-                    .send(`INDEX ${req.body.index} DOES NOT EXIST`);
+                    .send(`INDEX FOR MODULE WITH ID ${req.body.moduleId} DOES NOT EXIST`);
             }
             else {
                 if (err.message === "document_missing_exception") {
                     res
                         .status(http_status_1.default.BAD_REQUEST)
-                        .send(`DOCUMENT ${req.body.id} DOES NOT EXIST IN INDEX ${req.body.index}`);
+                        .send(`DOCUMENT ${req.body.id} DOES NOT EXIST IN INDEX FOR MODULE WITH ID ${req.body.moduleId}`);
                 }
                 else {
                     logger_1.default.log("error", err, { route: req.originalUrl });
@@ -68,7 +68,7 @@ module.exports = (app, repository) => {
             if (err.message === "document_not_found") {
                 res
                     .status(http_status_1.default.BAD_REQUEST)
-                    .send(`DOCUMENT ${req.body.id} DOES NOT EXIST IN INDEX ${req.body.index}`);
+                    .send(`DOCUMENT ${req.body.id} DOES NOT EXIST IN INDEX FOR MODULE WITH ID ${req.body.moduleId}`);
             }
             else {
                 logger_1.default.log("error", err, { route: req.originalUrl });

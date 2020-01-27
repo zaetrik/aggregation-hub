@@ -26,13 +26,21 @@ const validateGetModules = (req, res, next) => {
     validate(req, res, next, schema, req.params);
 };
 exports.validateGetModules = validateGetModules;
-const validateGetDeleteModuleById = (req, res, next) => {
+const validateDeleteModuleById = (req, res, next) => {
+    const schema = joi_1.default.object({
+        moduleId: joi_1.default.string().required(),
+        deleteData: joi_1.default.boolean()
+    });
+    validate(req, res, next, schema, Object.assign({}, req.params, req.query));
+};
+exports.validateDeleteModuleById = validateDeleteModuleById;
+const validateGetModuleById = (req, res, next) => {
     const schema = joi_1.default.object({
         moduleId: joi_1.default.string().required()
     });
     validate(req, res, next, schema, req.params);
 };
-exports.validateGetDeleteModuleById = validateGetDeleteModuleById;
+exports.validateGetModuleById = validateGetModuleById;
 const validateAddModule = (req, res, next) => {
     const schema = joi_1.default.object({
         // req.body

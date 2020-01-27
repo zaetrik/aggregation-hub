@@ -5,7 +5,8 @@ import { Repository } from "repository";
 import {
   validateAddModule,
   validateGetModules,
-  validateGetDeleteModuleById,
+  validateGetModuleById,
+  validateDeleteModuleById,
   validateModifyRouteSettings,
   validateModifyModuleConfig
 } from "./middleware/validators";
@@ -14,12 +15,13 @@ import {
   GetModulesResponse,
   DeleteJobResponse
 } from "responses";
+import axios from "axios";
 
 // repository is used to pass different DB functions (e.g. testDbAbstraction)
 export = (app: express.Application, repository: Repository) => {
   app.get(
     "/modules/id/:moduleId",
-    validateGetDeleteModuleById,
+    validateGetModuleById,
     async (req: Request, res: Response) => {
       try {
         const getModuleByIdOperation: GetModulesResponse = await repository.getModuleById(
@@ -35,7 +37,7 @@ export = (app: express.Application, repository: Repository) => {
 
   app.delete(
     "/modules/id/:moduleId",
-    validateGetDeleteModuleById,
+    validateDeleteModuleById,
     async (req: Request, res: Response) => {
       try {
         const deleteModuleByIdOperation: InsertDeleteModuleResponse = await repository.deleteModuleById(
@@ -44,6 +46,13 @@ export = (app: express.Application, repository: Repository) => {
         const deleteJobsFromModuleOperation: DeleteJobResponse = await repository.deleteJobByModuleId(
           req.params.moduleId
         );
+
+        const deleteData: boolean = req.query.deleteData || false;
+        if (deleteData) {
+          await axios.delete(
+            `${process.env.DATA_STORE_URL}/index/delete/${req.params.moduleId}`
+          );
+        }
 
         return res.send(deleteModuleByIdOperation);
       } catch (err) {

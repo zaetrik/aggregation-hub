@@ -38,7 +38,16 @@ const validateGetModules = (req: Request, res: Response, next) => {
   validate(req, res, next, schema, req.params);
 };
 
-const validateGetDeleteModuleById = (req: Request, res: Response, next) => {
+const validateDeleteModuleById = (req: Request, res: Response, next) => {
+  const schema: JoiTypes.Schema = Joi.object({
+    moduleId: Joi.string().required(),
+    deleteData: Joi.boolean()
+  });
+
+  validate(req, res, next, schema, { ...req.params, ...req.query });
+};
+
+const validateGetModuleById = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
     moduleId: Joi.string().required()
   });
@@ -140,7 +149,8 @@ const validateGetJobByModuleId = (req: Request, res: Response, next) => {
 export {
   validateGetModules,
   validateAddModule,
-  validateGetDeleteModuleById,
+  validateGetModuleById,
+  validateDeleteModuleById,
   validateModifyRouteSettings,
   validateModifyModuleConfig,
   validateStartModuleDataAggregation,

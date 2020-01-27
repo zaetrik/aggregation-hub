@@ -17,12 +17,12 @@ const ModuleAggregatedDataOverview = ({
   const getModuleData = async (start?: number) => {
     const responseGetModuleData = await axios.get(
       process.env.NODE_ENV === "development"
-        ? `${process.env.STORE_SERVICE_DEV}/query/all?index=${
+        ? `${process.env.STORE_SERVICE_DEV}/query/all?moduleId=${
             module.id
           }&start=${start ? start : 0}`
-        : `${process.env.STORE_SERVICE_PROD}/index/data/${module.id}&start=${
-            start ? start : 0
-          }`
+        : `${process.env.STORE_SERVICE_PROD}/query/all?moduleId=${
+            module.id
+          }&start=${start ? start : 0}`
     );
 
     setModuleData([...moduleData, ...responseGetModuleData.data.data]);

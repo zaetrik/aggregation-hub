@@ -2,14 +2,13 @@ import {
   Client as ElasticsearchClient,
   ApiResponse
 } from "@elastic/elasticsearch";
-import logger from "../utils/logger";
 
 const repository = (client: ElasticsearchClient): Repository => {
   const insertDocument = async (
     dataToAdd: InsertDocumentRequestData
   ): Promise<InsertUpdateDocumentResponse> => {
     const insertOperation = await client.index({
-      index: `module-${dataToAdd.index}`,
+      index: `module-${dataToAdd.moduleId}`,
       body: dataToAdd.data
     });
 
@@ -24,7 +23,7 @@ const repository = (client: ElasticsearchClient): Repository => {
     dataToUpdate: UpdateDocumentRequestData
   ): Promise<InsertUpdateDocumentResponse> => {
     const updateOperation = await client.update({
-      index: `module-${dataToUpdate.index}`,
+      index: `module-${dataToUpdate.moduleId}`,
       id: dataToUpdate.id,
       body: { doc: dataToUpdate.data, doc_as_upsert: false }
     });
@@ -41,7 +40,7 @@ const repository = (client: ElasticsearchClient): Repository => {
   ): Promise<DeleteDocumentResponse> => {
     const deleteOperation = await client
       .delete({
-        index: `module-${dataToDelete.index}`,
+        index: `module-${dataToDelete.moduleId}`,
         id: dataToDelete.id
       })
       // catch error to check which error type it is exactly
@@ -60,10 +59,10 @@ const repository = (client: ElasticsearchClient): Repository => {
   };
 
   const createIndex = async (
-    index: string
+    moduleId: string
   ): Promise<CreateDeleteIndexResponse> => {
     const createIndexOperation = await client.indices.create({
-      index: `module-${index}`
+      index: `module-${moduleId}`
     });
 
     return {
@@ -73,49 +72,49 @@ const repository = (client: ElasticsearchClient): Repository => {
   };
 
   const deleteIndex = async (
-    index: string
+    moduleId: string
   ): Promise<CreateDeleteIndexResponse> => {
     const deleteIndexOperation = await client.indices.delete({
-      index: `module-${index}`
+      index: `module-${moduleId}`
     });
 
     return {
       status: deleteIndexOperation.statusCode,
-      index: index
+      index: deleteIndexOperation.body.index
     };
   };
 
   const getDocumentCountFromIndex = async (
-    index: string
+    moduleId: string
   ): Promise<{ status: number; count: number }> => {
     const getDocumentCountOperation: ApiResponse = await client.count({
-      index: `module-${index}`
+      index: `module-${moduleId}`
     });
 
     return { status: 200, count: getDocumentCountOperation.body.count };
   };
 
   const getMappingFromIndex = async (
-    index: string
+    moduleId: string
   ): Promise<{ status: number; mapping: object }> => {
     const getMappingFromIndexOperation: ApiResponse = await client.indices.getMapping(
       {
-        index: `module-${index}`
+        index: `module-${moduleId}`
       }
     );
 
     return {
       status: 200,
-      mapping: getMappingFromIndexOperation.body[`module-${index}`].mappings
+      mapping: getMappingFromIndexOperation.body[`module-${moduleId}`].mappings
     };
   };
 
   const queryAllFromIndex = async (
-    index: string,
+    moduleId: string,
     start: number
   ): Promise<{ status: number; data: object[] }> => {
     const queryAllOperation: ApiResponse = await client.search({
-      index: `module-${index}`,
+      index: `module-${moduleId}`,
       from: start ? start : 0,
       size: 10,
       body: {

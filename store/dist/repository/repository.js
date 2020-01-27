@@ -11,7 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const repository = (client) => {
     const insertDocument = (dataToAdd) => __awaiter(this, void 0, void 0, function* () {
         const insertOperation = yield client.index({
-            index: `module-${dataToAdd.index}`,
+            index: `module-${dataToAdd.moduleId}`,
             body: dataToAdd.data
         });
         return {
@@ -22,7 +22,7 @@ const repository = (client) => {
     });
     const updateDocument = (dataToUpdate) => __awaiter(this, void 0, void 0, function* () {
         const updateOperation = yield client.update({
-            index: `module-${dataToUpdate.index}`,
+            index: `module-${dataToUpdate.moduleId}`,
             id: dataToUpdate.id,
             body: { doc: dataToUpdate.data, doc_as_upsert: false }
         });
@@ -35,7 +35,7 @@ const repository = (client) => {
     const deleteDocument = (dataToDelete) => __awaiter(this, void 0, void 0, function* () {
         const deleteOperation = yield client
             .delete({
-            index: `module-${dataToDelete.index}`,
+            index: `module-${dataToDelete.moduleId}`,
             id: dataToDelete.id
         })
             // catch error to check which error type it is exactly
@@ -52,42 +52,42 @@ const repository = (client) => {
             warnings: deleteOperation.warnings
         };
     });
-    const createIndex = (index) => __awaiter(this, void 0, void 0, function* () {
+    const createIndex = (moduleId) => __awaiter(this, void 0, void 0, function* () {
         const createIndexOperation = yield client.indices.create({
-            index: `module-${index}`
+            index: `module-${moduleId}`
         });
         return {
             status: createIndexOperation.statusCode,
             index: createIndexOperation.body.index
         };
     });
-    const deleteIndex = (index) => __awaiter(this, void 0, void 0, function* () {
+    const deleteIndex = (moduleId) => __awaiter(this, void 0, void 0, function* () {
         const deleteIndexOperation = yield client.indices.delete({
-            index: `module-${index}`
+            index: `module-${moduleId}`
         });
         return {
             status: deleteIndexOperation.statusCode,
-            index: index
+            index: deleteIndexOperation.body.index
         };
     });
-    const getDocumentCountFromIndex = (index) => __awaiter(this, void 0, void 0, function* () {
+    const getDocumentCountFromIndex = (moduleId) => __awaiter(this, void 0, void 0, function* () {
         const getDocumentCountOperation = yield client.count({
-            index: `module-${index}`
+            index: `module-${moduleId}`
         });
         return { status: 200, count: getDocumentCountOperation.body.count };
     });
-    const getMappingFromIndex = (index) => __awaiter(this, void 0, void 0, function* () {
+    const getMappingFromIndex = (moduleId) => __awaiter(this, void 0, void 0, function* () {
         const getMappingFromIndexOperation = yield client.indices.getMapping({
-            index: `module-${index}`
+            index: `module-${moduleId}`
         });
         return {
             status: 200,
-            mapping: getMappingFromIndexOperation.body[`module-${index}`].mappings
+            mapping: getMappingFromIndexOperation.body[`module-${moduleId}`].mappings
         };
     });
-    const queryAllFromIndex = (index, start) => __awaiter(this, void 0, void 0, function* () {
+    const queryAllFromIndex = (moduleId, start) => __awaiter(this, void 0, void 0, function* () {
         const queryAllOperation = yield client.search({
-            index: `module-${index}`,
+            index: `module-${moduleId}`,
             from: start ? start : 0,
             size: 10,
             body: {
