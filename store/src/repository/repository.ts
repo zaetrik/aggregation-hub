@@ -80,7 +80,7 @@ const repository = (client: ElasticsearchClient): Repository => {
 
     return {
       status: deleteIndexOperation.statusCode,
-      index: deleteIndexOperation.body.index
+      index: `module-${moduleId}`
     };
   };
 

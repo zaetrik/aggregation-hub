@@ -67,7 +67,7 @@ const repository = (client) => {
         });
         return {
             status: deleteIndexOperation.statusCode,
-            index: deleteIndexOperation.body.index
+            index: `module-${moduleId}`
         };
     });
     const getDocumentCountFromIndex = (moduleId) => __awaiter(this, void 0, void 0, function* () {

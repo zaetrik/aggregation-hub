@@ -5,15 +5,22 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "dev": "NODE_ENV=development nodemon --ignore logs/ dist/index.js"
+    "dev": "NODE_ENV=development nodemon --ignore logs/ dist/index.js",
+    "test": "docker-compose -f docker-compose.test.yml up --build -d && concurrently \"PORT=3003 npm run dev\" \"PORT=3003 jest ./src/tests --runInBand --watchAll\""
   },
   "author": "Cedomic",
   "license": "See Repository",
   "devDependencies": {
     "@types/express": "4.17.0",
+    "@types/jest": "^25.1.0",
     "@types/joi": "^14.3.4",
     "@types/node": "12.0.10",
-    "nodemon": "1.19.1"
+    "@types/supertest": "^2.0.8",
+    "concurrently": "^5.1.0",
+    "jest": "^25.1.0",
+    "nodemon": "1.19.1",
+    "supertest": "^4.0.2",
+    "ts-jest": "^25.0.0"
   },
   "dependencies": {
     "@elastic/elasticsearch": "7.4.0",
@@ -31,6 +38,7 @@
     "moment": "^2.24.0",
     "morgan": "1.9.1",
     "morgan-json": "^1.1.0",
+    "typescript": "^3.7.5",
     "winston": "^3.2.1"
   }
 }

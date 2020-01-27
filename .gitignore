@@ -97,6 +97,8 @@ postgres-data/
 
 elasticsearch-data/
 
+elasticsearch-data-test/
+
 filebeat-data/
 
 .env

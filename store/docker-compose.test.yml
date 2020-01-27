@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+  elasticsearch_1:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.4.0
+    container_name: elasticsearch_1
+    restart: always
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - ./elasticsearch-data-test:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"

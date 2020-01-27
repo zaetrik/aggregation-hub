@@ -22,6 +22,7 @@ export = (app: express.Application, repository: Repository) => {
         const createIndexOperation: CreateDeleteIndexResponse = await repository.createIndex(
           req.params.moduleId
         );
+
         res.status(httpStatus.OK).send(createIndexOperation);
       } catch (err) {
         if (err.message === "resource_already_exists_exception") {
