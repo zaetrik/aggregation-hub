@@ -14,6 +14,7 @@ jobs:
           node-version: 11.x
       - name: Test Store
         run: |
+          ls -a
           echo Running tests for store
           cd store
           echo Building store
