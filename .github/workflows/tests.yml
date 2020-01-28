@@ -17,7 +17,7 @@ jobs:
       - name: Test Store
         run: |
           echo Running tests for store
-          cd store
+          cd ./store
           echo Building store
           npm install
           echo Running tests for store
@@ -35,7 +35,7 @@ jobs:
       - name: Test modules-server
         run: |
           echo Running tests for modules-server
-          cd modules-server
+          cd ./modules-server
           echo Building modules-server
           npm install
           echo Running tests for modules-server
@@ -53,7 +53,7 @@ jobs:
       - name: Test google-search-results-module
         run: |
           echo Running tests for google-search-results-module
-          cd google-search-results-module
+          cd ./google-search-results-module
           echo Building google-search-results-module
           npm install
           echo Running tests for google-search-results-module
@@ -71,7 +71,7 @@ jobs:
       - name: Test typescript-express-module-example
         run: |
           echo Running tests for typescript-express-module-example
-          cd typescript-express-module-example
+          cd ./typescript-express-module-example
           echo Building typescript-express-module-example
           npm install
           echo Running tests for typescript-express-module-example
