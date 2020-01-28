@@ -6,8 +6,6 @@ jobs:
   store:
     
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./store
 
     steps:
       - name: Use Node.js v11
@@ -15,35 +13,31 @@ jobs:
         with:
           node-version: 11.x
       - name: Test Store
+        working-directory: ./store
         run: |
           echo Running tests for store
-          cd ./store
           echo Building store
           npm install
           echo Running tests for store
           npm test
   modules-server:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./modules-server
-
+    
     steps:
       - name: Use Node.js v11
         uses: actions/setup-node@v1
         with:
           node-version: 11.x
       - name: Test modules-server
+        working-directory: ./modules-server
         run: |
           echo Running tests for modules-server
-          cd ./modules-server
           echo Building modules-server
           npm install
           echo Running tests for modules-server
           npm test
   google-search-results-module:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./modules/google-search-results-module
 
     steps:
       - name: Use Node.js v11
@@ -51,17 +45,15 @@ jobs:
         with:
           node-version: 11.x
       - name: Test google-search-results-module
+        working-directory: ./modules/google-search-results-module
         run: |
           echo Running tests for google-search-results-module
-          cd ./google-search-results-module
           echo Building google-search-results-module
           npm install
           echo Running tests for google-search-results-module
           npm test
   typescript-express-module-example:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./modules/typescript-express-module-example
 
     steps:
       - name: Use Node.js v11
@@ -69,9 +61,9 @@ jobs:
         with:
           node-version: 11.x
       - name: Test typescript-express-module-example
+        working-directory: ./modules/typescript-express-module-example
         run: |
           echo Running tests for typescript-express-module-example
-          cd ./typescript-express-module-example
           echo Building typescript-express-module-example
           npm install
           echo Running tests for typescript-express-module-example
