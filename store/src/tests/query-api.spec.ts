@@ -1,9 +1,7 @@
 import supertest from "supertest";
 
 describe("Query API", () => {
-  const api = supertest(
-    process.env.CI_STORE || `localhost:${process.env.PORT}`
-  );
+  const api = supertest(`localhost:${process.env.PORT}`);
 
   it("adds a document", async () => {
     const response = await api.get("/query/all?moduleId=1&start=0");

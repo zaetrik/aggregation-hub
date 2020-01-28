@@ -1,10 +1,5 @@
 version: "3.3"
 
-networks:
-  host:
-    external:
-      name: host
-
 services:
   store:
     build:
@@ -12,17 +7,13 @@ services:
       args:
         PORT: ${PORT}
     container_name: store
-    environment:
-      - DB_SERVER=http://elasticsearch_1:9200
-      - PORT=3003
-      - WAIT_HOSTS=elasticsearch_1:9200
+    env_file:
+      - dev.env
     restart: always
     volumes:
       - ./logs:/home/dockeruser/app/logs/
     ports:
-      - "3003:3003"
-    networks:
-      - host
+      - "${PORT}:${PORT}"
   elasticsearch_1:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.4.0
     container_name: elasticsearch_1
@@ -33,5 +24,3 @@ services:
       - ./elasticsearch-data-test:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
-    networks:
-      - host
