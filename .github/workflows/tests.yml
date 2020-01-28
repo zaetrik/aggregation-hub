@@ -15,8 +15,8 @@ jobs:
         uses: actions/checkout@v2.0.0
       - name: Test Store
         env:
-          - CI_ELASTICSEARCH: http://elasticsearch_1:9200
-          - CI_STORE: http://store:3004
+          CI_ELASTICSEARCH: http://elasticsearch_1:9200
+          CI_STORE: http://store:3004
         working-directory: ./store
         run: |
           echo Running tests for store
