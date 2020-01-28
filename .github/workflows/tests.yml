@@ -15,8 +15,10 @@ jobs:
       - name: Test Store
         working-directory: ./store
         run: |
-          pwd
-          ls -a
+          directory=$(pwd)
+          folders=$(ls -a)
+          echo $directory
+          echo $folders
           echo Running tests for store
           echo Building store
           npm install
