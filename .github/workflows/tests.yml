@@ -1,11 +1,13 @@
-name: Run Tests
+name: Tests
 
 on: [push]
 
 jobs:
-  build:
-
+  store:
+    
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./store
 
     steps:
       - name: Use Node.js v11
@@ -14,38 +16,59 @@ jobs:
           node-version: 11.x
       - name: Test Store
         run: |
-          ls -a
           echo Running tests for store
-          cd store
           echo Building store
           npm install
           echo Running tests for store
           npm test
-      - name: Test module-server
+  modules-server:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./modules-server
+
+    steps:
+      - name: Use Node.js v11
+        uses: actions/setup-node@v1
+        with:
+          node-version: 11.x
+      - name: Test modules-server
         run: |
           echo Running tests for modules-server
-          cd ..
-          cd modules-server
           echo Building modules-server
           npm install
           echo Running tests for modules-server
           npm test
+  google-search-results-module:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./modules/google-search-results-module
+
+    steps:
+      - name: Use Node.js v11
+        uses: actions/setup-node@v1
+        with:
+          node-version: 11.x
       - name: Test google-search-results-module
         run: |
           echo Running tests for google-search-results-module
-          cd ..
-          cd modules/google-search-results-module
           echo Building google-search-results-module
           npm install
           echo Running tests for google-search-results-module
           npm test
+  typescript-express-module-example:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./modules/typescript-express-module-example
+
+    steps:
+      - name: Use Node.js v11
+        uses: actions/setup-node@v1
+        with:
+          node-version: 11.x
       - name: Test typescript-express-module-example
         run: |
           echo Running tests for typescript-express-module-example
-          cd ..
-          cd typescript-express-module-example
           echo Building typescript-express-module-example
           npm install
           echo Running tests for typescript-express-module-example
           npm test
-        
