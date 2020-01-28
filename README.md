@@ -1,3 +1,5 @@
+![Tests](https://github.com/Cedomic/aggregation-hub/workflows/Tests/badge.svg)
+
 # Aggregation Hub
 
 A platform to aggregate data from all kinds of different sources.
