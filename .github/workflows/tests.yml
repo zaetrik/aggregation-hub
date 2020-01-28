@@ -23,6 +23,8 @@ jobs:
           echo Building store
           npm install
           echo Running tests for store
+          docker-compose -f docker-compose.test.yml up -d
+          docker ps -a
           npm test
   modules-server:
     runs-on: ubuntu-latest
