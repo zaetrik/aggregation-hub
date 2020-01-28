@@ -201,7 +201,6 @@ export = (app: express.Application, repository: Repository) => {
           {},
           ...generatedModuleRouteSettings
         );
-        console.log(newModuleRouteSettings);
 
         const updateModuleRouteSettings: {
           status: number;

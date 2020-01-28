@@ -133,7 +133,6 @@ module.exports = (app, repository) => {
                     };
                 });
             const newModuleRouteSettings = Object.assign({}, ...generatedModuleRouteSettings);
-            console.log(newModuleRouteSettings);
             const updateModuleRouteSettings = yield repository.updateModuleRouteSettings(req.params.moduleId, newModuleRouteSettings);
             return res.send(modifyModuleConfigOperation);
         }

@@ -1,0 +1,30 @@
+version: "3.3"
+
+services:
+  modules-server:
+    container_name: modules-server
+    build:
+      context: .
+      args:
+        PORT: ${PORT}
+    env_file:
+      - dev.env
+    environment:
+      - NODE_ENV=development
+    restart: always
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./logs/:/home/dockeruser/app/logs/
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - ./postgres-data-test/postgres:/var/lib/postgresql/data
+    restart: always

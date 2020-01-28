@@ -95,6 +95,8 @@ logs/
 
 postgres-data/
 
+postgres-data-test/
+
 elasticsearch-data/
 
 elasticsearch-data-test/
