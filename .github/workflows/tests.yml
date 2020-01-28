@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.0.0
       - name: Test Store
-        working-directory: aggregation-hub/store
+        working-directory: ./aggregation-hub/store
         run: |
           echo Running tests for store
           echo Building store
@@ -30,6 +30,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 11.x
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
       - name: Test modules-server
         working-directory: aggregation-hub/modules-server
         run: |
@@ -46,8 +48,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 11.x
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
       - name: Test google-search-results-module
-        working-directory: aggregation-hub/modules/google-search-results-module
+        working-directory: modules/google-search-results-module
         run: |
           echo Running tests for google-search-results-module
           echo Building google-search-results-module
@@ -62,8 +66,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 11.x
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
       - name: Test typescript-express-module-example
-        working-directory: aggregation-hub/modules/typescript-express-module-example
+        working-directory: ./modules/typescript-express-module-example
         run: |
           echo Running tests for typescript-express-module-example
           echo Building typescript-express-module-example
