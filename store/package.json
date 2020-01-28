@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "NODE_ENV=development nodemon --ignore logs/ dist/index.js",
-    "test": "docker-compose -f docker-compose.test.yml up --build -d && concurrently \"PORT=3003 npm run dev\" \"PORT=3003 jest ./src/tests --runInBand --watchAll\""
+    "test": "concurrently \"PORT=3003 npm run dev\" \"PORT=3003 jest ./src/tests --runInBand --detectOpenHandles --forceExit\""
   },
   "author": "Cedomic",
   "license": "See Repository",
@@ -17,8 +17,10 @@
     "@types/node": "12.0.10",
     "@types/supertest": "^2.0.8",
     "concurrently": "^5.1.0",
+    "dockerode": "^3.0.2",
     "jest": "^25.1.0",
     "nodemon": "1.19.1",
+    "shelljs": "^0.8.3",
     "supertest": "^4.0.2",
     "ts-jest": "^25.0.0"
   },
