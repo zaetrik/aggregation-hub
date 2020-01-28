@@ -14,18 +14,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.0.0
       - name: Test Store
-        env:
-          CI_ELASTICSEARCH: http://elasticsearch_1:9200
-          CI_STORE: http://store:3004
         working-directory: ./store
         run: |
           echo Running tests for store
           echo Building store
           npm install
           echo Running tests for store
-          docker-compose -f docker-compose.test.yml up -d
-          docker ps -a
-          npm test
+          CI_ELASTICSEARCH=http://elasticsearch_1:9200 CI_STORE=http://store:3004 npm test
   modules-server:
     runs-on: ubuntu-latest
 

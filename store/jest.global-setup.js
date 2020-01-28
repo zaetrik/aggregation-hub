@@ -3,7 +3,7 @@ const shell = require("shelljs");
 const waitForServiceToBeUp = (url, httpCode) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(new Error("SERVICE NOT AVAILABLE"));
+      reject(new Error(`SERVICE ${url} NOT AVAILABLE`));
     }, 60000);
 
     setInterval(() => {
