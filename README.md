@@ -89,7 +89,6 @@ On the overview page of your newly added module you will have to create a job an
 - Add authentication
 - Create shareable data streams
   - User can select data sources and make this data accessible via a public or secured API endpoint
-- Add tests (shame on me)
 - Create more modules
 - Create dashboard to replace Kibana
 - Create a "store" for data aggregation modules
