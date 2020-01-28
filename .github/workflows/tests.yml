@@ -12,15 +12,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 11.x
-      - name: Store
-        run: ls -a
       - name: Test Store
-        working-directory: ./store
+        working-directory: aggregation-hub/store
         run: |
-          directory=$(pwd)
-          folders=$(ls -a)
-          echo $directory
-          echo $folders
           echo Running tests for store
           echo Building store
           npm install
@@ -35,7 +29,7 @@ jobs:
         with:
           node-version: 11.x
       - name: Test modules-server
-        working-directory: ./modules-server
+        working-directory: aggregation-hub/modules-server
         run: |
           echo Running tests for modules-server
           echo Building modules-server
@@ -51,7 +45,7 @@ jobs:
         with:
           node-version: 11.x
       - name: Test google-search-results-module
-        working-directory: ./modules/google-search-results-module
+        working-directory: aggregation-hub/modules/google-search-results-module
         run: |
           echo Running tests for google-search-results-module
           echo Building google-search-results-module
@@ -67,7 +61,7 @@ jobs:
         with:
           node-version: 11.x
       - name: Test typescript-express-module-example
-        working-directory: ./modules/typescript-express-module-example
+        working-directory: aggregation-hub/modules/typescript-express-module-example
         run: |
           echo Running tests for typescript-express-module-example
           echo Building typescript-express-module-example
