@@ -18,6 +18,8 @@ jobs:
         run: |
           echo Running tests for store
           echo Building store
+          docker-compose -f dokcer-compose.test.yml up -d
+          docker network ls
           npm install
           echo Running tests for store
           CI_ELASTICSEARCH=http://elasticsearch_1:9200 CI_STORE=http://store:3004 npm test
