@@ -23,7 +23,7 @@ module.exports = async () => {
   shell.exec("docker-compose -f docker-compose.test.yml up --build -d");
 
   await waitForServiceToBeUp(
-    `http://localhost:${process.env.PORT}/modules`,
+    `http://localhost:${process.env.PORT}/config`,
     200
   );
 };

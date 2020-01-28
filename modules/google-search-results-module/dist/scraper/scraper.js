@@ -21,13 +21,15 @@ const startAggregation = (dataStoreUrl, searchQueries, moduleId) => __awaiter(th
             const getSearchResultsPromises = searchQueries.map(searchQuery => getSearchResults(searchQuery));
             const searchResults = yield Promise.all(getSearchResultsPromises);
             const flattenedSearchResults = [].concat(...searchResults);
-            flattenedSearchResults.map(searchResult => {
-                axios_1.default.post(`${dataStoreUrl}/document/insert`, {
-                    moduleId: moduleId,
-                    data: searchResult
+            if (process.env.NODE_ENV !== "TEST") {
+                flattenedSearchResults.map(searchResult => {
+                    axios_1.default.post(`${dataStoreUrl}/document/insert`, {
+                        moduleId: moduleId,
+                        data: searchResult
+                    });
                 });
-            });
-            resolve();
+            }
+            resolve(flattenedSearchResults);
         }
         catch (err) {
             logger_1.default.log("error", err);

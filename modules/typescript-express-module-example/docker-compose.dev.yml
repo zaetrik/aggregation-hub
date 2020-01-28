@@ -31,6 +31,7 @@ services:
       - traefik.frontend.rateLimit.extractorFunc=client.ip
     volumes:
       - ./logs:/home/dockeruser/app/logs/
+      - ./config.json:/home/dockeruser/app/config.json
     networks:
       - public
       - external

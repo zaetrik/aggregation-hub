@@ -20,7 +20,7 @@ module.exports = async () => {
     shell.echo("Sorry, this script requires docker-compose");
     shell.exit(1);
   }
-  shell.exec("docker-compose -f docker-compose.test.yml up -d");
+  shell.exec("docker-compose -f docker-compose.test.yml up --build -d");
 
   await waitForServiceToBeUp("http://localhost:9200", 200);
 };

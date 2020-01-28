@@ -7,7 +7,12 @@ const startAggregation = async (
   dataStoreUrl: string,
   searchQueries: string[],
   moduleId: string
-) => {
+): Promise<{
+  query: string;
+  link: string;
+  hostname: string;
+  title: string;
+}[]> => {
   return new Promise(async (resolve, reject) => {
     try {
       const getSearchResultsPromises: Promise<
@@ -20,16 +25,23 @@ const startAggregation = async (
       >[] = searchQueries.map(searchQuery => getSearchResults(searchQuery));
 
       const searchResults = await Promise.all(getSearchResultsPromises);
-      const flattenedSearchResults = [].concat(...searchResults);
+      const flattenedSearchResults: {
+        query: string;
+        link: string;
+        hostname: string;
+        title: string;
+      }[] = [].concat(...searchResults);
 
-      flattenedSearchResults.map(searchResult => {
-        axios.post(`${dataStoreUrl}/document/insert`, {
-          moduleId: moduleId,
-          data: searchResult
+      if (process.env.NODE_ENV !== "TEST") {
+        flattenedSearchResults.map(searchResult => {
+          axios.post(`${dataStoreUrl}/document/insert`, {
+            moduleId: moduleId,
+            data: searchResult
+          });
         });
-      });
+      }
 
-      resolve();
+      resolve(flattenedSearchResults);
     } catch (err) {
       logger.log("error", err);
       reject(err);
