@@ -7,8 +7,8 @@ services:
       args:
         PORT: ${PORT}
     container_name: google-search-results-module
-    env_file:
-      - dev.env
+    environment:
+      - PORT=3006
     restart: always
     ports:
       - "${PORT}:${PORT}"

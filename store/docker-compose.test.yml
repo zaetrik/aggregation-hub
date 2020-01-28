@@ -7,8 +7,10 @@ services:
       args:
         PORT: ${PORT}
     container_name: store
-    env_file:
-      - dev.env
+    environment:
+      - DB_SERVER=http://elasticsearch_1:9200
+      - PORT=3003
+      - WAIT_HOSTS=elasticsearch_1:9200
     restart: always
     volumes:
       - ./logs:/home/dockeruser/app/logs/

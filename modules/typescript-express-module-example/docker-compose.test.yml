@@ -7,8 +7,8 @@ services:
       args:
         PORT: ${PORT}
     container_name: typescript-express-module-example
-    env_file:
-      - dev.env
+    environment: :
+      - PORT=3005
     restart: always
     ports:
       - "${PORT}:${PORT}"

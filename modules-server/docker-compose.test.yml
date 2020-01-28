@@ -7,10 +7,18 @@ services:
       context: .
       args:
         PORT: ${PORT}
-    env_file:
-      - dev.env
     environment:
       - NODE_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_SERVER=http://postgres:5432
+      - DB_NAME=modules
+      - PORT=3004
+      - WAIT_HOSTS=postgres:5432
+      - DATA_STORE_URL=http://store:3003
+      - SERVICE_URL=http://modules-server:3004
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
     restart: always
     ports:
       - "${PORT}:${PORT}"
