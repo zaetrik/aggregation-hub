@@ -12,15 +12,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 11.x
-      - name: test
-        working-directory: aggregation-hub
-        run: |
-          test=$(ls -a)
-          echo $test
-      - name: test2
-        run: |
-          test=$(ls -a)
-          echo $test
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
       - name: Test Store
         working-directory: aggregation-hub/store
         run: |
