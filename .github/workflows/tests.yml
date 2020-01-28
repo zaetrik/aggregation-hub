@@ -15,6 +15,8 @@ jobs:
       - name: Test Store
         working-directory: ./store
         run: |
+          pwd
+          ls -a
           echo Running tests for store
           echo Building store
           npm install
