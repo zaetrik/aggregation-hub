@@ -18,7 +18,7 @@ jobs:
         run: |
           echo Running tests for store
           echo Building store
-          docker-compose -f dokcer-compose.test.yml up -d
+          docker-compose -f docker-compose.test.yml up -d
           docker network ls
           npm install
           echo Running tests for store
