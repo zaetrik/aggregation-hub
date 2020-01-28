@@ -12,32 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-describe("Document API", () => {
+describe("Query API", () => {
     const api = supertest_1.default(`localhost:${process.env.PORT}`);
-    let documentId;
     it("adds a document", () => __awaiter(this, void 0, void 0, function* () {
-        const response = yield api
-            .post("/document/insert")
-            .send({ moduleId: 1, data: { test: "test" } });
-        expect(response.body.status).toEqual(201);
-        expect(response.body.warnings).toBeNull();
-        expect(response.body.id).toBeDefined();
-        documentId = response.body.id;
-    }));
-    it("updates a document", () => __awaiter(this, void 0, void 0, function* () {
-        const response = yield api
-            .post("/document/update")
-            .send({ moduleId: 1, id: documentId, data: { test: "new" } });
+        const response = yield api.get("/query/all?moduleId=1&start=0");
         expect(response.body.status).toEqual(200);
-        expect(response.body.warnings).toBeNull();
-        expect(response.body.id).toBeDefined();
-    }));
-    it("deletes a document", () => __awaiter(this, void 0, void 0, function* () {
-        const response = yield api.delete("/document/delete").send({
-            moduleId: 1,
-            id: documentId
-        });
-        expect(response.body.status).toEqual(200);
-        expect(response.body.warnings).toBeNull();
+        expect(response.body.data).toBeDefined();
     }));
 });

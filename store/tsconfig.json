@@ -6,7 +6,7 @@
     "target": "es6",
     "noImplicitAny": false,
     "moduleResolution": "node",
-    "typeRoots": ["./node_modules/@types", "./typings"],
+    "typeRoots": ["./node_modules/@types", "./types"],
     "rootDir": "src",
     "outDir": "dist",
     "baseUrl": ".",

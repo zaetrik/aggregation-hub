@@ -24,4 +24,14 @@ describe("Document API", () => {
     expect(response.body.warnings).toBeNull();
     expect(response.body.id).toBeDefined();
   });
+
+  it("deletes a document", async () => {
+    const response = await api.delete("/document/delete").send({
+      moduleId: 1,
+      id: documentId
+    });
+
+    expect(response.body.status).toEqual(200);
+    expect(response.body.warnings).toBeNull();
+  });
 });
