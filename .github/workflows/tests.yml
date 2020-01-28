@@ -13,12 +13,8 @@ jobs:
         with:
           node-version: 11.x
       - name: Store
-        working-directory: ./store
-        run: |
-          directory=$(pwd)
-          folders=$(ls -a)
-          echo $directory
-          echo $folders
+        working-directory: store
+        run: ls -a
       - name: Test Store
         working-directory: ./store
         run: |
