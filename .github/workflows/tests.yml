@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.0.0
       - name: Test Store
-        working-directory: ./aggregation-hub/store
+        working-directory: ./store
         run: |
           echo Running tests for store
           echo Building store
@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.0.0
       - name: Test modules-server
-        working-directory: aggregation-hub/modules-server
+        working-directory: ./modules-server
         run: |
           echo Running tests for modules-server
           echo Building modules-server
@@ -51,7 +51,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.0.0
       - name: Test google-search-results-module
-        working-directory: modules/google-search-results-module
+        working-directory: ./modules/google-search-results-module
         run: |
           echo Running tests for google-search-results-module
           echo Building google-search-results-module
