@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 describe("Index API", () => {
-    const api = supertest_1.default(`localhost:${process.env.PORT}`);
+    const api = supertest_1.default(process.env.CI_STORE || `localhost:${process.env.PORT}`);
     it("deletes an index", () => __awaiter(this, void 0, void 0, function* () {
         yield api.post("/index/create/1");
         const response = yield api.delete("/index/delete/1");

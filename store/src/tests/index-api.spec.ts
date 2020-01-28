@@ -1,7 +1,9 @@
 import supertest from "supertest";
 
 describe("Index API", () => {
-  const api = supertest(`localhost:${process.env.PORT}`);
+  const api = supertest(
+    process.env.CI_STORE || `localhost:${process.env.PORT}`
+  );
   it("deletes an index", async () => {
     await api.post("/index/create/1");
     const response = await api.delete("/index/delete/1");
