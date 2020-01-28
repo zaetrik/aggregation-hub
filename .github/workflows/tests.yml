@@ -1,0 +1,50 @@
+name: Run Tests
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Use Node.js v11
+        uses: actions/setup-node@v1
+        with:
+          node-version: 11.x
+      - name: Test Store
+        run: |
+          echo Running tests for store
+          cd store
+          echo Building store
+          npm install
+          echo Running tests for store
+          npm test
+      - name: Test module-server
+        run: |
+          echo Running tests for modules-server
+          cd ..
+          cd modules-server
+          echo Building modules-server
+          npm install
+          echo Running tests for modules-server
+          npm test
+      - name: Test google-search-results-module
+        run: |
+          echo Running tests for google-search-results-module
+          cd ..
+          cd modules/google-search-results-module
+          echo Building google-search-results-module
+          npm install
+          echo Running tests for google-search-results-module
+          npm test
+      - name: Test typescript-express-module-example
+        run: |
+          echo Running tests for typescript-express-module-example
+          cd ..
+          cd typescript-express-module-example
+          echo Building typescript-express-module-example
+          npm install
+          echo Running tests for typescript-express-module-example
+          npm test
+        
