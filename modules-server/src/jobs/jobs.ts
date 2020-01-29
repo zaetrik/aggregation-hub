@@ -3,7 +3,6 @@ import { Repository } from "repository";
 import cron from "cron";
 import { GetJobsResponse, GetModulesResponse } from "responses";
 import { DataModule } from "dataModule";
-import axios from "axios";
 import executeJob from "../utils/shared/executeJob";
 
 export = (repository: Repository) => {
