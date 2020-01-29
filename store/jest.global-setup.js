@@ -22,5 +22,8 @@ module.exports = async () => {
   }
   shell.exec("docker-compose -f docker-compose.test.yml up --build -d");
 
-  await waitForServiceToBeUp(`${process.env.ELASTICSEARCH_HOST}:9200`, 200);
+  await waitForServiceToBeUp(
+    `http://${process.env.ELASTICSEARCH_HOST}:9200`,
+    200
+  );
 };
