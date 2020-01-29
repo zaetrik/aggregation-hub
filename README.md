@@ -1,3 +1,5 @@
+![Pipeline Status](https://gitlab.com/Cedomic/aggregation-hub/badges/master/pipeline.svg)
+
 # Aggregation Hub
 
 A platform to aggregate data from all kinds of different sources.
