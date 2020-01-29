@@ -1,6 +1,6 @@
 [![Pipeline Status](https://gitlab.com/Cedomic/aggregation-hub/badges/master/pipeline.svg)](https://gitlab.com/Cedomic/aggregation-hub/pipelines/latest)
 
-#### Main Repo at https://gitlab.com/Cedomic/aggregation-hub
+#### Main Repo on [GitLab](https://gitlab.com/Cedomic/aggregation-hub)
 
 # Aggregation Hub
 
