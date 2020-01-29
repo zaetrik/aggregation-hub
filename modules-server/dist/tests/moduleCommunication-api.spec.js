@@ -18,7 +18,7 @@ describe("Module Communication API", () => {
     it("throws error when required route settings are not set", () => __awaiter(void 0, void 0, void 0, function* () {
         yield api.post("/modules").send({
             name: "testing-job-execution",
-            address: `http://typescript-express-module-example:${process.env.MODULE_PORT}`
+            address: `http://${process.env.MODULE_HOST}:${process.env.MODULE_PORT}`
         });
         const getModuleResponse = yield api.get("/modules/testing-job-execution");
         const moduleId = getModuleResponse.body.modules[0].id;

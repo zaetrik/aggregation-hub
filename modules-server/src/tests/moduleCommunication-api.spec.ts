@@ -6,7 +6,7 @@ describe("Module Communication API", () => {
   it("throws error when required route settings are not set", async () => {
     await api.post("/modules").send({
       name: "testing-job-execution",
-      address: `http://typescript-express-module-example:${process.env.MODULE_PORT}`
+      address: `http://${process.env.MODULE_HOST}:${process.env.MODULE_PORT}`
     });
 
     const getModuleResponse = await api.get("/modules/testing-job-execution");
