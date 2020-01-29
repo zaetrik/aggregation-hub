@@ -24,6 +24,11 @@ module.exports = async () => {
     shell.exec("docker-compose -f docker-compose.test.yml up --build -d");
 
     await waitForServiceToBeUp(`http://localhost:9200`, 200);
+  } else {
+    const { spawn } = require("child_process");
+
+    spawn("npm", ["run", "dev"]);
+    shell.exec("sleep 10");
   }
   return;
 };
