@@ -4,7 +4,7 @@ const waitForServiceToBeUp = (url, httpCode) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       reject(new Error(`SERVICE ${url} NOT AVAILABLE`));
-    }, 60000);
+    }, 120000);
 
     setInterval(() => {
       const response = shell.exec(

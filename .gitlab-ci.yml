@@ -15,5 +15,8 @@ store-test:
     - cp example.env ./.env
     - cp example.env ./dev.env
     - npm i
+    - docker-compose -f docker-compose.test.yml up -d
+    - docker ps
+    - docker network ls
   script:
     - npm run ci
