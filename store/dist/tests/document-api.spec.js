@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -13,9 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 describe("Document API", () => {
-    const api = supertest_1.default(`localhost:${process.env.PORT}`);
+    const api = supertest_1.default(`${process.env.SERVICE_HOST}:${process.env.PORT}`);
     let documentId;
-    it("adds a document", () => __awaiter(this, void 0, void 0, function* () {
+    it("adds a document", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield api
             .post("/document/insert")
             .send({ moduleId: 1, data: { test: "test" } });
@@ -24,7 +25,7 @@ describe("Document API", () => {
         expect(response.body.id).toBeDefined();
         documentId = response.body.id;
     }));
-    it("updates a document", () => __awaiter(this, void 0, void 0, function* () {
+    it("updates a document", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield api
             .post("/document/update")
             .send({ moduleId: 1, id: documentId, data: { test: "new" } });
@@ -32,7 +33,7 @@ describe("Document API", () => {
         expect(response.body.warnings).toBeNull();
         expect(response.body.id).toBeDefined();
     }));
-    it("deletes a document", () => __awaiter(this, void 0, void 0, function* () {
+    it("deletes a document", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield api.delete("/document/delete").send({
             moduleId: 1,
             id: documentId

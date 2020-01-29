@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -18,7 +19,7 @@ module.exports = (app, repository) => {
     /**
      * DOCUMENT ROUTES
      */
-    app.post("/document/insert", validators_1.validateInsertDocument, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/document/insert", validators_1.validateInsertDocument, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const insertOperation = yield repository.insertDocument(req.body);
             res.status(http_status_1.default.OK).send(insertOperation);
@@ -35,7 +36,7 @@ module.exports = (app, repository) => {
             }
         }
     }));
-    app.post("/document/update", validators_1.validateUpdateDocument, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/document/update", validators_1.validateUpdateDocument, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const updateOperation = yield repository.updateDocument(req.body);
             res.status(http_status_1.default.OK).send(updateOperation);
@@ -59,7 +60,7 @@ module.exports = (app, repository) => {
             }
         }
     }));
-    app.delete("/document/delete", validators_1.validateDeleteDocument, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.delete("/document/delete", validators_1.validateDeleteDocument, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const deleteOperation = yield repository.deleteDocument(req.body);
             res.status(http_status_1.default.OK).send(deleteOperation);

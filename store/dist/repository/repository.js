@@ -1,15 +1,16 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const repository = (client) => {
-    const insertDocument = (dataToAdd) => __awaiter(this, void 0, void 0, function* () {
+    const insertDocument = (dataToAdd) => __awaiter(void 0, void 0, void 0, function* () {
         const insertOperation = yield client.index({
             index: `module-${dataToAdd.moduleId}`,
             body: dataToAdd.data
@@ -20,7 +21,7 @@ const repository = (client) => {
             id: insertOperation.body._id
         };
     });
-    const updateDocument = (dataToUpdate) => __awaiter(this, void 0, void 0, function* () {
+    const updateDocument = (dataToUpdate) => __awaiter(void 0, void 0, void 0, function* () {
         const updateOperation = yield client.update({
             index: `module-${dataToUpdate.moduleId}`,
             id: dataToUpdate.id,
@@ -32,7 +33,7 @@ const repository = (client) => {
             id: updateOperation.body._id
         };
     });
-    const deleteDocument = (dataToDelete) => __awaiter(this, void 0, void 0, function* () {
+    const deleteDocument = (dataToDelete) => __awaiter(void 0, void 0, void 0, function* () {
         const deleteOperation = yield client
             .delete({
             index: `module-${dataToDelete.moduleId}`,
@@ -52,7 +53,7 @@ const repository = (client) => {
             warnings: deleteOperation.warnings
         };
     });
-    const createIndex = (moduleId) => __awaiter(this, void 0, void 0, function* () {
+    const createIndex = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
         const createIndexOperation = yield client.indices.create({
             index: `module-${moduleId}`
         });
@@ -61,7 +62,7 @@ const repository = (client) => {
             index: createIndexOperation.body.index
         };
     });
-    const deleteIndex = (moduleId) => __awaiter(this, void 0, void 0, function* () {
+    const deleteIndex = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
         const deleteIndexOperation = yield client.indices.delete({
             index: `module-${moduleId}`
         });
@@ -70,13 +71,13 @@ const repository = (client) => {
             index: `module-${moduleId}`
         };
     });
-    const getDocumentCountFromIndex = (moduleId) => __awaiter(this, void 0, void 0, function* () {
+    const getDocumentCountFromIndex = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
         const getDocumentCountOperation = yield client.count({
             index: `module-${moduleId}`
         });
         return { status: 200, count: getDocumentCountOperation.body.count };
     });
-    const getMappingFromIndex = (moduleId) => __awaiter(this, void 0, void 0, function* () {
+    const getMappingFromIndex = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
         const getMappingFromIndexOperation = yield client.indices.getMapping({
             index: `module-${moduleId}`
         });
@@ -85,7 +86,7 @@ const repository = (client) => {
             mapping: getMappingFromIndexOperation.body[`module-${moduleId}`].mappings
         };
     });
-    const queryAllFromIndex = (moduleId, start) => __awaiter(this, void 0, void 0, function* () {
+    const queryAllFromIndex = (moduleId, start) => __awaiter(void 0, void 0, void 0, function* () {
         const queryAllOperation = yield client.search({
             index: `module-${moduleId}`,
             from: start ? start : 0,

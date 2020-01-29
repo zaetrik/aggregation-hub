@@ -1,12 +1,14 @@
-image: docker:latest
+image: docker:19.03.0
 
 stages:
   - test
 
 store-test:
   stage: test
+  variables:
+    DOCKER_DRIVER: overlay2
   services:
-    - docker:dind
+    - docker:19.03.0-dind
   before_script:
     - apk --update add docker-compose
     - apk --update add nodejs

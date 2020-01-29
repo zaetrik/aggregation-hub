@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -18,7 +19,7 @@ module.exports = (app, repository) => {
     /**
      * INDEX ROUTES
      */
-    app.post("/index/create/:moduleId", validators_1.validateCreateDeleteIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/index/create/:moduleId", validators_1.validateCreateDeleteIndex, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const createIndexOperation = yield repository.createIndex(req.params.moduleId);
             res.status(http_status_1.default.OK).send(createIndexOperation);
@@ -33,7 +34,7 @@ module.exports = (app, repository) => {
             }
         }
     }));
-    app.delete("/index/delete/:moduleId", validators_1.validateCreateDeleteIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.delete("/index/delete/:moduleId", validators_1.validateCreateDeleteIndex, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const deleteIndexOperation = yield repository.deleteIndex(req.params.moduleId);
             res.status(http_status_1.default.OK).send(deleteIndexOperation);
@@ -48,7 +49,7 @@ module.exports = (app, repository) => {
             }
         }
     }));
-    app.get("/index/count/:moduleId", validators_1.validateGetDocumentCountGetMappingFromIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/index/count/:moduleId", validators_1.validateGetDocumentCountGetMappingFromIndex, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getDocumentCountOperation = yield repository.getDocumentCountFromIndex(req.params.moduleId);
             res.status(http_status_1.default.OK).send(getDocumentCountOperation);
@@ -58,7 +59,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.get("/index/mapping/:moduleId", validators_1.validateGetDocumentCountGetMappingFromIndex, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/index/mapping/:moduleId", validators_1.validateGetDocumentCountGetMappingFromIndex, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getMappingOperation = yield repository.getMappingFromIndex(req.params.moduleId);
             res.status(http_status_1.default.OK).send(getMappingOperation);

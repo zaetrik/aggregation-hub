@@ -1,7 +1,7 @@
 import supertest from "supertest";
 
 describe("Document API", () => {
-  const api = supertest(`localhost:${process.env.PORT}`);
+  const api = supertest(`${process.env.SERVICE_HOST}:${process.env.PORT}`);
 
   let documentId;
   it("adds a document", async () => {
