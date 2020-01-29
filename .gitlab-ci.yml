@@ -11,6 +11,7 @@ store-test:
     - apk --update add docker-compose
     - apk --update add nodejs
     - apk --update add npm
+    - apk add --update curl && rm -rf /var/cache/apk/*
     - cd store
     - cp example.env ./.env
     - cp example.env ./dev.env
