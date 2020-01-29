@@ -32,22 +32,16 @@ module.exports = async () => {
   } else {
     const { spawn } = require("child_process");
 
-    spawn("node", [
-      "../modules/typescript-express-module-example/dist/index.js",
-      "PORT=3005"
-    ]);
-    spawn("npm", [
-      "run",
-      "dev",
-      "PORT=3004",
-      "DB_SERVER=http://postgres:5432",
-      "DB_HOST=postgres",
-      "DB_PORT=5432",
-      "DB_NAME=modules",
-      "DB_USERNAME=user",
-      "DB_PASSWORD=password",
-      "SERVICE_URL=http://localhost:3004"
-    ]);
+    spawn(
+      "node",
+      ["../modules/typescript-express-module-example/dist/index.js"],
+      {
+        env: {
+          PORT: 3005
+        }
+      }
+    );
+    spawn("npm", ["run", "dev"]);
     shell.exec("sleep 10");
   }
   return;
