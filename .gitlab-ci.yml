@@ -7,7 +7,7 @@ store-test:
   stage: test
   services:
     - name: docker:19.03.0-dind
-      alias: localhost
+      alias: dind
   before_script:
     - apk --update add docker-compose
     - apk --update add nodejs
@@ -19,9 +19,6 @@ store-test:
     - npm i
     - docker-compose -f docker-compose.test.yml up -d
     - sleep 60
-    - curl http://localhost:9200
-    - curl http://elasticsearch_1:9200
-    - curl http://docker:9200
-    - curl http://elasticsearch_1
+    - curl dind:9200
   script:
     - npm run ci

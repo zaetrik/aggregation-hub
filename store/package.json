@@ -7,7 +7,7 @@
     "start": "node dist/index.js",
     "dev": "NODE_ENV=development nodemon --ignore logs/ dist/index.js",
     "test": "ELASTICSEARCH_HOST=http://localhost SERVICE_HOST=localhost PORT=3003 jest ./src/tests --runInBand --detectOpenHandles --forceExit",
-    "ci": "ELASTICSEARCH_HOST=localhost SERVICE_HOST=localhost PORT=3003 jest ./src/tests --runInBand --detectOpenHandles --forceExit"
+    "ci": "ELASTICSEARCH_HOST=dind SERVICE_HOST=dind PORT=3003 jest ./src/tests --runInBand --detectOpenHandles --forceExit"
   },
   "author": "Cedomic",
   "license": "See Repository",
