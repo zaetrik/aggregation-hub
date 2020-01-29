@@ -1,9 +1,10 @@
+image: docker:19.03.0
+
 stages:
   - test
 
 store-test:
   stage: test
-  image: docker:19.03.0
   services:
     - docker:19.03.0-dind
   before_script:
@@ -14,8 +15,21 @@ store-test:
     - cp example.env ./.env
     - cp example.env ./dev.env
     - npm i
-    - docker-compose -f docker-compose.test.yml up -d
-    - docker ps
-    - docker network ls
+  script:
+    - npm run ci
+
+modules-server-test:
+  stage: test
+  services:
+    - docker:19.03.0-dind
+  before_script:
+    - apk --update add docker-compose
+    - apk --update add nodejs
+    - apk --update add npm
+    - cd modules-server
+    - cp example.env ./.env
+    - cp example.env ./dev.env
+    - npm i
+    - cat /etc/hosts
   script:
     - npm run ci
