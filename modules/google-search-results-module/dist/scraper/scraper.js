@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -15,8 +16,8 @@ const axios_1 = __importDefault(require("axios"));
 const async_retry_1 = __importDefault(require("async-retry"));
 const cheerio_1 = __importDefault(require("cheerio"));
 const logger_1 = __importDefault(require("../utils/logger"));
-const startAggregation = (dataStoreUrl, searchQueries, moduleId) => __awaiter(this, void 0, void 0, function* () {
-    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+const startAggregation = (dataStoreUrl, searchQueries, moduleId) => __awaiter(void 0, void 0, void 0, function* () {
+    return new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getSearchResultsPromises = searchQueries.map(searchQuery => getSearchResults(searchQuery));
             const searchResults = yield Promise.all(getSearchResultsPromises);
@@ -38,7 +39,7 @@ const startAggregation = (dataStoreUrl, searchQueries, moduleId) => __awaiter(th
     }));
 });
 exports.startAggregation = startAggregation;
-const stopAggregation = (moduleServiceUrl, moduleId) => __awaiter(this, void 0, void 0, function* () {
+const stopAggregation = (moduleServiceUrl, moduleId) => __awaiter(void 0, void 0, void 0, function* () {
     yield axios_1.default.post(`${moduleServiceUrl}/aggregation/${moduleId}/done`, {});
 });
 exports.stopAggregation = stopAggregation;
@@ -47,8 +48,8 @@ exports.stopAggregation = stopAggregation;
  * @param URL Link from page to fetch
  * @returns HTML from page
  */
-const getHTML = (url) => __awaiter(this, void 0, void 0, function* () {
-    return yield async_retry_1.default((request) => __awaiter(this, void 0, void 0, function* () {
+const getHTML = (url) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield async_retry_1.default((request) => __awaiter(void 0, void 0, void 0, function* () {
         return yield axios_1.default.get(url).catch(err => {
             logger_1.default.log("error", `Error in getHTML() for URL "${url}": ${err}`);
             throw err;
@@ -58,7 +59,7 @@ const getHTML = (url) => __awaiter(this, void 0, void 0, function* () {
         minTimeout: 120000
     });
 });
-const getSearchResults = (searchQuery) => __awaiter(this, void 0, void 0, function* () {
+const getSearchResults = (searchQuery) => __awaiter(void 0, void 0, void 0, function* () {
     const html = yield getHTML(`https://www.google.com/search?q=${searchQuery}&tbm=nws`);
     const $ = yield cheerio_1.default.load(html.data);
     const searchResults = [];

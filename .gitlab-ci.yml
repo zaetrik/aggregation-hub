@@ -17,3 +17,21 @@ store-test:
     - npm i
   script:
     - npm run ci
+
+modules-server-test:
+  stage: test
+  image: node:10.16.0-alpine
+  services:
+    - name: postgres
+      alias: postgres
+  variables:
+    POSTGRES_USER: user
+    POSTGRES_PASSWORD: password
+    POSTGRES_DB: modules
+  before_script:
+    - cd store
+    - cp example.env ./.env
+    - cp example.env ./dev.env
+    - npm i
+  script:
+    - npm run ci

@@ -24,7 +24,9 @@ export = (app: express.Application) => {
 
   app.get("/config", async (req, res) => {
     try {
-      return res.status(httpStatus.OK).sendFile(path.resolve("./config.json"));
+      return res
+        .status(httpStatus.OK)
+        .sendFile(path.join(__dirname, "..", "..", "config.json"));
     } catch (err) {
       logger.log("error", err, { route: req.originalUrl });
     }
