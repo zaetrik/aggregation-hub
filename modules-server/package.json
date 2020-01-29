@@ -7,7 +7,7 @@
     "start": "node dist/index.js",
     "dev": "NODE_ENV=development DATA_STORE_URL=http://elasticsearch_1:9200 nodemon --ignore logs/ dist/index.js",
     "test": "CI=false MODULE_PORT=3005 MODULE_HOST=typescript-express-module-example PORT=3004 jest ./src/tests --runInBand --detectOpenHandles --forceExit",
-    "ci": "concurrently \"PORT=3005 node ../modules/typescript-express-module-example/dist/index.js\" \"PORT=3004 DB_SERVER=http://postgres:5432 DB_HOST=postgres DB_PORT=5432 DB_NAME=modules DB_USERNAME=user DB_PASSWORD=password SERVICE_URL=http://localhost:3004 npm run dev\" \"CI=true PORT=3004 MODULE_PORT=3005 MODULE_HOST=localhost jest ./src/tests --forceExit\""
+    "ci": "CI=true PORT=3004 MODULE_PORT=3005 MODULE_HOST=localhost jest ./src/tests --detectOpenHandles --forceExit"
   },
   "author": "Cedomic",
   "license": "See Repository",
@@ -18,7 +18,6 @@
     "@types/pg": "^7.14.0",
     "@types/supertest": "^2.0.8",
     "@types/uuid": "^3.4.6",
-    "concurrently": "^5.1.0",
     "jest": "^25.1.0",
     "nodemon": "1.19.1",
     "shelljs": "^0.8.3",

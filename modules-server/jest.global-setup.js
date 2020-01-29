@@ -29,6 +29,26 @@ module.exports = async () => {
       `http://localhost:${process.env.PORT}/modules`,
       200
     );
+  } else {
+    const { spawn } = require("child_process");
+
+    spawn("node", [
+      "../modules/typescript-express-module-example/dist/index.js",
+      "PORT=3005"
+    ]);
+    spawn("npm", [
+      "run",
+      "dev",
+      "PORT=3004",
+      "DB_SERVER=http://postgres:5432",
+      "DB_HOST=postgres",
+      "DB_PORT=5432",
+      "DB_NAME=modules",
+      "DB_USERNAME=user",
+      "DB_PASSWORD=password",
+      "SERVICE_URL=http://localhost:3004"
+    ]);
+    shell.exec("sleep 10");
   }
   return;
 };
