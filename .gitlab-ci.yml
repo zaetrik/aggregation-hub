@@ -3,10 +3,12 @@ stages:
 
 store-test:
   stage: test
-  image: gitlab/dind:latest
-  services:
-    - docker:dind
+  image: ubuntu
   before_script:
+    - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
+    - pip install docker-compose
+    - curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+    - sudo apt install nodejs
     - cd store
     - cp example.env ./.env
     - cp example.env ./dev.env
