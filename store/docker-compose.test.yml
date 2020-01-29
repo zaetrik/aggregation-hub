@@ -3,7 +3,6 @@ version: "3.3"
 services:
   store:
     build:
-      network: host
       context: .
       args:
         PORT: ${PORT}
@@ -15,11 +14,8 @@ services:
       - ./logs:/home/dockeruser/app/logs/
     ports:
       - "${PORT}:${PORT}"
-
   elasticsearch_1:
-    build:
-      network: host
-      image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.4.0
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.4.0
     container_name: elasticsearch_1
     restart: always
     environment:
