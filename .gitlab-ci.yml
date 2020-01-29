@@ -1,15 +1,15 @@
 stages:
-    - test
-  
-  store-test:
-    stage: test
-    image: gitlab/dind:latest
-    services:
-      - docker:dind
-    before_script:
-      - cd store
-      - cp example.env ./.env
-      - cp example.env ./dev.env
-      - npm i
-    script:
-      - npm test
+  - test
+
+store-test:
+  stage: test
+  image: gitlab/dind:latest
+  services:
+    - docker:dind
+  before_script:
+    - cd store
+    - cp example.env ./.env
+    - cp example.env ./dev.env
+    - npm i
+  script:
+    - npm test
