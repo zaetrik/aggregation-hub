@@ -25,4 +25,5 @@ module.exports = async () => {
 
     await waitForServiceToBeUp(`http://localhost:9200`, 200);
   }
+  return;
 };
