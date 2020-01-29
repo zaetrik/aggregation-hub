@@ -1,4 +1,4 @@
-![Pipeline Status](https://gitlab.com/Cedomic/aggregation-hub/badges/master/pipeline.svg)
+[![Pipeline Status](https://gitlab.com/Cedomic/aggregation-hub/badges/master/pipeline.svg)(https://gitlab.com/Cedomic/aggregation-hub/pipelines/latest)]
 
 # Aggregation Hub
 
