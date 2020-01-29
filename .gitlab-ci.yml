@@ -19,4 +19,4 @@ store-test:
     - cp example.env ./dev.env
     - npm i
   script:
-    - npm test
+    - npm run ci
