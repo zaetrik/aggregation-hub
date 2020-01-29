@@ -105,7 +105,8 @@ Module.getInitialProps = async ({ res, query }) => {
 
     return {
       module: responseModule.data.modules[0],
-      job: responseJob.data.jobs[0]
+      job: responseJob.data.jobs[0],
+      query
     };
   } else {
     return { module: undefined, job: undefined, query };
