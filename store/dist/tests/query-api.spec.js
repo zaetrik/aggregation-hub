@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 describe("Query API", () => {
-    const api = supertest_1.default(`${process.env.SERVICE_HOST}:${process.env.PORT}`);
+    const api = supertest_1.default(`localhost:${process.env.PORT}`);
     it("adds a document", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield api.get("/query/all?moduleId=1&start=0");
         expect(response.body.status).toEqual(200);

@@ -11,9 +11,6 @@ store-test:
   variables:
     DB_SERVER: "http://elasticsearch:9200"
   before_script:
-    - apk --update add docker-compose
-    - apk --update add nodejs
-    - apk --update add npm
     - cd store
     - cp example.env ./.env
     - cp example.env ./dev.env
