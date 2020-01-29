@@ -5,8 +5,8 @@ store-test:
   stage: test
   image: ubuntu
   before_script:
-    - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-    - pip install docker-compose
+    - sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+    - sudo chmod +x /usr/local/bin/docker-compose
     - curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
     - sudo apt install nodejs
     - cd store
