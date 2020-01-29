@@ -8,6 +8,7 @@ store-test:
   services:
     - docker:dind
   before_script:
+    - apk --update add docker-compose
     - apk --update add nodejs
     - apk --update add npm
     - cd store
