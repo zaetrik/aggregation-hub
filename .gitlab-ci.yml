@@ -29,7 +29,7 @@ modules-server-test:
     POSTGRES_PASSWORD: password
     POSTGRES_DB: modules
   before_script:
-    - cd store
+    - cd modules-server
     - cp example.env ./.env
     - cp example.env ./dev.env
     - npm i
