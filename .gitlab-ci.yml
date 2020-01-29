@@ -6,7 +6,8 @@ stages:
 store-test:
   stage: test
   services:
-    - docker:19.03.0-dind
+    - name: docker:19.03.0-dind
+      alias: localhost
   before_script:
     - apk --update add docker-compose
     - apk --update add nodejs
