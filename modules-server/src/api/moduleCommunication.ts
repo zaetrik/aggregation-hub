@@ -6,8 +6,9 @@ import { Repository } from "repository";
 import { GetModulesResponse, GetJobsResponse } from "responses";
 import { DataModule } from "dataModule";
 import axios from "axios";
-import getRequiredModuleRouteSettings from "../utils/getRequiredModuleRouteSettings";
-import requiredModuleRouteSettingNotSet from "../utils/requiredModuleRouteSettingNotSet";
+import getRequiredModuleRouteSettings from "../utils/shared/getRequiredModuleRouteSettings";
+import requiredModuleRouteSettingNotSet from "../utils/shared/requiredModuleRouteSettingNotSet";
+import executeJob from "../utils/shared/executeJob";
 
 // repository is used to pass different DB functions (e.g. testDbAbstraction)
 export = (app: express.Application, repository: Repository) => {
@@ -26,37 +27,7 @@ export = (app: express.Application, repository: Repository) => {
 
         const module: DataModule = getModuleByIdOperation.modules[0];
 
-        const routeSettings: {
-          status: number;
-          routeSettings: ModuleRouteSettings;
-        } = await repository.getModuleRouteSettings(module.id);
-
-        const requiredModuleSettings: {
-          body: string[];
-          query: string[];
-        } = getRequiredModuleRouteSettings(module, "/start");
-
-        if (
-          !routeSettings.routeSettings.routeSettings ||
-          requiredModuleRouteSettingNotSet(
-            routeSettings.routeSettings.routeSettings["/start"],
-            requiredModuleSettings
-          )
-        ) {
-          throw new Error(JSON.stringify(requiredModuleSettings));
-        }
-
-        const startRouteSettings = {
-          ...routeSettings.routeSettings.routeSettings["/start"].bodyParams,
-          ...routeSettings.routeSettings.routeSettings["/start"].queryParams
-        };
-
-        axios.post(`${module.address}/start`, {
-          ...startRouteSettings,
-          dataStoreUrl: process.env.DATA_STORE_URL,
-          moduleServiceUrl: process.env.SERVICE_URL,
-          moduleId: module.id
-        });
+        await executeJob(module, repository);
 
         return res.status(httpStatus.OK).send({
           status: 200,
@@ -64,7 +35,13 @@ export = (app: express.Application, repository: Repository) => {
         });
       } catch (err) {
         logger.log("error", err, { route: req.originalUrl });
-        res.sendStatus(httpStatus.BAD_REQUEST);
+        if (err.message.indexOf("Required routeSettings not set") !== -1) {
+          res
+            .status(httpStatus.BAD_REQUEST)
+            .send({ status: httpStatus.BAD_REQUEST, message: err.message });
+        } else {
+          res.sendStatus(httpStatus.BAD_REQUEST);
+        }
       }
     }
   );

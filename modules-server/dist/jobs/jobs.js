@@ -13,9 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 const logger_1 = __importDefault(require("../utils/logger"));
 const cron_1 = __importDefault(require("cron"));
-const axios_1 = __importDefault(require("axios"));
-const getRequiredModuleRouteSettings_1 = __importDefault(require("../utils/getRequiredModuleRouteSettings"));
-const requiredModuleRouteSettingNotSet_1 = __importDefault(require("../utils/requiredModuleRouteSettingNotSet"));
+const executeJob_1 = __importDefault(require("../utils/shared/executeJob"));
 module.exports = (repository) => {
     new cron_1.default.CronJob("30 * * * * *", () => {
         checkIfJobIsDue();
@@ -25,23 +23,16 @@ module.exports = (repository) => {
         const jobsToExecute = jobs.jobs.filter(job => new Date().getTime() - job.lastExecuted > 1000 * 60 * job.interval &&
             job.execute &&
             !job.running);
-        jobsToExecute.map(job => executeJob(job));
+        jobsToExecute.map(job => startJobExecution(job));
     });
-    const executeJob = (job) => __awaiter(void 0, void 0, void 0, function* () {
+    const startJobExecution = (job) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getModuleByIdOperation = yield repository.getModuleById(job.moduleId);
             if (getModuleByIdOperation.modules.length === 0) {
                 throw new Error("MODULE NOT FOUND");
             }
             const module = getModuleByIdOperation.modules[0];
-            const routeSettings = yield repository.getModuleRouteSettings(`${module.id}`);
-            const requiredModuleSettings = getRequiredModuleRouteSettings_1.default(module, "/start");
-            if (!routeSettings.routeSettings.routeSettings ||
-                requiredModuleRouteSettingNotSet_1.default(routeSettings.routeSettings.routeSettings["/start"], requiredModuleSettings)) {
-                throw new Error(JSON.stringify(requiredModuleSettings));
-            }
-            const startRouteSettings = Object.assign(Object.assign({}, routeSettings.routeSettings.routeSettings["/start"].bodyParams), routeSettings.routeSettings.routeSettings["/start"].queryParams);
-            axios_1.default.post(`${module.address}/start`, Object.assign(Object.assign({}, startRouteSettings), { dataStoreUrl: process.env.DATA_STORE_URL, moduleServiceUrl: process.env.SERVICE_URL, moduleId: module.id }));
+            yield executeJob_1.default(module, repository);
             yield repository.updateJob(Object.assign(Object.assign({}, job), { running: true }));
         }
         catch (err) {

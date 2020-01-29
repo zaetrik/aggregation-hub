@@ -4,8 +4,7 @@ import cron from "cron";
 import { GetJobsResponse, GetModulesResponse } from "responses";
 import { DataModule } from "dataModule";
 import axios from "axios";
-import getRequiredModuleRouteSettings from "../utils/getRequiredModuleRouteSettings";
-import requiredModuleRouteSettingNotSet from "../utils/requiredModuleRouteSettingNotSet";
+import executeJob from "../utils/shared/executeJob";
 
 export = (repository: Repository) => {
   new cron.CronJob(
@@ -28,10 +27,10 @@ export = (repository: Repository) => {
         !job.running
     );
 
-    jobsToExecute.map(job => executeJob(job));
+    jobsToExecute.map(job => startJobExecution(job));
   };
 
-  const executeJob = async (job: Job) => {
+  const startJobExecution = async (job: Job) => {
     try {
       const getModuleByIdOperation: GetModulesResponse = await repository.getModuleById(
         job.moduleId
@@ -43,37 +42,7 @@ export = (repository: Repository) => {
 
       const module: DataModule = getModuleByIdOperation.modules[0];
 
-      const routeSettings: {
-        status: number;
-        routeSettings: ModuleRouteSettings;
-      } = await repository.getModuleRouteSettings(`${module.id}`);
-
-      const requiredModuleSettings: {
-        body: string[];
-        query: string[];
-      } = getRequiredModuleRouteSettings(module, "/start");
-
-      if (
-        !routeSettings.routeSettings.routeSettings ||
-        requiredModuleRouteSettingNotSet(
-          routeSettings.routeSettings.routeSettings["/start"],
-          requiredModuleSettings
-        )
-      ) {
-        throw new Error(JSON.stringify(requiredModuleSettings));
-      }
-
-      const startRouteSettings = {
-        ...routeSettings.routeSettings.routeSettings["/start"].bodyParams,
-        ...routeSettings.routeSettings.routeSettings["/start"].queryParams
-      };
-
-      axios.post(`${module.address}/start`, {
-        ...startRouteSettings,
-        dataStoreUrl: process.env.DATA_STORE_URL,
-        moduleServiceUrl: process.env.SERVICE_URL,
-        moduleId: module.id
-      });
+      await executeJob(module, repository);
 
       await repository.updateJob({
         ...job,

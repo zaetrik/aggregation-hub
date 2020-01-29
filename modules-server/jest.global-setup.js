@@ -20,7 +20,9 @@ module.exports = async () => {
     shell.echo("Sorry, this script requires docker-compose");
     shell.exit(1);
   }
-  shell.exec("docker-compose -f docker-compose.test.yml up --build -d");
+  shell.exec(
+    `MODULE_PORT=${process.env.MODULE_PORT} docker-compose -f docker-compose.test.yml up --build -d`
+  );
 
   await waitForServiceToBeUp(
     `http://localhost:${process.env.PORT}/modules`,

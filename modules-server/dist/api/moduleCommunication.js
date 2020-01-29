@@ -14,9 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const http_status_1 = __importDefault(require("http-status"));
 const logger_1 = __importDefault(require("../utils/logger"));
 const validators_1 = require("./middleware/validators");
-const axios_1 = __importDefault(require("axios"));
-const getRequiredModuleRouteSettings_1 = __importDefault(require("../utils/getRequiredModuleRouteSettings"));
-const requiredModuleRouteSettingNotSet_1 = __importDefault(require("../utils/requiredModuleRouteSettingNotSet"));
+const executeJob_1 = __importDefault(require("../utils/shared/executeJob"));
 module.exports = (app, repository) => {
     app.post("/aggregation/:moduleId/start", validators_1.validateStartModuleDataAggregation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -25,14 +23,7 @@ module.exports = (app, repository) => {
                 throw new Error("MODULE NOT FOUND");
             }
             const module = getModuleByIdOperation.modules[0];
-            const routeSettings = yield repository.getModuleRouteSettings(module.id);
-            const requiredModuleSettings = getRequiredModuleRouteSettings_1.default(module, "/start");
-            if (!routeSettings.routeSettings.routeSettings ||
-                requiredModuleRouteSettingNotSet_1.default(routeSettings.routeSettings.routeSettings["/start"], requiredModuleSettings)) {
-                throw new Error(JSON.stringify(requiredModuleSettings));
-            }
-            const startRouteSettings = Object.assign(Object.assign({}, routeSettings.routeSettings.routeSettings["/start"].bodyParams), routeSettings.routeSettings.routeSettings["/start"].queryParams);
-            axios_1.default.post(`${module.address}/start`, Object.assign(Object.assign({}, startRouteSettings), { dataStoreUrl: process.env.DATA_STORE_URL, moduleServiceUrl: process.env.SERVICE_URL, moduleId: module.id }));
+            yield executeJob_1.default(module, repository);
             return res.status(http_status_1.default.OK).send({
                 status: 200,
                 message: `Started aggregation process for module ${module.name}`
@@ -40,7 +31,14 @@ module.exports = (app, repository) => {
         }
         catch (err) {
             logger_1.default.log("error", err, { route: req.originalUrl });
-            res.sendStatus(http_status_1.default.BAD_REQUEST);
+            if (err.message.indexOf("Required routeSettings not set") !== -1) {
+                res
+                    .status(http_status_1.default.BAD_REQUEST)
+                    .send({ status: http_status_1.default.BAD_REQUEST, message: err.message });
+            }
+            else {
+                res.sendStatus(http_status_1.default.BAD_REQUEST);
+            }
         }
     }));
     app.post("/aggregation/:moduleId/done", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
