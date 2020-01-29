@@ -34,11 +34,29 @@ const Module = ({
     }, []);
   }
 
+  const startJob = async () => {
+    await axios.post(
+      process.env.NODE_ENV === "development"
+        ? `${process.env.MODULES_SERVICE_DEV}/aggregation/${query.moduleId}/start`
+        : `${process.env.MODULES_SERVICE_DEV}/aggregation/${query.moduleId}/start`,
+      {}
+    );
+  };
+
   return moduleState ? (
     <Layout>
       <Box pad="medium" gap="small">
         <Box direction="row">
           <Heading alignSelf="start">{moduleState.name}</Heading>
+          <Button
+            alignSelf="end"
+            margin="auto"
+            icon={<Icons.Play />}
+            label="Execute Job"
+            hoverIndicator
+            primary
+            onClick={startJob}
+          />
           <Button
             alignSelf="end"
             margin="auto"

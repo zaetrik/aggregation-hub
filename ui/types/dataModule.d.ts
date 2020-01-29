@@ -41,5 +41,5 @@ interface DataModule {
     author: string;
   };
   routeSettings?: ModuleRouteSettings;
-  id?: number;
+  id?: string;
 }

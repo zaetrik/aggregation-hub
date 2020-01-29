@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -14,7 +15,7 @@ const http_status_1 = __importDefault(require("http-status"));
 const logger_1 = __importDefault(require("../utils/logger"));
 const validators_1 = require("./middleware/validators");
 module.exports = (app, repository) => {
-    app.post("/jobs", validators_1.validateAddModifyJob, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/jobs", validators_1.validateAddModifyJob, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const addNewJobOperation = yield repository.addJob(req.body);
             return res.send(addNewJobOperation);
@@ -24,7 +25,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.post("/jobs/update", validators_1.validateAddModifyJob, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/jobs/update", validators_1.validateAddModifyJob, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const updateJobOperation = yield repository.updateJob(req.body);
             return res.send(updateJobOperation);
@@ -34,7 +35,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.delete("/jobs/id/:moduleId", validators_1.validateDeleteJob, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.delete("/jobs/id/:moduleId", validators_1.validateDeleteJob, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const deleteJobByModuleIdOperation = yield repository.deleteJobByModuleId(req.params.moduleId);
             return res.send(deleteJobByModuleIdOperation);
@@ -44,7 +45,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.get("/jobs", (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/jobs", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getAllJobsOperation = yield repository.getAllJobs();
             return res.send(getAllJobsOperation);
@@ -54,7 +55,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.get("/jobs/id/:moduleId", validators_1.validateGetJobByModuleId, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/jobs/id/:moduleId", validators_1.validateGetJobByModuleId, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getJobByModuleIdOperation = yield repository.getJobByModuleId(req.params.moduleId);
             return res.send(getJobByModuleIdOperation);

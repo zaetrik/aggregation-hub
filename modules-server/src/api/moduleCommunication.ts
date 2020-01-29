@@ -6,6 +6,8 @@ import { Repository } from "repository";
 import { GetModulesResponse, GetJobsResponse } from "responses";
 import { DataModule } from "dataModule";
 import axios from "axios";
+import getRequiredModuleRouteSettings from "../utils/getRequiredModuleRouteSettings";
+import requiredModuleRouteSettingNotSet from "../utils/requiredModuleRouteSettingNotSet";
 
 // repository is used to pass different DB functions (e.g. testDbAbstraction)
 export = (app: express.Application, repository: Repository) => {
@@ -27,10 +29,27 @@ export = (app: express.Application, repository: Repository) => {
         const routeSettings: {
           status: number;
           routeSettings: ModuleRouteSettings;
-        } = await repository.getModuleRouteSettings(module.id.toString());
+        } = await repository.getModuleRouteSettings(module.id);
 
-        const startRouteSettings =
-          routeSettings.routeSettings.routeSettings["/start"].bodyParams;
+        const requiredModuleSettings: {
+          body: string[];
+          query: string[];
+        } = getRequiredModuleRouteSettings(module, "/start");
+
+        if (
+          !routeSettings.routeSettings.routeSettings ||
+          requiredModuleRouteSettingNotSet(
+            routeSettings.routeSettings.routeSettings["/start"],
+            requiredModuleSettings
+          )
+        ) {
+          throw new Error(JSON.stringify(requiredModuleSettings));
+        }
+
+        const startRouteSettings = {
+          ...routeSettings.routeSettings.routeSettings["/start"].bodyParams,
+          ...routeSettings.routeSettings.routeSettings["/start"].queryParams
+        };
 
         axios.post(`${module.address}/start`, {
           ...startRouteSettings,

@@ -40,5 +40,5 @@ interface DataModule {
     description: string;
     author: string;
   };
-  id?: number;
+  id?: string;
 }

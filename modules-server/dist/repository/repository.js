@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -16,21 +17,21 @@ const repository = (client) => {
     /**
      * Modules
      */
-    const getAllModules = () => __awaiter(this, void 0, void 0, function* () {
+    const getAllModules = () => __awaiter(void 0, void 0, void 0, function* () {
         const modules = yield client.query("SELECT * FROM modules");
         return { status: 200, modules: modules.rows };
     });
-    const getModules = (moduleName) => __awaiter(this, void 0, void 0, function* () {
+    const getModules = (moduleName) => __awaiter(void 0, void 0, void 0, function* () {
         const modules = yield client.query(`SELECT * FROM modules WHERE name LIKE '%' || $1 || '%' LIMIT 100`, [moduleName]);
         return { status: 200, modules: modules.rows };
     });
-    const getModuleById = (moduleId) => __awaiter(this, void 0, void 0, function* () {
+    const getModuleById = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
         const module = yield client.query(`SELECT * FROM modules WHERE id = $1`, [
             moduleId
         ]);
         return { status: 200, modules: module.rows };
     });
-    const deleteModuleById = (moduleId) => __awaiter(this, void 0, void 0, function* () {
+    const deleteModuleById = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
         yield client.query(`DELETE FROM modules WHERE id = $1`, [moduleId]);
         return { status: 200 };
     });
@@ -38,7 +39,7 @@ const repository = (client) => {
      * Adds module only by name and address; fetches config from module itself
      * @param { name: string, address: string }
      */
-    const addModule = (newModule) => __awaiter(this, void 0, void 0, function* () {
+    const addModule = (newModule) => __awaiter(void 0, void 0, void 0, function* () {
         const moduleConfig = yield axios_1.default.get(`${newModule.address}/config`);
         yield client.query(`INSERT INTO modules (name, address, config) VALUES ($1, $2, $3);`, [newModule.name, newModule.address, moduleConfig.data]);
         return { status: 200 };
@@ -47,34 +48,34 @@ const repository = (client) => {
      * Adds module manually, so the module has to have a config
      * @param newModule DataModule
      */
-    const addModuleManual = (newModule) => __awaiter(this, void 0, void 0, function* () {
+    const addModuleManual = (newModule) => __awaiter(void 0, void 0, void 0, function* () {
         yield client.query(`INSERT INTO modules (name, address, config) VALUES ($1, $2, $3);`, [newModule.name, newModule.address, newModule.config]);
         return { status: 200 };
     });
-    const updateModuleConfig = (moduleId, moduleConfig) => __awaiter(this, void 0, void 0, function* () {
+    const updateModuleConfig = (moduleId, moduleConfig) => __awaiter(void 0, void 0, void 0, function* () {
         yield client.query(`UPDATE modules SET config = COALESCE($1, config) WHERE id = $2;`, [moduleConfig, moduleId]);
         return { status: 200 };
     });
-    const updateModuleRouteSettings = (moduleId, moduleRouteSettings) => __awaiter(this, void 0, void 0, function* () {
+    const updateModuleRouteSettings = (moduleId, moduleRouteSettings) => __awaiter(void 0, void 0, void 0, function* () {
         yield client.query(`UPDATE modules SET "routeSettings" = COALESCE($1, "routeSettings") WHERE id = $2;`, [moduleRouteSettings, moduleId]);
         return { status: 200 };
     });
-    const getModuleRouteSettings = (moduleId) => __awaiter(this, void 0, void 0, function* () {
+    const getModuleRouteSettings = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
         const routeSettings = yield client.query(`SELECT "routeSettings" FROM modules WHERE id = $1`, [moduleId]);
         return { status: 200, routeSettings: routeSettings.rows[0] };
     });
     /**
      * Jobs
      */
-    const getAllJobs = () => __awaiter(this, void 0, void 0, function* () {
+    const getAllJobs = () => __awaiter(void 0, void 0, void 0, function* () {
         const jobs = yield client.query("SELECT * FROM jobs");
         return { status: 200, jobs: jobs.rows };
     });
-    const addJob = (newJob) => __awaiter(this, void 0, void 0, function* () {
+    const addJob = (newJob) => __awaiter(void 0, void 0, void 0, function* () {
         yield client.query(`INSERT INTO jobs ("moduleId", interval, execute, "lastExecuted", running) VALUES ($1, $2, $3, $4, $5);`, [newJob.moduleId, newJob.interval, newJob.execute, -8640000000, false]);
         return { status: 200, jobs: [newJob] };
     });
-    const updateJob = (updatedJob) => __awaiter(this, void 0, void 0, function* () {
+    const updateJob = (updatedJob) => __awaiter(void 0, void 0, void 0, function* () {
         yield client.query(`UPDATE jobs SET interval = COALESCE($1, interval), execute = COALESCE($2, execute), "lastExecuted" = COALESCE($3, "lastExecuted"), running = COALESCE($4, running) WHERE "moduleId" = $5;`, [
             updatedJob.interval,
             updatedJob.execute,
@@ -84,11 +85,11 @@ const repository = (client) => {
         ]);
         return { status: 200, jobs: [updatedJob] };
     });
-    const deleteJobByModuleId = (moduleId) => __awaiter(this, void 0, void 0, function* () {
+    const deleteJobByModuleId = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
         yield client.query(`DELETE FROM jobs WHERE "moduleId" = $1`, [moduleId]);
         return { status: 200 };
     });
-    const getJobByModuleId = (moduleId) => __awaiter(this, void 0, void 0, function* () {
+    const getJobByModuleId = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
         const jobs = yield client.query(`SELECT * FROM jobs WHERE "moduleId" = $1`, [moduleId]);
         return { status: 200, jobs: jobs.rows };
     });

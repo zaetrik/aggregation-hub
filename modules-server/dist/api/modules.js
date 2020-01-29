@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -15,7 +16,7 @@ const logger_1 = __importDefault(require("../utils/logger"));
 const validators_1 = require("./middleware/validators");
 const axios_1 = __importDefault(require("axios"));
 module.exports = (app, repository) => {
-    app.get("/modules/id/:moduleId", validators_1.validateGetModuleById, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/modules/id/:moduleId", validators_1.validateGetModuleById, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getModuleByIdOperation = yield repository.getModuleById(req.params.moduleId);
             return res.send(getModuleByIdOperation);
@@ -25,7 +26,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.delete("/modules/id/:moduleId", validators_1.validateDeleteModuleById, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.delete("/modules/id/:moduleId", validators_1.validateDeleteModuleById, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const deleteModuleByIdOperation = yield repository.deleteModuleById(req.params.moduleId);
             const deleteJobsFromModuleOperation = yield repository.deleteJobByModuleId(req.params.moduleId);
@@ -40,7 +41,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.get("/modules/:moduleName", validators_1.validateGetModules, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/modules/:moduleName", validators_1.validateGetModules, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getModulesOperation = yield repository.getModules(req.params.moduleName);
             return res.send(getModulesOperation);
@@ -50,7 +51,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.get("/modules", (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/modules", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getAllModulesOperation = yield repository.getAllModules();
             return res.send(getAllModulesOperation);
@@ -60,7 +61,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.post("/modules", validators_1.validateAddModule, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/modules", validators_1.validateAddModule, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             if (req.query.manual) {
                 const addModuleOperationManual = yield repository.addModuleManual(req.body);
@@ -76,7 +77,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.post("/modules/id/:moduleId/routeSettings", validators_1.validateModifyRouteSettings, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/modules/id/:moduleId/routeSettings", validators_1.validateModifyRouteSettings, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const modifyRouteSettingsOperation = yield repository.updateModuleRouteSettings(req.params.moduleId, req.body.moduleRouteSettings);
             return res.send(modifyRouteSettingsOperation);
@@ -86,7 +87,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.get("/modules/id/:moduleId/routeSettings", (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/modules/id/:moduleId/routeSettings", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getModuleRouteSettingsOperation = yield repository.getModuleRouteSettings(req.params.moduleId);
             res.status(http_status_1.default.OK).send(getModuleRouteSettingsOperation);
@@ -96,7 +97,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.post("/modules/id/:moduleId/config", validators_1.validateModifyModuleConfig, (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/modules/id/:moduleId/config", validators_1.validateModifyModuleConfig, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const modifyModuleConfigOperation = yield repository.updateModuleConfig(req.params.moduleId, req.body.moduleConfig);
             /**

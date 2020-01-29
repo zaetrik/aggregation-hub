@@ -31,7 +31,7 @@ const validateDeleteModuleById = (req, res, next) => {
         moduleId: joi_1.default.string().required(),
         deleteData: joi_1.default.boolean()
     });
-    validate(req, res, next, schema, Object.assign({}, req.params, req.query));
+    validate(req, res, next, schema, Object.assign(Object.assign({}, req.params), req.query));
 };
 exports.validateDeleteModuleById = validateDeleteModuleById;
 const validateGetModuleById = (req, res, next) => {
@@ -56,7 +56,7 @@ const validateAddModule = (req, res, next) => {
         // req.query
         manual: joi_1.default.boolean()
     });
-    validate(req, res, next, schema, Object.assign({}, req.body, req.query));
+    validate(req, res, next, schema, Object.assign(Object.assign({}, req.body), req.query));
 };
 exports.validateAddModule = validateAddModule;
 const validateModifyRouteSettings = (req, res, next) => {
@@ -66,7 +66,7 @@ const validateModifyRouteSettings = (req, res, next) => {
             .required()
             .unknown()
     });
-    validate(req, res, next, schema, Object.assign({}, req.body, req.params));
+    validate(req, res, next, schema, Object.assign(Object.assign({}, req.body), req.params));
 };
 exports.validateModifyRouteSettings = validateModifyRouteSettings;
 const validateModifyModuleConfig = (req, res, next) => {
@@ -82,7 +82,7 @@ const validateModifyModuleConfig = (req, res, next) => {
             .required()
             .unknown()
     });
-    validate(req, res, next, schema, Object.assign({}, req.body, req.params));
+    validate(req, res, next, schema, Object.assign(Object.assign({}, req.body), req.params));
 };
 exports.validateModifyModuleConfig = validateModifyModuleConfig;
 /**
