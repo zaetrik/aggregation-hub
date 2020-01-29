@@ -19,6 +19,6 @@ store-test:
     - docker-compose -f docker-compose.test.yml up -d
     - sleep 15
     - docker ps -a
-    - curl http://docker:9200
+    - curl $CI_DOCKER_HOST:9200
   script:
     - npm run ci
