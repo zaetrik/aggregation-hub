@@ -6,7 +6,7 @@ cache:
   paths:
     - node_modules/
 
-build store:
+build-store:
   stage: build
   image: node:10.16.0-alpine
   before_script:
@@ -18,7 +18,7 @@ build store:
     paths:
       - node_modules/
 
-build modules-server:
+build-modules-server:
   stage: build
   image: node:10.16.0-alpine
   before_script:
@@ -30,7 +30,7 @@ build modules-server:
     paths:
       - node_modules/
 
-build typescript-express-module-example:
+build-typescript-express-module-example:
   stage: build
   image: node:10.16.0-alpine
   before_script:
@@ -42,7 +42,7 @@ build typescript-express-module-example:
     paths:
       - node_modules/
 
-test store:
+test-store:
   stage: test
   image: node:10.16.0-alpine
   services:
@@ -56,7 +56,7 @@ test store:
   script:
     - npm run ci
 
-test modules-server:
+test-modules-server:
   stage: test
   image: node:10.16.0-alpine
   services:
