@@ -1,7 +1,48 @@
 stages:
+  - build
   - test
 
-store-test:
+cache:
+  paths:
+    - node_modules/
+
+build store:
+  stage: build
+  image: node:10.16.0-alpine
+  before_script:
+    - cd store
+    - cp example.env ./.env
+    - cp example.env ./dev.env
+    - npm i
+  artifacts:
+    paths:
+      - node_modules/
+
+build modules-server:
+  stage: build
+  image: node:10.16.0-alpine
+  before_script:
+    - cd modules-server
+    - cp example.env ./.env
+    - cp example.env ./dev.env
+    - npm i
+  artifacts:
+    paths:
+      - node_modules/
+
+build typescript-express-module-example:
+  stage: build
+  image: node:10.16.0-alpine
+  before_script:
+    - cd modules/typescript-express-module-example
+    - cp example.env ./.env
+    - cp example.env ./dev.env
+    - npm i
+  artifacts:
+    paths:
+      - node_modules/
+
+test store:
   stage: test
   image: node:10.16.0-alpine
   services:
@@ -12,13 +53,10 @@ store-test:
     DB_SERVER: "http://elasticsearch:9200"
   before_script:
     - cd store
-    - cp example.env ./.env
-    - cp example.env ./dev.env
-    - npm i
   script:
     - npm run ci
 
-modules-server-test:
+test modules-server:
   stage: test
   image: node:10.16.0-alpine
   services:
@@ -30,11 +68,5 @@ modules-server-test:
     POSTGRES_DB: modules
   before_script:
     - cd modules-server
-    - cp example.env ./.env
-    - cp example.env ./dev.env
-    - npm i
-    - cd ../modules/typescript-express-module-example
-    - npm i
-    - cd ../../modules-server
   script:
     - npm run ci
