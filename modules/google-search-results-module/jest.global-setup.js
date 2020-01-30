@@ -16,14 +16,21 @@ const waitForServiceToBeUp = (url, httpCode) => {
 };
 
 module.exports = async () => {
-  if (!shell.which("docker-compose")) {
-    shell.echo("Sorry, this script requires docker-compose");
-    shell.exit(1);
-  }
-  shell.exec("docker-compose -f docker-compose.test.yml up --build -d");
+  if (!process.env.CI) {
+    if (!shell.which("docker-compose")) {
+      shell.echo("Sorry, this script requires docker-compose");
+      shell.exit(1);
+    }
+    shell.exec("docker-compose -f docker-compose.test.yml up --build -d");
 
-  await waitForServiceToBeUp(
-    `http://localhost:${process.env.PORT}/config`,
-    200
-  );
+    await waitForServiceToBeUp(
+      `http://localhost:${process.env.PORT}/config`,
+      200
+    );
+  } else {
+    const { spawn } = require("child_process");
+
+    spawn("npm", ["run", "dev"]);
+    shell.exec("sleep 10");
+  }
 };

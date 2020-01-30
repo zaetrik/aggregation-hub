@@ -3,46 +3,66 @@ stages:
   - test
 
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - node_modules/
+    - modules-server/node_modules/
+    - store/node_modules/
+    - modules/google-search-results-module/node_modules/
+    - modules/typescript-express-module-example/node_modules/
 
-build-store:
+build store:
   stage: build
   image: node:10.16.0-alpine
   before_script:
     - cd store
     - cp example.env ./.env
     - cp example.env ./dev.env
+  script:
     - npm i
   artifacts:
     paths:
-      - node_modules/
+      - store/node_modules/
 
-build-modules-server:
+build modules-server:
   stage: build
   image: node:10.16.0-alpine
   before_script:
     - cd modules-server
     - cp example.env ./.env
     - cp example.env ./dev.env
+  script:
     - npm i
   artifacts:
     paths:
-      - node_modules/
+      - modules-server/node_modules/
 
-build-typescript-express-module-example:
+build typescript-express-module-example:
   stage: build
   image: node:10.16.0-alpine
   before_script:
     - cd modules/typescript-express-module-example
     - cp example.env ./.env
     - cp example.env ./dev.env
+  script:
     - npm i
   artifacts:
     paths:
-      - node_modules/
+      - modules/typescript-express-module-example/node_modules/
 
-test-store:
+build google-search-results-module:
+  stage: build
+  image: node:10.16.0-alpine
+  before_script:
+    - cd modules/google-search-results-module
+    - cp example.env ./.env
+    - cp example.env ./dev.env
+  script:
+    - npm i
+  artifacts:
+    paths:
+      - modules/google-search-results-module/node_modules/
+
+test store:
   stage: test
   image: node:10.16.0-alpine
   services:
@@ -56,7 +76,7 @@ test-store:
   script:
     - npm run ci
 
-test-modules-server:
+test modules-server:
   stage: test
   image: node:10.16.0-alpine
   services:
@@ -68,5 +88,21 @@ test-modules-server:
     POSTGRES_DB: modules
   before_script:
     - cd modules-server
+  script:
+    - npm run ci
+
+test google-search-results-module:
+  stage: test
+  image: node:10.16.0-alpine
+  before_script:
+    - cd modules/google-search-results-module
+  script:
+    - npm run ci
+
+test typescript-express-module-example:
+  stage: test
+  image: node:10.16.0-alpine
+  before_script:
+    - cd modules/typescript-express-module-example
   script:
     - npm run ci
