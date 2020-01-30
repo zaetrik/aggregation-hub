@@ -20,4 +20,10 @@ interface Repository {
     index: string,
     start: number
   ) => Promise<{ status: number; data: object[] }>;
+  query: (
+    indices: string | string[],
+    size: number,
+    start: number,
+    query: { [key: string]: any }
+  ) => Promise<{ status: number; data: object[] }>;
 }

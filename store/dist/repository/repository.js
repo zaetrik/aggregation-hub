@@ -8,8 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const buildQuery_1 = __importDefault(require("../utils/buildQuery"));
 const repository = (client) => {
+    /**
+     * Document API
+     */
     const insertDocument = (dataToAdd) => __awaiter(void 0, void 0, void 0, function* () {
         const insertOperation = yield client.index({
             index: `module-${dataToAdd.moduleId}`,
@@ -53,6 +60,9 @@ const repository = (client) => {
             warnings: deleteOperation.warnings
         };
     });
+    /**
+     * Index API
+     */
     const createIndex = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
         const createIndexOperation = yield client.indices.create({
             index: `module-${moduleId}`
@@ -86,6 +96,9 @@ const repository = (client) => {
             mapping: getMappingFromIndexOperation.body[`module-${moduleId}`].mappings
         };
     });
+    /**
+     * Query API
+     */
     const queryAllFromIndex = (moduleId, start) => __awaiter(void 0, void 0, void 0, function* () {
         const queryAllOperation = yield client.search({
             index: `module-${moduleId}`,
@@ -102,6 +115,19 @@ const repository = (client) => {
             data: queryAllOperation.body.hits.hits.map(item => item._source)
         };
     });
+    const query = (indices, size, start, query) => __awaiter(void 0, void 0, void 0, function* () {
+        const generatedQuery = buildQuery_1.default(query);
+        const queryOperation = yield client.search({
+            index: indices.map(moduleId => `module-${moduleId}`),
+            from: start ? start : 0,
+            size: size ? size : 10,
+            body: generatedQuery.toJSON()
+        });
+        return {
+            status: 200,
+            data: queryOperation.body.hits.hits.map(item => item._source)
+        };
+    });
     return {
         insertDocument,
         updateDocument,
@@ -110,7 +136,8 @@ const repository = (client) => {
         deleteIndex,
         getDocumentCountFromIndex,
         getMappingFromIndex,
-        queryAllFromIndex
+        queryAllFromIndex,
+        query
     };
 };
 const connect = (databaseConnection) => {

@@ -16,7 +16,7 @@ const waitForServiceToBeUp = (url, httpCode) => {
 };
 
 module.exports = async () => {
-  if (!process.env.CI) {
+  if (process.env.CI === "false") {
     if (!shell.which("docker-compose")) {
       shell.echo("Sorry, this script requires docker-compose");
       shell.exit(1);

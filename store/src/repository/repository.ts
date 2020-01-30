@@ -2,8 +2,13 @@ import {
   Client as ElasticsearchClient,
   ApiResponse
 } from "@elastic/elasticsearch";
+import { RequestBodySearch } from "elastic-builder";
+import buildQuery from "../utils/buildQuery";
 
 const repository = (client: ElasticsearchClient): Repository => {
+  /**
+   * Document API
+   */
   const insertDocument = async (
     dataToAdd: InsertDocumentRequestData
   ): Promise<InsertUpdateDocumentResponse> => {
@@ -58,6 +63,10 @@ const repository = (client: ElasticsearchClient): Repository => {
     };
   };
 
+  /**
+   * Index API
+   */
+
   const createIndex = async (
     moduleId: string
   ): Promise<CreateDeleteIndexResponse> => {
@@ -109,6 +118,10 @@ const repository = (client: ElasticsearchClient): Repository => {
     };
   };
 
+  /**
+   * Query API
+   */
+
   const queryAllFromIndex = async (
     moduleId: string,
     start: number
@@ -130,6 +143,27 @@ const repository = (client: ElasticsearchClient): Repository => {
     };
   };
 
+  const query = async (
+    indices: string[],
+    size: number,
+    start: number,
+    query: { [key: string]: any }
+  ): Promise<{ status: number; data: object[] }> => {
+    const generatedQuery: RequestBodySearch = buildQuery(query);
+
+    const queryOperation: ApiResponse = await client.search({
+      index: indices.map(moduleId => `module-${moduleId}`),
+      from: start ? start : 0,
+      size: size ? size : 10,
+      body: generatedQuery.toJSON()
+    });
+
+    return {
+      status: 200,
+      data: queryOperation.body.hits.hits.map(item => item._source)
+    };
+  };
+
   return {
     insertDocument,
     updateDocument,
@@ -138,7 +172,8 @@ const repository = (client: ElasticsearchClient): Repository => {
     deleteIndex,
     getDocumentCountFromIndex,
     getMappingFromIndex,
-    queryAllFromIndex
+    queryAllFromIndex,
+    query
   };
 };
 

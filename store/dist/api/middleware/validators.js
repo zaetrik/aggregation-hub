@@ -16,6 +16,9 @@ const validate = (req, res, next, schema, dataToValidate) => {
         return res.sendStatus(http_status_1.default.BAD_REQUEST);
     }
 };
+/**
+ * Document API
+ */
 const validateInsertDocument = (req, res, next) => {
     const schema = joi_1.default.object({
         moduleId: joi_1.default.number().required(),
@@ -41,6 +44,9 @@ const validateDeleteDocument = (req, res, next) => {
     validate(req, res, next, schema, req.body);
 };
 exports.validateDeleteDocument = validateDeleteDocument;
+/**
+ * Index API
+ */
 const validateCreateDeleteIndex = (req, res, next) => {
     const schema = joi_1.default.object({
         moduleId: joi_1.default.number().required()
@@ -55,6 +61,9 @@ const validateGetDocumentCountGetMappingFromIndex = (req, res, next) => {
     validate(req, res, next, schema, req.params);
 };
 exports.validateGetDocumentCountGetMappingFromIndex = validateGetDocumentCountGetMappingFromIndex;
+/**
+ * Query API
+ */
 const validateQueryAll = (req, res, next) => {
     const schema = joi_1.default.object({
         moduleId: joi_1.default.number().required(),
@@ -63,3 +72,17 @@ const validateQueryAll = (req, res, next) => {
     validate(req, res, next, schema, req.query);
 };
 exports.validateQueryAll = validateQueryAll;
+const validateQuery = (req, res, next) => {
+    const schema = joi_1.default.object({
+        moduleIds: joi_1.default.array()
+            .items(joi_1.default.string())
+            .required(),
+        size: joi_1.default.number(),
+        start: joi_1.default.number(),
+        query: joi_1.default.object()
+            .unknown()
+            .required()
+    });
+    validate(req, res, next, schema, req.body);
+};
+exports.validateQuery = validateQuery;

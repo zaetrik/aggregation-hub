@@ -26,6 +26,10 @@ const validate = (
   }
 };
 
+/**
+ * Document API
+ */
+
 const validateInsertDocument = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
     moduleId: Joi.number().required(),
@@ -54,6 +58,10 @@ const validateDeleteDocument = (req: Request, res: Response, next) => {
   validate(req, res, next, schema, req.body);
 };
 
+/**
+ * Index API
+ */
+
 const validateCreateDeleteIndex = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
     moduleId: Joi.number().required()
@@ -74,6 +82,10 @@ const validateGetDocumentCountGetMappingFromIndex = (
   validate(req, res, next, schema, req.params);
 };
 
+/**
+ * Query API
+ */
+
 const validateQueryAll = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
     moduleId: Joi.number().required(),
@@ -83,11 +95,27 @@ const validateQueryAll = (req: Request, res: Response, next) => {
   validate(req, res, next, schema, req.query);
 };
 
+const validateQuery = (req: Request, res: Response, next) => {
+  const schema: JoiTypes.Schema = Joi.object({
+    moduleIds: Joi.array()
+      .items(Joi.string())
+      .required(),
+    size: Joi.number(),
+    start: Joi.number(),
+    query: Joi.object()
+      .unknown()
+      .required()
+  });
+
+  validate(req, res, next, schema, req.body);
+};
+
 export {
   validateInsertDocument,
   validateUpdateDocument,
   validateDeleteDocument,
   validateCreateDeleteIndex,
   validateGetDocumentCountGetMappingFromIndex,
-  validateQueryAll
+  validateQueryAll,
+  validateQuery
 };
