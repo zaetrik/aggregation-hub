@@ -9,5 +9,9 @@ export default (query: { [key: string]: any }): esb.RequestBodySearch => {
 };
 
 const getQueryObjects = (key, item): esb.BoolQuery => {
-  return esb.boolQuery().must(esb.matchQuery(key, item));
+  return esb
+    .boolQuery()
+    .must(
+      item === "*" ? esb.wildcardQuery(key, "*") : esb.matchQuery(key, item)
+    );
 };

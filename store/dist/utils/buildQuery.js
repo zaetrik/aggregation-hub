@@ -13,5 +13,7 @@ exports.default = (query) => {
     return esb.requestBodySearch().query(esb.boolQuery().must(queryObjects));
 };
 const getQueryObjects = (key, item) => {
-    return esb.boolQuery().must(esb.matchQuery(key, item));
+    return esb
+        .boolQuery()
+        .must(item === "*" ? esb.wildcardQuery(key, "*") : esb.matchQuery(key, item));
 };
