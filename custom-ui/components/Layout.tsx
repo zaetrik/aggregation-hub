@@ -4,8 +4,9 @@ import theme from "../theme";
 
 // Components
 import Menu from "./Menu";
+import Heading from "./Heading";
 
-const Layout = (props: {
+export default (props: {
   activeMenuItem?: string;
   children?: any;
 }): JSX.Element => {
@@ -28,7 +29,14 @@ const Layout = (props: {
       </Head>
       <div className="container">
         <div className="sidebar">
-          <header>Aggregation Hub</header>
+          <Heading
+            size="large"
+            fontWeight={600}
+            padding="medium"
+            textAlign="center"
+          >
+            Aggregation Hub
+          </Heading>
           <Menu activeItem={props.activeMenuItem} />
         </div>
         <div className="content">{props.children}</div>
@@ -53,8 +61,8 @@ const Layout = (props: {
           }
 
           header {
-            ${theme.paddingLarge}
-            ${theme.fonts.large}
+            padding: ${theme.padding.large};
+            font-size: ${theme.fonts.large};
             font-weight: bold;
             text-align: center;
           }
@@ -63,5 +71,3 @@ const Layout = (props: {
     </Fragment>
   );
 };
-
-export default Layout;

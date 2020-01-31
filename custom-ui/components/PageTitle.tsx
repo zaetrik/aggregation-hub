@@ -1,23 +1,6 @@
-import { Fragment } from "react";
-import theme from "../theme";
+// Components
+import Heading from "./Heading";
 
 export default ({ title }: { title: string }) => {
-  return (
-    <Fragment>
-      <h1 className="page-title">{title}</h1>
-      <style jsx>{`
-        .page-title {
-          ${theme.marginLarge}
-          font-size: 36px;
-        }
-
-        .icon {
-          display: inline-block;
-          margin-right: 10px;
-          font-size: 36px;
-          ${theme.paddingSmall}
-        }
-      `}</style>
-    </Fragment>
-  );
+  return <Heading size="xlarge">{title}</Heading>;
 };

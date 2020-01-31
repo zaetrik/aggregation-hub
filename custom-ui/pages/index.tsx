@@ -9,10 +9,11 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { FaChartBar, FaPlus } from "react-icons/fa";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import AccordionPanel from "../components/AccordionPanel";
+import Text from "../components/Text";
 
 // Types
 import { DataModule } from "../types/dataModule";
-import AccordionPanel from "../components/AccordionPanel";
 
 export default () => {
   const [modules, setModules] = useState<DataModule[]>([]);
@@ -36,7 +37,7 @@ export default () => {
             <ModulesList modules={modules} setModules={setModules} />
           </div>
         ) : (
-          <h3>No Modules Available</h3>
+          <Text>No Modules Available</Text>
         )}
       </Layout>
       <style jsx>{`

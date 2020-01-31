@@ -1,7 +1,8 @@
 import { Fragment } from "react";
 import Link from "next/link";
-
 import theme from "../theme";
+
+// Components
 import { FaChartBar, FaThLarge } from "react-icons/fa";
 
 export default ({
@@ -30,7 +31,8 @@ export default ({
       </nav>
       <style jsx>{`
         .menu-item {
-          ${(theme.hoverOut, theme.paddingMedium)}
+          ${theme.hoverOut}
+          padding: ${theme.padding.medium};
         }
 
         .menu-item:hover {
@@ -44,8 +46,8 @@ export default ({
 
         .menu-icon {
           display: inline-block;
-          margin-right: 10px;
-          ${theme.paddingSmall}
+          margin-right: ${theme.margin.medium};
+          padding: ${theme.padding.small};
         }
       `}</style>
     </Fragment>

@@ -3,6 +3,7 @@ import theme from "../theme";
 
 // Components
 import { FaAngleRight, FaAngleDown } from "react-icons/fa";
+import Heading from "./Heading";
 
 export default (props: {
   open?: boolean;
@@ -15,14 +16,22 @@ export default (props: {
   return (
     <Fragment>
       <div style={props.containerStyle} className="accordion-panel-container">
-        <header className="cursor-pointer" onClick={e => setOpen(!open)}>
-          {open ? (
-            <FaAngleDown size={18} style={{ marginRight: "10px" }} />
-          ) : (
-            <FaAngleRight size={18} style={{ marginRight: "10px" }} />
-          )}
-          {props.title}
-        </header>
+        <div className="header" onClick={e => setOpen(!open)}>
+          <Heading padding="medium" className="cursor-pointer" fontWeight={200}>
+            {open ? (
+              <FaAngleDown
+                size={theme.fonts.medium.split("px")[0]}
+                style={{ marginRight: theme.margin.medium }}
+              />
+            ) : (
+              <FaAngleRight
+                size={theme.fonts.medium.split("px")[0]}
+                style={{ marginRight: theme.margin.medium }}
+              />
+            )}
+            {props.title}
+          </Heading>
+        </div>
         <div
           className={
             open
@@ -39,7 +48,7 @@ export default (props: {
         }
 
         .accordion-panel-open {
-          max-height: 500px; 
+          max-height: 500px;
         }
 
         .accordion-panel-closed {
@@ -48,18 +57,16 @@ export default (props: {
         }
 
         .accordion-content {
-          ${theme.paddingMedium}
+          padding: ${theme.padding.medium};
         }
 
-        header {
+        .header {
           display: flex;
           ${theme.borderRadius}
-          ${theme.paddingMedium}
           ${theme.hoverOut}
-          ${theme.fonts.large}
         }
 
-        header:hover {
+        .header:hover {
           ${theme.hoverIn}
         }
       `}</style>

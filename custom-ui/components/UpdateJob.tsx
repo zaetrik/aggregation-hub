@@ -6,45 +6,47 @@ import Input from "./Input";
 import Button from "./Button";
 
 export default ({
-  moduleId,
+  job,
   setJob,
-  currentInterval
+  setEditJob
 }: {
-  moduleId: string;
+  job: Job;
   setJob: Dispatch<SetStateAction<Job>>;
-  currentInterval: number;
+  setEditJob: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [checked, setChecked] = useState<boolean>(true);
+  const [checked, setChecked] = useState<boolean>(job.execute);
   const [interval, setInterval] = useState<number>(
-    currentInterval ? currentInterval : 1
+    job.interval ? job.interval : 1
   );
 
   useEffect(() => {
-    setInterval(currentInterval);
-  }, [currentInterval]);
+    setInterval(job.interval);
+  }, [job]);
 
-  const createNewJob = async () => {
+  const updateJob = async () => {
     if (interval > 0) {
       await axios.post(
         process.env.NODE_ENV === "development"
-          ? `${process.env.MODULES_SERVICE_DEV}/jobs`
-          : `${process.env.MODULES_SERVICE_PROD}/jobs`,
+          ? `${process.env.MODULES_SERVICE_DEV}/jobs/update`
+          : `${process.env.MODULES_SERVICE_PROD}/jobs/update`,
         {
-          moduleId: moduleId,
-          interval: interval,
-          execute: checked
+          moduleId: job.moduleId,
+          execute: checked,
+          interval: interval
         }
       );
 
       const responseGetJob = await axios.get(
         process.env.NODE_ENV === "development"
-          ? `${process.env.MODULES_SERVICE_DEV}/jobs/id/${moduleId}`
-          : `${process.env.MODULES_SERVICE_PROD}/jobs/id/${moduleId}`
+          ? `${process.env.MODULES_SERVICE_DEV}/jobs/id/${job.moduleId}`
+          : `${process.env.MODULES_SERVICE_PROD}/jobs/id/${job.moduleId}`
       );
 
       setJob(responseGetJob.data.jobs[0]);
+      setEditJob(false);
     }
   };
+
   return (
     <Fragment>
       <Input
@@ -59,7 +61,7 @@ export default ({
         checked={checked}
         onChange={e => setChecked(!checked)}
       />
-      <Button type="submit" title="Create Job" onClick={e => createNewJob()} />
+      <Button type="submit" title="Update Job" onClick={e => updateJob()} />
     </Fragment>
   );
 };

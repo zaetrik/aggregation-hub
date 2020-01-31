@@ -1,11 +1,19 @@
-import { Fragment, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+
+// Components
+import Text from "./Text";
 
 // Types
 import { DataModule } from "../types/dataModule";
-import theme from "../theme";
 
-export default ({ module }: { module: DataModule }) => {
+export default ({
+  module,
+  containerStyle
+}: {
+  module: DataModule;
+  containerStyle?: { [style: string]: string };
+}) => {
   const [count, setCount] = useState<number>(0);
 
   const getDocumentCount = async () => {
@@ -27,13 +35,10 @@ export default ({ module }: { module: DataModule }) => {
     return () => clearInterval(interval);
   }, [module]);
   return (
-    <Fragment>
-      <span>{count}</span>
-      <style jsx>{`
-        span {
-          ${theme.fonts.large}
-        }
-      `}</style>
-    </Fragment>
+    <div style={containerStyle ? containerStyle : {}}>
+      <Text size="large" padding="xsmall" margin="none">
+        {count} Documents Aggregated
+      </Text>
+    </div>
   );
 };

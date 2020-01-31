@@ -1,10 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 
+// Components
+import BasicTable from "./BasicTable";
+import Text from "./Text";
+
 // Types
 import { DataModule } from "../types/dataModule";
-import theme from "../theme";
-import BasicTable from "./BasicTable";
 
 export default ({ module }: { module: DataModule }) => {
   const [mapping, setMapping] = useState<{
@@ -43,9 +45,7 @@ export default ({ module }: { module: DataModule }) => {
       {Object.keys(mapping.properties).length > 0 ? (
         <BasicTable data={data} columns={columns} />
       ) : (
-        <div>
-          <h2>No mapping available</h2>
-        </div>
+        <Text>No mapping available</Text>
       )}
     </Fragment>
   );

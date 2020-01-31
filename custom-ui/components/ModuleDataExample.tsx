@@ -1,11 +1,12 @@
 import { Fragment, useState, useEffect } from "react";
 import axios from "axios";
 
-// Types
-import { DataModule } from "../types/dataModule";
-
 // Components
 import BasicTable from "./BasicTable";
+import Text from "./Text";
+
+// Types
+import { DataModule } from "../types/dataModule";
 
 export default ({ module }: { module: DataModule }) => {
   const [moduleData, setModuleData] = useState<object[]>([]);
@@ -42,7 +43,7 @@ export default ({ module }: { module: DataModule }) => {
       {moduleData.length > 0 ? (
         <BasicTable columns={getColumns()} data={moduleData} />
       ) : (
-        <h1>No data available</h1>
+        <Text>No data available</Text>
       )}
     </Fragment>
   );

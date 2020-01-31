@@ -38,8 +38,8 @@ export default ({
         }
 
         input {
-          ${theme.paddingSmall}
-          margin-top: 5px;
+          padding: ${theme.padding.small};
+          margin-top: ${theme.margin.small};
           outline: none;
           border: none;
           ${theme.borderRadius}
@@ -47,7 +47,7 @@ export default ({
         }
 
         label {
-          ${theme.marginSmall}
+          margin: ${theme.margin.small};
           width: inherit;
           display: flex;
           flex-flow: column;

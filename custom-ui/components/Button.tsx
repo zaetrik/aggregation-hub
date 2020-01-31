@@ -1,5 +1,8 @@
-import { Fragment, ButtonHTMLAttributes } from "react";
+import { Fragment } from "react";
 import theme from "../theme";
+
+// Components
+import Text from "./Text";
 
 export default ({
   type,
@@ -27,28 +30,27 @@ export default ({
         }}
       >
         <span className="icon">{icon}</span>
-        <span>{title}</span>
+        <Text size="small">{title}</Text>
       </button>
       <style jsx>{`
         .icon {
-          font-size: 15px;
-          padding: 0 5px;
+          font-size: ${theme.fonts.medium};
+          padding: 0 ${theme.padding.small};
         }
 
         button {
           font-size: 100%;
           border: 0;
           font-family: inherit;
-          ${theme.paddingSmall}
+          padding: ${theme.padding.small};
           ${theme.borderRadius}
           ${theme.hoverOut}
           border: 1px solid transparent;
         }
 
         button:hover {
-            ${theme.hoverIn}
-            ${theme.border}
-            font-weight: bold;
+          ${theme.hoverIn}
+          ${theme.border}
         }
       `}</style>
     </Fragment>

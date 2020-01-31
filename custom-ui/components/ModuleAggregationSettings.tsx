@@ -5,11 +5,12 @@ import { useState, useReducer, useEffect, Fragment } from "react";
 import Input from "./Input";
 import { FaSave } from "react-icons/fa";
 import Button from "./Button";
+import Heading from "./Heading";
 
 // Types
 import { DataModule } from "../types/dataModule";
 
-const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
+export default ({ module }: { module: DataModule }) => {
   const initialRouteSettings = (): ModuleRouteSettings => {
     const routes = module.routeSettings
       ? Object.keys(module.routeSettings).map(route => {
@@ -387,7 +388,9 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
 
             return (
               <div key={indexRoute}>
-                <h1>{module.config.routes[route].description}</h1>
+                <Heading size="small" padding="medium" margin="none">
+                  {module.config.routes[route].description}
+                </Heading>
                 <div>
                   {formItemsBodyParams}
                   {formItemsQueryParams}
@@ -406,5 +409,3 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
     </Fragment>
   );
 };
-
-export default ModuleAggregationSettings;
