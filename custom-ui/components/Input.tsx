@@ -3,11 +3,13 @@ import theme from "../theme";
 
 export default ({
   label,
+  value,
   onChange,
   type,
   placeholder,
   containerStyle
 }: {
+  value?: string | number;
   placeholder?: string;
   label?: string;
   onChange?: any;
@@ -20,6 +22,7 @@ export default ({
         <label>
           {label}
           <input
+            value={value ? value : ""}
             placeholder={placeholder ? placeholder : ""}
             type={type ? type : "text"}
             onChange={e => {

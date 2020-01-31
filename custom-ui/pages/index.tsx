@@ -27,7 +27,7 @@ export default () => {
         <PageTitle title="Modules" />
         <AccordionPanel
           title="Create New Module"
-          containerStyle={{ width: "50%" }}
+          containerStyle={{ maxWidth: "600px" }}
         >
           <CreateNewModule setModules={setModules} />
         </AccordionPanel>

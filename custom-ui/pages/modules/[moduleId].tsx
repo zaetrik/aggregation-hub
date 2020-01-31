@@ -9,9 +9,12 @@ import PageTitle from "../../components/PageTitle";
 import Layout from "../../components/Layout";
 import AccordionPanel from "../../components/AccordionPanel";
 import ModuleMappingOverview from "../../components/ModuleMappingOverview";
-import { FaArrowRight, FaDatabase } from "react-icons/fa";
+import { FaDatabase, FaPlay, FaEdit } from "react-icons/fa";
 import ModuleDataExample from "../../components/ModuleDataExample";
 import ModuleDocumentCount from "../../components/ModuleDocumentCount";
+import ModuleAggregationSettings from "../../components/ModuleAggregationSettings";
+import CreateJob from "../../components/CreateJob";
+import Button from "../../components/Button";
 
 const ModulePage = ({
   module,
@@ -23,7 +26,6 @@ const ModulePage = ({
   query?: { moduleId: string };
 }) => {
   const [jobState, setJobState] = useState<Job>(job);
-  const [editJob, setEditJob] = useState<boolean>(false);
   const [moduleState, setModuleState] = useState<DataModule>(module);
 
   if (process.env.NODE_ENV === "development") {
@@ -34,46 +36,100 @@ const ModulePage = ({
 
       axios
         .get(`${process.env.MODULES_SERVICE_DEV}/jobs/id/${query.moduleId}`)
-        .then(response => setJobState(response.data.jobs[0]));
+        .then(response =>
+          setJobState(response.data.jobs[0] ? response.data.jobs[0] : {})
+        );
     }, []);
   }
+
+  return moduleState ? (
+    <Fragment>
+      <Layout>
+        <PageTitle title={moduleState.name} />
+        {jobState.moduleId ? (
+          <JobOverview
+            job={jobState}
+            setJob={setJobState}
+            moduleId={moduleState.id}
+          />
+        ) : (
+          <CreateJob
+            moduleId={moduleState.id}
+            setJob={setJobState}
+            currentInterval={jobState.interval}
+          />
+        )}
+        <ModuleOverview module={moduleState} />
+      </Layout>
+    </Fragment>
+  ) : null;
+};
+
+const JobOverview = ({
+  job,
+  setJob,
+  moduleId
+}: {
+  job: Job;
+  setJob: Dispatch<SetStateAction<Job>>;
+  moduleId: string;
+}) => {
+  const [editJob, setEditJob] = useState<boolean>(false);
 
   const startJob = async () => {
     await axios.post(
       process.env.NODE_ENV === "development"
-        ? `${process.env.MODULES_SERVICE_DEV}/aggregation/${query.moduleId}/start`
-        : `${process.env.MODULES_SERVICE_DEV}/aggregation/${query.moduleId}/start`,
+        ? `${process.env.MODULES_SERVICE_DEV}/aggregation/${moduleId}/start`
+        : `${process.env.MODULES_SERVICE_DEV}/aggregation/${moduleId}/start`,
       {}
     );
   };
   return (
     <Fragment>
-      <Layout>
-        <PageTitle title={moduleState.name} />
-        <JobOverview job={jobState} setJob={setJobState} />
-        <ModuleOverview module={moduleState} />
-      </Layout>
+      {editJob ? (
+        <h1>Update Job</h1>
+      ) : (
+        <Fragment>
+          <h1>Job</h1>
+          <Button
+            onClick={async e => {
+              const event = e.currentTarget;
+              event.disabled = true;
+              setTimeout(() => {
+                event.disabled = false;
+              }, 5000);
+              await startJob();
+            }}
+            title="Execute Job"
+            icon={<FaPlay />}
+          />
+          <Button
+            containerStyle={{ marginLeft: "10px" }}
+            onClick={async e => {
+              setEditJob(true);
+            }}
+            title="Edit Job"
+            icon={<FaEdit />}
+          />
+        </Fragment>
+      )}
     </Fragment>
   );
-};
-
-const JobOverview = ({
-  job,
-  setJob
-}: {
-  job: Job;
-  setJob: Dispatch<SetStateAction<Job>>;
-}) => {
-  return <Fragment></Fragment>;
 };
 
 const ModuleOverview = ({ module }: { module: DataModule }) => {
   return module.config ? (
     <Fragment>
+      <h1>Module</h1>
+      <div>
+        <ModuleDocumentCount module={module} /> Documents Aggregated
+      </div>
       <AccordionPanel title="Description" open={true}>
         <h1>{module.config.description}</h1>
       </AccordionPanel>
-      <AccordionPanel title="Settings"></AccordionPanel>
+      <AccordionPanel title="Settings">
+        <ModuleAggregationSettings module={module} />
+      </AccordionPanel>
       <AccordionPanel title="Mapping">
         <ModuleMappingOverview module={module} />
       </AccordionPanel>
@@ -81,8 +137,7 @@ const ModuleOverview = ({ module }: { module: DataModule }) => {
         title={
           <Fragment>
             <FaDatabase size={20} style={{ paddingRight: "20px" }} />
-            Data <FaArrowRight size={20} style={{ padding: "0 20px" }} />
-            <ModuleDocumentCount module={module} />
+            Example Data
           </Fragment>
         }
       >

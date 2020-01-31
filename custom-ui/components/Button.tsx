@@ -6,8 +6,10 @@ export default ({
   onClick,
   title,
   icon,
-  containerStyle
+  containerStyle,
+  active
 }: {
+  active?: boolean;
   type?: "button" | "submit" | "reset";
   onClick?: any;
   title?: string;
@@ -17,6 +19,7 @@ export default ({
   return (
     <Fragment>
       <button
+        disabled={active ? !active : false}
         type={type ? type : "button"}
         style={containerStyle}
         onClick={e => {
