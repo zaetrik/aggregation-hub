@@ -1,7 +1,7 @@
 // CSS Variables
 
 export default {
-  borderRadius: "border-radius: 10px;",
+  borderRadius: "border-radius: 6px;",
   hoverOut: "transition: all 0.3s ease-out;",
   hoverIn:
     "background-color: rgba(228, 232, 235, 1); transition: all 0.3s ease-out;",

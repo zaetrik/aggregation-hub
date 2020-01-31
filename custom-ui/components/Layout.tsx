@@ -49,7 +49,7 @@ const Layout = (props: {
 
           .content {
             width: 100%;
-            padding: 1em;
+            padding: 2em;
           }
 
           header {

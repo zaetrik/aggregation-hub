@@ -1,10 +1,17 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, Dispatch, SetStateAction } from "react";
 import axios from "axios";
 
 // Types
 import { DataModule } from "../../types/dataModule";
+
+// Components
 import PageTitle from "../../components/PageTitle";
 import Layout from "../../components/Layout";
+import AccordionPanel from "../../components/AccordionPanel";
+import ModuleMappingOverview from "../../components/ModuleMappingOverview";
+import { FaArrowRight, FaDatabase } from "react-icons/fa";
+import ModuleDataExample from "../../components/ModuleDataExample";
+import ModuleDocumentCount from "../../components/ModuleDocumentCount";
 
 const ModulePage = ({
   module,
@@ -43,9 +50,46 @@ const ModulePage = ({
     <Fragment>
       <Layout>
         <PageTitle title={moduleState.name} />
+        <JobOverview job={jobState} setJob={setJobState} />
+        <ModuleOverview module={moduleState} />
       </Layout>
     </Fragment>
   );
+};
+
+const JobOverview = ({
+  job,
+  setJob
+}: {
+  job: Job;
+  setJob: Dispatch<SetStateAction<Job>>;
+}) => {
+  return <Fragment></Fragment>;
+};
+
+const ModuleOverview = ({ module }: { module: DataModule }) => {
+  return module.config ? (
+    <Fragment>
+      <AccordionPanel title="Description" open={true}>
+        <h1>{module.config.description}</h1>
+      </AccordionPanel>
+      <AccordionPanel title="Settings"></AccordionPanel>
+      <AccordionPanel title="Mapping">
+        <ModuleMappingOverview module={module} />
+      </AccordionPanel>
+      <AccordionPanel
+        title={
+          <Fragment>
+            <FaDatabase size={20} style={{ paddingRight: "20px" }} />
+            Data <FaArrowRight size={20} style={{ padding: "0 20px" }} />
+            <ModuleDocumentCount module={module} />
+          </Fragment>
+        }
+      >
+        <ModuleDataExample module={module} />
+      </AccordionPanel>
+    </Fragment>
+  ) : null;
 };
 
 ModulePage.getInitialProps = async ({ res, query }) => {

@@ -18,7 +18,7 @@ export default ({
         <header
           className="cursor-pointer"
           onClick={e => {
-            if (onClick) onClick;
+            if (onClick) onClick(e);
           }}
         >
           {title}
@@ -30,9 +30,8 @@ export default ({
           ${theme.hoverOut}
           display: block;
           position: relative;
-          margin-bottom: 40px;
+          margin-bottom: 25px;
           padding: 1rem 1.5rem;
-          ${theme.marginLarge}
           background: hsla(0, 0%, 100%, 0.33);
           ${theme.borderRadius}
           box-shadow: 0 23px 20px -20px rgba(153, 166, 177, 0.1),
@@ -42,7 +41,6 @@ export default ({
         header {
           ${theme.paddingSmall}
           ${theme.fonts.large}
-          font-weight: bold;
         }
 
         .card-container:hover {

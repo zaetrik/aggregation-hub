@@ -1,12 +1,5 @@
 import axios from "axios";
-import {
-  Fragment,
-  useState,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-  FormEvent
-} from "react";
+import { Fragment, useState, useEffect, Dispatch, SetStateAction } from "react";
 
 // Components
 import Layout from "../components/Layout";
@@ -15,9 +8,11 @@ import Card from "../components/Card";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FaChartBar, FaPlus } from "react-icons/fa";
 import Button from "../components/Button";
+import Input from "../components/Input";
 
 // Types
 import { DataModule } from "../types/dataModule";
+import AccordionPanel from "../components/AccordionPanel";
 
 export default () => {
   const [modules, setModules] = useState<DataModule[]>([]);
@@ -26,27 +21,38 @@ export default () => {
     getModules().then(modules => setModules(modules));
   }, []);
 
-  const getModules = async (): Promise<DataModule[]> => {
-    const response = await axios.get(
-      `${process.env.MODULES_SERVICE_DEV}/modules`
-    );
-    return response.data.modules;
-  };
-
   return (
     <Fragment>
       <Layout activeMenuItem="Modules">
         <PageTitle title="Modules" />
-        <CreateNewModule setModules={setModules} />
+        <AccordionPanel
+          title="Create New Module"
+          containerStyle={{ width: "50%" }}
+        >
+          <CreateNewModule setModules={setModules} />
+        </AccordionPanel>
         {modules.length > 0 ? (
-          <ModulesList modules={modules} setModules={setModules} />
+          <div className="modules-list">
+            <ModulesList modules={modules} setModules={setModules} />
+          </div>
         ) : (
           <h3>No Modules Available</h3>
         )}
       </Layout>
-      <style jsx>{``}</style>
+      <style jsx>{`
+        .modules-list {
+          margin-top: 40px;
+        }
+      `}</style>
     </Fragment>
   );
+};
+
+const getModules = async (): Promise<DataModule[]> => {
+  const response = await axios.get(
+    `${process.env.MODULES_SERVICE_DEV}/modules`
+  );
+  return response.data.modules;
 };
 
 const ModulesList = ({
@@ -62,14 +68,17 @@ const ModulesList = ({
         ? `${process.env.MODULES_SERVICE_DEV}/modules/id/${moduleId}?deleteData=true`
         : `${process.env.MODULES_SERVICE_PROD}/modules/id/${moduleId}?deleteData=true`
     );
-    setModules(modules.filter(module => module.id !== moduleId));
+
+    const updatedModules = await getModules();
+    setModules(updatedModules);
   };
 
   return (
     <Fragment>
       {modules.map((module, key) => (
-        <div>
+        <div key={key}>
           <Card
+            containerStyle={{ maxWidth: "600px" }}
             title={module.name}
             onClick={e => (location.href = `/modules/${module.id}`)}
           >
@@ -110,41 +119,32 @@ const CreateNewModule = ({
         { name: formData.moduleName, address: formData.moduleAddress }
       );
 
-      const responseModules = await axios.get(
-        process.env.NODE_ENV === "development"
-          ? `${process.env.MODULES_SERVICE_DEV}/modules`
-          : `${process.env.MODULES_SERVICE_PROD}/modules`
-      );
-
-      setModules(responseModules.data.modules);
+      const updatedModules = await getModules();
+      setModules(updatedModules);
     }
   };
 
   return (
     <Fragment>
       <div>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="moduleName"
-            onChange={e =>
-              setFormData({ ...formData, moduleName: e.target.value })
-            }
-          />
-        </label>
-        <label>
-          Address:
-          <input
-            type="text"
-            name="moduleAddress"
-            onChange={e =>
-              setFormData({ ...formData, moduleAddress: e.target.value })
-            }
-          />
-        </label>
+        <Input
+          placeholder="Choose a name for your module"
+          label="Name"
+          type="text"
+          onChange={e =>
+            setFormData({ ...formData, moduleName: e.target.value })
+          }
+        />
+        <Input
+          placeholder="Enter the address of the module"
+          label="Address"
+          type="text"
+          onChange={e =>
+            setFormData({ ...formData, moduleAddress: e.target.value })
+          }
+        />
         <Button
-          containerStyle={{ margin: "10px" }}
+          containerStyle={{ margin: "10px 5px" }}
           title="Create Module"
           icon={<FaPlus />}
           onClick={e => createNewModule()}
