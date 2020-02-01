@@ -32,7 +32,15 @@ module.exports = (app, repository) => {
             const deleteJobsFromModuleOperation = yield repository.deleteJobByModuleId(req.params.moduleId);
             const deleteData = req.query.deleteData || false;
             if (deleteData) {
-                yield axios_1.default.delete(`${process.env.DATA_STORE_URL}/index/delete/${req.params.moduleId}`);
+                yield axios_1.default
+                    .delete(`${process.env.DATA_STORE_URL}/index/delete/${req.params.moduleId}`)
+                    .catch(err => {
+                    console.log(err);
+                    if (err.message === "Request failed with status code 304")
+                        return;
+                    else
+                        throw err;
+                });
             }
             return res.send(deleteModuleByIdOperation);
         }

@@ -49,9 +49,14 @@ export = (app: express.Application, repository: Repository) => {
 
         const deleteData: boolean = req.query.deleteData || false;
         if (deleteData) {
-          await axios.delete(
-            `${process.env.DATA_STORE_URL}/index/delete/${req.params.moduleId}`
-          );
+          await axios
+            .delete(
+              `${process.env.DATA_STORE_URL}/index/delete/${req.params.moduleId}`
+            )
+            .catch(err => {
+              if (err.message === "Request failed with status code 304") return;
+              else throw err;
+            });
         }
 
         return res.send(deleteModuleByIdOperation);
