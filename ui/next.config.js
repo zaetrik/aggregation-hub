@@ -1,5 +1,4 @@
-const withCSS = require("@zeit/next-css");
-module.exports = withCSS({
+module.exports = {
   /* config options here */
   poweredByHeader: false,
   env: {
@@ -9,4 +8,4 @@ module.exports = withCSS({
     STORE_SERVICE_DEV: "http://localhost:3003",
     STORE_SERVICE_PROD: "http://localhost:3003"
   }
-});
+};
