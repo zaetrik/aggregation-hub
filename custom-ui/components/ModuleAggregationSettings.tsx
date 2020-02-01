@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useState, useReducer, useEffect, Fragment } from "react";
+import { updateRouteSettings } from "../loaders/modules";
 
 // Components
 import Input from "./Input";
@@ -55,12 +55,9 @@ export default ({ module }: { module: DataModule }) => {
   };
 
   const submitAggregationSettings = async () => {
-    await axios.post(
-      process.env.NODE_ENV === "development"
-        ? `${process.env.MODULES_SERVICE_DEV}/modules/id/${module.id}/routeSettings`
-        : `${process.env.MODULES_SERVICE_PROD}/modules/id/${module.id}/routeSettings`,
-      { moduleRouteSettings: routeSettings }
-    );
+    await updateRouteSettings(module.id, {
+      moduleRouteSettings: routeSettings
+    });
   };
 
   const getStringArrayFormItem = (

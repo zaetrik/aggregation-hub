@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import axios from "axios";
+import { getMapping } from "../loaders/store";
 
 // Components
 import BasicTable from "./BasicTable";
@@ -16,15 +16,9 @@ export default ({ module }: { module: DataModule }) => {
   const [data, setData] = useState<{ field: string; type: string }[]>([]);
 
   useEffect(() => {
-    axios
-      .get(
-        process.env.NODE_ENV === "development"
-          ? `${process.env.STORE_SERVICE_DEV}/index/mapping/${module.id}`
-          : `${process.env.STORE_SERVICE_PROD}/index/mapping/${module.id}`
-      )
-      .then(response => {
-        setMapping(response.data.mapping);
-      });
+    getMapping(module.id).then(response => {
+      setMapping(response.data.mapping);
+    });
   }, [module]);
 
   useEffect(() => {

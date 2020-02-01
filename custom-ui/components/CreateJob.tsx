@@ -1,5 +1,5 @@
 import { Fragment, Dispatch, SetStateAction, useState, useEffect } from "react";
-import axios from "axios";
+import { createJob, getJobByModuleId } from "../loaders/modules";
 
 // Components
 import Input from "./Input";
@@ -25,22 +25,13 @@ export default ({
 
   const createNewJob = async () => {
     if (interval > 0) {
-      await axios.post(
-        process.env.NODE_ENV === "development"
-          ? `${process.env.MODULES_SERVICE_DEV}/jobs`
-          : `${process.env.MODULES_SERVICE_PROD}/jobs`,
-        {
-          moduleId: moduleId,
-          interval: interval,
-          execute: checked
-        }
-      );
+      await createJob({
+        moduleId: moduleId,
+        interval: interval,
+        execute: checked
+      });
 
-      const responseGetJob = await axios.get(
-        process.env.NODE_ENV === "development"
-          ? `${process.env.MODULES_SERVICE_DEV}/jobs/id/${moduleId}`
-          : `${process.env.MODULES_SERVICE_PROD}/jobs/id/${moduleId}`
-      );
+      const responseGetJob = await getJobByModuleId(moduleId);
 
       setJob(responseGetJob.data.jobs[0]);
     }

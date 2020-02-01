@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { getModuleById, getJobByModuleId } from "../../loaders/modules";
 
 // Components
 import PageTitle from "../../components/PageTitle";
@@ -25,15 +25,13 @@ const ModulePage = ({
 
   if (process.env.NODE_ENV === "development") {
     useEffect(() => {
-      axios
-        .get(`${process.env.MODULES_SERVICE_DEV}/modules/id/${query.moduleId}`)
-        .then(response => setModuleState(response.data.modules[0]));
+      getModuleById(query.moduleId).then(response =>
+        setModuleState(response.data.modules[0])
+      );
 
-      axios
-        .get(`${process.env.MODULES_SERVICE_DEV}/jobs/id/${query.moduleId}`)
-        .then(response =>
-          setJobState(response.data.jobs[0] ? response.data.jobs[0] : {})
-        );
+      getJobByModuleId(query.moduleId).then(response =>
+        setJobState(response.data.jobs[0] ? response.data.jobs[0] : {})
+      );
     }, []);
   }
 
@@ -60,13 +58,8 @@ const ModulePage = ({
 
 ModulePage.getInitialProps = async ({ res, query }) => {
   if (process.env.NODE_ENV !== "development") {
-    const responseModule = await axios.get(
-      `${process.env.MODULES_SERVICE_PROD}/modules/id/${query.moduleId}`
-    );
-
-    const responseJob = await axios.get(
-      `${process.env.MODULES_SERVICE_PROD}/jobs/id/${query.moduleId}`
-    );
+    const responseModule = await getModuleById(query.moduleId);
+    const responseJob = await getJobByModuleId(query.moduleId);
 
     return {
       module: responseModule.data.modules[0],

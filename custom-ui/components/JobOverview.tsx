@@ -1,5 +1,5 @@
 import { Fragment, Dispatch, useState, SetStateAction } from "react";
-import axios from "axios";
+import { startJob } from "../loaders/modules";
 
 // Components
 import { FaPlay, FaEdit } from "react-icons/fa";
@@ -18,14 +18,6 @@ export default ({
 }) => {
   const [editJob, setEditJob] = useState<boolean>(false);
 
-  const startJob = async () => {
-    await axios.post(
-      process.env.NODE_ENV === "development"
-        ? `${process.env.MODULES_SERVICE_DEV}/aggregation/${moduleId}/start`
-        : `${process.env.MODULES_SERVICE_DEV}/aggregation/${moduleId}/start`,
-      {}
-    );
-  };
   return (
     <Fragment>
       <Heading size="large" fontWeight={200}>
@@ -42,7 +34,7 @@ export default ({
               setTimeout(() => {
                 event.disabled = false;
               }, 5000);
-              await startJob();
+              await startJob(moduleId);
             }}
             title="Execute Job"
             icon={<FaPlay />}

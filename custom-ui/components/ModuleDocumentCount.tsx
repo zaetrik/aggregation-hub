@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { getDocumentCount } from "../loaders/store";
 
 // Components
 import Text from "./Text";
@@ -16,20 +16,16 @@ export default ({
 }) => {
   const [count, setCount] = useState<number>(0);
 
-  const getDocumentCount = async () => {
-    const responseDocumentCount = await axios.get(
-      process.env.NODE_ENV === "development"
-        ? `${process.env.STORE_SERVICE_DEV}/index/count/${module.id}`
-        : `${process.env.STORE_SERVICE_PROD}/index/count/${module.id}`
-    );
+  const getDocumentCountForModule = async () => {
+    const responseDocumentCount = await getDocumentCount(module.id);
 
     setCount(responseDocumentCount.data.count);
   };
 
   useEffect(() => {
-    getDocumentCount();
+    getDocumentCountForModule();
     const interval = setInterval(async () => {
-      await getDocumentCount();
+      await getDocumentCountForModule();
     }, 5000);
 
     return () => clearInterval(interval);

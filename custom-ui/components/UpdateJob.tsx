@@ -1,5 +1,5 @@
 import { Fragment, Dispatch, SetStateAction, useState, useEffect } from "react";
-import axios from "axios";
+import { updateJob, getJobByModuleId } from "../loaders/modules";
 
 // Components
 import Input from "./Input";
@@ -23,24 +23,15 @@ export default ({
     setInterval(job.interval);
   }, [job]);
 
-  const updateJob = async () => {
+  const updateJobData = async () => {
     if (interval > 0) {
-      await axios.post(
-        process.env.NODE_ENV === "development"
-          ? `${process.env.MODULES_SERVICE_DEV}/jobs/update`
-          : `${process.env.MODULES_SERVICE_PROD}/jobs/update`,
-        {
-          moduleId: job.moduleId,
-          execute: checked,
-          interval: interval
-        }
-      );
+      await updateJob({
+        moduleId: job.moduleId,
+        execute: checked,
+        interval: interval
+      });
 
-      const responseGetJob = await axios.get(
-        process.env.NODE_ENV === "development"
-          ? `${process.env.MODULES_SERVICE_DEV}/jobs/id/${job.moduleId}`
-          : `${process.env.MODULES_SERVICE_PROD}/jobs/id/${job.moduleId}`
-      );
+      const responseGetJob = await getJobByModuleId(job.moduleId);
 
       setJob(responseGetJob.data.jobs[0]);
       setEditJob(false);
@@ -61,7 +52,7 @@ export default ({
         checked={checked}
         onChange={e => setChecked(!checked)}
       />
-      <Button type="submit" title="Update Job" onClick={e => updateJob()} />
+      <Button type="submit" title="Update Job" onClick={e => updateJobData()} />
     </Fragment>
   );
 };
