@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import { getAllModules } from "../loaders/modules";
+import theme from "../theme";
 
 // Components
 import Layout from "../components/Layout";
@@ -34,7 +35,9 @@ export default () => {
             <ModulesList modules={modules} setModules={setModules} />
           </div>
         ) : (
-          <Text>No Modules Available</Text>
+          <div style={{ marginTop: theme.margin.large }}>
+            <Text size="large">No Modules Available</Text>
+          </div>
         )}
       </Layout>
       <style jsx>{`

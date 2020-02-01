@@ -1,5 +1,6 @@
 import { Fragment, Dispatch, SetStateAction, useState, useEffect } from "react";
 import { updateJob, getJobByModuleId } from "../loaders/modules";
+import theme from "../theme";
 
 // Components
 import Input from "./Input";
@@ -47,12 +48,28 @@ export default ({
         label="Interval"
         value={interval}
       />
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={e => setChecked(!checked)}
+      <label>
+        Execute Job
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={e => setChecked(!checked)}
+        />
+      </label>
+      <Button
+        containerStyle={{ margin: theme.margin.small }}
+        type="submit"
+        title="Update Job"
+        onClick={e => updateJobData()}
       />
-      <Button type="submit" title="Update Job" onClick={e => updateJobData()} />
+      <style jsx>{`
+        label {
+          margin: ${theme.margin.small};
+          width: inherit;
+          display: flex;
+          flex-flow: column;
+        }
+      `}</style>
     </Fragment>
   );
 };

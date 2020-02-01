@@ -29,13 +29,16 @@ export default ({
           if (onClick) onClick(e);
         }}
       >
-        <span className="icon">{icon}</span>
-        <Text size="small">{title}</Text>
+        {icon ? <span className="icon">{icon}</span> : null}
+        <Text size="small" padding="none" margin="none">
+          {title}
+        </Text>
       </button>
       <style jsx>{`
         .icon {
           font-size: ${theme.fonts.medium};
           padding: 0 ${theme.padding.small};
+          vertical-align: middle;
         }
 
         button {

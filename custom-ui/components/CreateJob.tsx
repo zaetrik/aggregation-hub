@@ -1,9 +1,11 @@
 import { Fragment, Dispatch, SetStateAction, useState, useEffect } from "react";
 import { createJob, getJobByModuleId } from "../loaders/modules";
+import theme from "../theme";
 
 // Components
 import Input from "./Input";
 import Button from "./Button";
+import Heading from "./Heading";
 
 export default ({
   moduleId,
@@ -38,6 +40,9 @@ export default ({
   };
   return (
     <Fragment>
+      <Heading margin="none" size="large" padding="none" fontWeight={200}>
+        Create Job
+      </Heading>
       <Input
         type="number"
         onChange={e => setInterval(e.currentTarget.value)}
@@ -45,12 +50,28 @@ export default ({
         label="Interval"
         value={interval}
       />
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={e => setChecked(!checked)}
+      <label>
+        Execute Job
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={e => setChecked(!checked)}
+        />
+      </label>
+      <Button
+        type="submit"
+        containerStyle={{ margin: theme.margin.small }}
+        title="Create Job"
+        onClick={e => createNewJob()}
       />
-      <Button type="submit" title="Create Job" onClick={e => createNewJob()} />
+      <style jsx>{`
+        label {
+          margin: ${theme.margin.small};
+          width: inherit;
+          display: flex;
+          flex-flow: column;
+        }
+      `}</style>
     </Fragment>
   );
 };

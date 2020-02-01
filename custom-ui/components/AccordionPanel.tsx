@@ -18,17 +18,20 @@ export default (props: {
       <div style={props.containerStyle} className="accordion-panel-container">
         <div className="header" onClick={e => setOpen(!open)}>
           <Heading padding="medium" className="cursor-pointer" fontWeight={200}>
-            {open ? (
-              <FaAngleDown
-                size={theme.fonts.medium.split("px")[0]}
-                style={{ marginRight: theme.margin.medium }}
-              />
-            ) : (
-              <FaAngleRight
-                size={theme.fonts.medium.split("px")[0]}
-                style={{ marginRight: theme.margin.medium }}
-              />
-            )}
+            <span className="icon">
+              {open ? (
+                <FaAngleDown
+                  size={theme.fonts.medium.split("px")[0]}
+                  style={{ marginRight: theme.margin.medium }}
+                />
+              ) : (
+                <FaAngleRight
+                  className="icon"
+                  size={theme.fonts.medium.split("px")[0]}
+                  style={{ marginRight: theme.margin.medium }}
+                />
+              )}
+            </span>
             {props.title}
           </Heading>
         </div>
@@ -43,6 +46,10 @@ export default (props: {
         </div>
       </div>
       <style jsx>{`
+        .icon {
+          vertical-align: middle;
+        }
+
         .accordion-panel-container {
           border-bottom: 1px solid ${theme.colors.hoverColor};
         }

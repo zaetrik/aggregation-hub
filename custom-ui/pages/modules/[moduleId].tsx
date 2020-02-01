@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getModuleById, getJobByModuleId } from "../../loaders/modules";
+import theme from "../../theme";
 
 // Components
 import PageTitle from "../../components/PageTitle";
@@ -7,6 +8,8 @@ import Layout from "../../components/Layout";
 import CreateJob from "../../components/CreateJob";
 import ModuleOverview from "../../components/ModuleOverview";
 import JobOverview from "../../components/JobOverview";
+import Button from "../../components/Button";
+import { FaChartBar } from "react-icons/fa";
 
 // Types
 import { DataModule } from "../../types/dataModule";
@@ -37,7 +40,15 @@ const ModulePage = ({
 
   return moduleState ? (
     <Layout>
-      <PageTitle title={moduleState.name} />
+      <div style={{ display: "flex" }}>
+        <PageTitle title={moduleState.name} />
+        <Button
+          containerStyle={{ height: "min-content", alignSelf: "center" }}
+          title="Go to Dashboard"
+          onClick={e => (location.href = `/dashboards/${moduleState.id}`)}
+          icon={<FaChartBar />}
+        />
+      </div>
       {jobState.moduleId ? (
         <JobOverview
           job={jobState}
@@ -45,11 +56,13 @@ const ModulePage = ({
           moduleId={moduleState.id}
         />
       ) : (
-        <CreateJob
-          moduleId={moduleState.id}
-          setJob={setJobState}
-          currentInterval={jobState.interval}
-        />
+        <div style={{ marginLeft: theme.margin.large }}>
+          <CreateJob
+            moduleId={moduleState.id}
+            setJob={setJobState}
+            currentInterval={jobState.interval}
+          />
+        </div>
       )}
       <ModuleOverview module={moduleState} />
     </Layout>

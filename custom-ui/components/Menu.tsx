@@ -33,11 +33,11 @@ export default ({
         .menu-item {
           ${theme.hoverOut}
           padding: ${theme.padding.medium};
+          font-size: ${theme.fonts.medium};
         }
 
         .menu-item:hover {
           ${theme.hoverIn}
-          font-weight: bold;
         }
 
         .menu-item.${activeItem} {
@@ -46,6 +46,7 @@ export default ({
 
         .menu-icon {
           display: inline-block;
+          vertical-align: middle;
           margin-right: ${theme.margin.medium};
           padding: ${theme.padding.small};
         }

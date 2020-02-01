@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 
 const getModuleDataFromStore = async (
   moduleId: string,
-  start: number
+  start?: number
 ): Promise<AxiosResponse> => {
   return await axios.get(
     `${

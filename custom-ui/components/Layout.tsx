@@ -45,8 +45,8 @@ export default (props: {
         {`
           .sidebar {
             width: 15%;
-            min-width: 150px;
-            max-width: 200px;
+            min-width: 200px;
+            max-width: 250px;
           }
 
           .container {

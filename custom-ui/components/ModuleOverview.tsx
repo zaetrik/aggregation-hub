@@ -9,6 +9,7 @@ import ModuleMappingOverview from "./ModuleMappingOverview";
 import ModuleDataExample from "./ModuleDataExample";
 import { FaDatabase } from "react-icons/fa";
 import Heading from "./Heading";
+import Text from "./Text";
 
 // Types
 import { DataModule } from "../types/dataModule";
@@ -21,30 +22,37 @@ export default ({ module }: { module: DataModule }) => {
       </Heading>
       <ModuleDocumentCount
         containerStyle={{
-          paddingLeft: theme.margin.small,
-          marginBottom: theme.margin.medium
+          marginBottom: theme.margin.large
         }}
         module={module}
       />
-      <AccordionPanel title="Description" open={true}>
-        <Heading size="medium">{module.config.description}</Heading>
-      </AccordionPanel>
-      <AccordionPanel title="Settings">
-        <ModuleAggregationSettings module={module} />
-      </AccordionPanel>
-      <AccordionPanel title="Mapping">
-        <ModuleMappingOverview module={module} />
-      </AccordionPanel>
-      <AccordionPanel
-        title={
-          <Fragment>
-            <FaDatabase size={20} style={{ paddingRight: "20px" }} />
-            Example Data
-          </Fragment>
-        }
-      >
-        <ModuleDataExample module={module} />
-      </AccordionPanel>
+      <div style={{ marginLeft: theme.margin.medium }}>
+        <AccordionPanel title="Description" open={true}>
+          <Text size="medium">{module.config.description}</Text>
+        </AccordionPanel>
+        <AccordionPanel title="Settings">
+          <ModuleAggregationSettings module={module} />
+        </AccordionPanel>
+        <AccordionPanel title="Mapping">
+          <ModuleMappingOverview module={module} />
+        </AccordionPanel>
+        <AccordionPanel
+          title={
+            <Fragment>
+              <FaDatabase
+                size={20}
+                style={{
+                  paddingRight: theme.padding.medium,
+                  verticalAlign: "sub"
+                }}
+              />
+              Example Data
+            </Fragment>
+          }
+        >
+          <ModuleDataExample module={module} />
+        </AccordionPanel>
+      </div>
     </Fragment>
   ) : null;
 };

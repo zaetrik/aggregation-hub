@@ -2,5 +2,5 @@
 import Heading from "./Heading";
 
 export default ({ title }: { title: string }) => {
-  return <Heading size="xlarge">{title}</Heading>;
+  return <Heading size="xxlarge">{title}</Heading>;
 };

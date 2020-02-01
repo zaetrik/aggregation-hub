@@ -1,5 +1,6 @@
 import { Fragment, Dispatch, useState, SetStateAction } from "react";
 import { startJob } from "../loaders/modules";
+import theme from "../theme";
 
 // Components
 import { FaPlay, FaEdit } from "react-icons/fa";
@@ -21,34 +22,36 @@ export default ({
   return (
     <Fragment>
       <Heading size="large" fontWeight={200}>
-        Job
+        {!editJob ? "Job" : "Update Job"}
       </Heading>
-      {editJob ? (
-        <UpdateJob job={job} setJob={setJob} setEditJob={setEditJob} />
-      ) : (
-        <Fragment>
-          <Button
-            onClick={async e => {
-              const event = e.currentTarget;
-              event.disabled = true;
-              setTimeout(() => {
-                event.disabled = false;
-              }, 5000);
-              await startJob(moduleId);
-            }}
-            title="Execute Job"
-            icon={<FaPlay />}
-          />
-          <Button
-            containerStyle={{ marginLeft: "10px" }}
-            onClick={async e => {
-              setEditJob(true);
-            }}
-            title="Edit Job"
-            icon={<FaEdit />}
-          />
-        </Fragment>
-      )}
+      <div style={{ marginLeft: theme.margin.large }}>
+        {editJob ? (
+          <UpdateJob job={job} setJob={setJob} setEditJob={setEditJob} />
+        ) : (
+          <Fragment>
+            <Button
+              onClick={async e => {
+                const event = e.currentTarget;
+                event.disabled = true;
+                setTimeout(() => {
+                  event.disabled = false;
+                }, 5000);
+                await startJob(moduleId);
+              }}
+              title="Execute Job"
+              icon={<FaPlay />}
+            />
+            <Button
+              containerStyle={{ marginLeft: "10px" }}
+              onClick={async e => {
+                setEditJob(true);
+              }}
+              title="Edit Job"
+              icon={<FaEdit />}
+            />
+          </Fragment>
+        )}
+      </div>
     </Fragment>
   );
 };

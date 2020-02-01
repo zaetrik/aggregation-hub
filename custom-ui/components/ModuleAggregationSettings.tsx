@@ -1,11 +1,12 @@
 import { useState, useReducer, useEffect, Fragment } from "react";
 import { updateRouteSettings } from "../loaders/modules";
+import theme from "../theme";
 
 // Components
 import Input from "./Input";
 import { FaSave } from "react-icons/fa";
 import Button from "./Button";
-import Heading from "./Heading";
+import Text from "./Text";
 
 // Types
 import { DataModule } from "../types/dataModule";
@@ -385,10 +386,10 @@ export default ({ module }: { module: DataModule }) => {
 
             return (
               <div key={indexRoute}>
-                <Heading size="small" padding="medium" margin="none">
+                <Text size="medium">
                   {module.config.routes[route].description}
-                </Heading>
-                <div>
+                </Text>
+                <div className="form-items">
                   {formItemsBodyParams}
                   {formItemsQueryParams}
                 </div>
@@ -401,8 +402,15 @@ export default ({ module }: { module: DataModule }) => {
           onClick={e => submitAggregationSettings()}
           icon={<FaSave />}
           title="Save"
+          containerStyle={{ margin: theme.margin.medium }}
         />
       </div>
+      <style jsx>{`
+        .form-items {
+          padding: ${theme.padding.medium};
+          margin-top: ${theme.margin.medium};
+        }
+      `}</style>
     </Fragment>
   );
 };

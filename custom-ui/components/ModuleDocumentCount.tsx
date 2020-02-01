@@ -32,9 +32,7 @@ export default ({
   }, [module]);
   return (
     <div style={containerStyle ? containerStyle : {}}>
-      <Text size="large" padding="xsmall" margin="none">
-        {count} Documents Aggregated
-      </Text>
+      <Text size="large">{count} Documents Aggregated</Text>
     </div>
   );
 };
