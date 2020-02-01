@@ -38,7 +38,7 @@ export default ({
         .icon {
           font-size: ${theme.fonts.medium};
           padding: 0 ${theme.padding.small};
-          vertical-align: middle;
+          vertical-align: sub;
         }
 
         button {
