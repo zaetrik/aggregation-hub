@@ -1,18 +1,17 @@
-import {
-  Form,
-  FormField,
-  CheckBox,
-  TextArea,
-  Box,
-  Heading,
-  Button
-} from "grommet";
-import { DataModule } from "../types/dataModule";
-import * as Icons from "grommet-icons";
-import axios from "axios";
-import { useState, useReducer, useEffect } from "react";
+import { useState, useReducer, useEffect, Fragment } from "react";
+import { updateRouteSettings } from "../loaders/modules";
+import theme from "../theme";
 
-const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
+// Components
+import Input from "./Input";
+import { FaSave } from "react-icons/fa";
+import Button from "./Button";
+import Text from "./Text";
+
+// Types
+import { DataModule } from "../types/dataModule";
+
+export default ({ module }: { module: DataModule }) => {
   const initialRouteSettings = (): ModuleRouteSettings => {
     const routes = module.routeSettings
       ? Object.keys(module.routeSettings).map(route => {
@@ -37,7 +36,11 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
     return Object.assign({}, ...routes);
   };
 
-  const [routeSettings, setRouteSettings] = useState(initialRouteSettings);
+  const [routeSettings, setRouteSettings] = useState(initialRouteSettings());
+
+  useEffect(() => {
+    setRouteSettings(initialRouteSettings());
+  }, [module]);
 
   const updateRouteSettingsState = (route, param, value, bodyOrQueryParam) => {
     setRouteSettings({
@@ -53,12 +56,9 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
   };
 
   const submitAggregationSettings = async () => {
-    await axios.post(
-      process.env.NODE_ENV === "development"
-        ? `${process.env.MODULES_SERVICE_DEV}/modules/id/${module.id}/routeSettings`
-        : `${process.env.MODULES_SERVICE_PROD}/modules/id/${module.id}/routeSettings`,
-      { moduleRouteSettings: routeSettings }
-    );
+    await updateRouteSettings(module.id, {
+      moduleRouteSettings: routeSettings
+    });
   };
 
   const getStringArrayFormItem = (
@@ -76,13 +76,9 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
       : undefined;
 
     const [value, setValue] = useState(currentSettingTransformed);
-
     return (
-      <FormField
-        label={description}
-        //required={required}
-      >
-        <TextArea
+      <div className="form-item">
+        <textarea
           onChange={e => {
             const value = e.target.value.split("\n").map(item => item.trim());
             setValue(e.target.value);
@@ -92,7 +88,7 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
           name={param}
           value={value}
         />
-      </FormField>
+      </div>
     );
   };
 
@@ -113,11 +109,8 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
     const [value, setValue] = useState(currentSettingTransformed);
 
     return (
-      <FormField
-        label={description}
-        //required={required}
-      >
-        <TextArea
+      <div className="form-item">
+        <textarea
           onChange={e => {
             setValue(e.target.value);
             const value = e.target.value.split("\n").map(item => item.trim());
@@ -127,7 +120,7 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
           name={param}
           value={value}
         />
-      </FormField>
+      </div>
     );
   };
 
@@ -148,11 +141,8 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
     const [value, setValue] = useState(currentSettingTransformed);
 
     return (
-      <FormField
-        label={description}
-        //required={required}
-      >
-        <TextArea
+      <div className="form-item">
+        <textarea
           onChange={e => {
             setValue(e.target.value);
             const value = e.target.value
@@ -164,7 +154,7 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
           name={value}
           value={currentSettingTransformed}
         />
-      </FormField>
+      </div>
     );
   };
 
@@ -182,19 +172,20 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
     const [value, setValue] = useState(currentSetting);
 
     return (
-      <FormField
-        label={description}
-        //required={required}
-        placeholder="Type your string"
-        type="text"
-        name={param}
-        onChange={e => {
-          setValue(e.target.value);
-          const value = e.target.value;
-          updateRouteSettingsState(route, param, value, bodyOrQueryParam);
-        }}
-        value={value}
-      />
+      <div className="form-item">
+        <Input
+          label={description}
+          //required={required}
+          placeholder="Type your string"
+          type="text"
+          onChange={e => {
+            setValue(e.target.value);
+            const value = e.target.value;
+            updateRouteSettingsState(route, param, value, bodyOrQueryParam);
+          }}
+          value={value}
+        />
+      </div>
     );
   };
 
@@ -212,23 +203,20 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
     const [value, setValue] = useState(currentSetting);
 
     return (
-      <FormField
-        label={description}
-        //required={required}
-        placeholder="Type your number"
-        onChange={e => {
-          setValue(e.target.value);
-          const value = e.target.value;
-          updateRouteSettingsState(route, param, value, bodyOrQueryParam);
-        }}
-        validate={{
-          regexp: new RegExp(/^[1-9][0-9]*$/),
-          message: "Input should be a number"
-        }}
-        type="number"
-        name={param}
-        value={value}
-      />
+      <div className="form-item">
+        <Input
+          label={description}
+          //required={required}
+          placeholder="Type your number"
+          onChange={e => {
+            setValue(e.target.value);
+            const value = e.target.value;
+            updateRouteSettingsState(route, param, value, bodyOrQueryParam);
+          }}
+          type="number"
+          value={value}
+        />
+      </div>
     );
   };
 
@@ -270,10 +258,9 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
     }, [checked]);
 
     return (
-      <FormField //required={required}
-      >
-        <CheckBox
-          label={description}
+      <div className="form-item">
+        <input
+          type="checkbox"
           checked={checked.value}
           name={param}
           onChange={e => {
@@ -281,7 +268,7 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
             dispatchSetChecked({ route, param, value, bodyOrQueryParam });
           }}
         />
-      </FormField>
+      </div>
     );
   };
 
@@ -384,8 +371,8 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
   };
 
   return (
-    <Box pad="medium">
-      <Form onSubmit={e => submitAggregationSettings()}>
+    <Fragment>
+      <div>
         {Object.keys(module.config.routes).map((route, indexRoute) => {
           if (module.config.routes[route].configurable) {
             const formItemsBodyParams = getFormItemsForBodyParams(
@@ -398,22 +385,32 @@ const ModuleAggregationSettings = ({ module }: { module: DataModule }) => {
             );
 
             return (
-              <Box pad="small" key={indexRoute}>
-                <Heading size="xxsmall">
+              <div key={indexRoute}>
+                <Text size="medium">
                   {module.config.routes[route].description}
-                </Heading>
-                <Box pad="small">
+                </Text>
+                <div className="form-items">
                   {formItemsBodyParams}
                   {formItemsQueryParams}
-                </Box>
-              </Box>
+                </div>
+              </div>
             );
           }
         })}
-        <Button type="submit" primary label="Save" icon={<Icons.Save />} />
-      </Form>
-    </Box>
+        <Button
+          type="submit"
+          onClick={e => submitAggregationSettings()}
+          icon={<FaSave />}
+          title="Save"
+          containerStyle={{ margin: theme.margin.medium }}
+        />
+      </div>
+      <style jsx>{`
+        .form-items {
+          padding: ${theme.padding.medium};
+          margin-top: ${theme.margin.medium};
+        }
+      `}</style>
+    </Fragment>
   );
 };
-
-export default ModuleAggregationSettings;

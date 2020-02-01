@@ -1,101 +1,52 @@
 import { Dispatch, SetStateAction, Fragment } from "react";
-import { Box, Heading, Button, ResponsiveContext, Grid } from "grommet";
-import { DataModule } from "../types/dataModule";
-import Link from "next/link";
-import DeleteModule from "./DeleteModule";
-import * as Icons from "grommet-icons";
+import { deleteModuleById, getAllModules } from "../loaders/modules";
 
-const ModulesList = ({
+// Components
+import Card from "./Card";
+import Button from "./Button";
+import { FaChartBar } from "react-icons/fa";
+import { AiOutlineDelete } from "react-icons/ai";
+
+// Types
+import { DataModule } from "../types/dataModule";
+
+export default ({
   modules,
-  setModulesState
+  setModules
 }: {
   modules: DataModule[];
-  setModulesState: Dispatch<SetStateAction<DataModule[]>>;
+  setModules: Dispatch<SetStateAction<DataModule[]>>;
 }) => {
+  const deleteModule = async (moduleId: string) => {
+    await deleteModuleById(moduleId);
+
+    const responseUpdatedModules = await getAllModules();
+    setModules(responseUpdatedModules.data.modules);
+  };
+
   return (
     <Fragment>
-      <ResponsiveContext.Consumer>
-        {size => {
-          if (modules) {
-            const areas = modules.map((module, index) => {
-              return {
-                name: `${module.id}`,
-                start: [0, index],
-                end: [0, index]
-              };
-            });
-
-            const rows = modules.map(module => {
-              return "1fr";
-            });
-
-            const columns = ["1fr"];
-
-            return (
-              <Grid
-                rows={rows}
-                alignSelf="center"
-                columns={columns}
-                fill
-                style={{
-                  minHeight: "100%",
-                  width: "100%"
-                }}
-                gap="small"
-                areas={areas}
-              >
-                {modules.length > 0 ? (
-                  <Box pad="medium">
-                    <Heading size="xxsmall">Modules</Heading>
-                    {modules.map((module, index) => {
-                      return (
-                        <Box
-                          margin="small"
-                          key={index}
-                          round
-                          animation="fadeIn"
-                          background="brand"
-                        >
-                          <Link href={`/modules/${module.id}`} key={index}>
-                            <Heading
-                              textAlign="start"
-                              alignSelf="start"
-                              margin="medium"
-                              className="cursor-pointer"
-                            >
-                              {module.name}
-                            </Heading>
-                          </Link>
-                          <Box direction="row">
-                            <DeleteModule
-                              modules={modules}
-                              module={module}
-                              setModulesState={setModulesState}
-                            ></DeleteModule>
-                            <Button
-                              alignSelf="end"
-                              margin="small"
-                              icon={<Icons.PieChart />}
-                              label="Go to Dashboard"
-                              hoverIndicator
-                              onClick={() =>
-                                (location.href =
-                                  "http://localhost:5601/app/kibana#/discover")
-                              }
-                            />
-                          </Box>
-                        </Box>
-                      );
-                    })}
-                  </Box>
-                ) : null}
-              </Grid>
-            );
-          }
-        }}
-      </ResponsiveContext.Consumer>
+      {modules.map((module, key) => (
+        <div key={key}>
+          <Card
+            containerStyle={{ maxWidth: "600px" }}
+            title={module.name}
+            onClick={e => (location.href = `/modules/${module.id}`)}
+          >
+            <Button
+              containerStyle={{ marginRight: "10px" }}
+              title="Delete"
+              onClick={e => deleteModule(module.id)}
+              icon={<AiOutlineDelete />}
+            />
+            <Button
+              title="Go to Dashboard"
+              onClick={e => (location.href = `/dashboards/${module.id}`)}
+              icon={<FaChartBar />}
+            />
+          </Card>
+        </div>
+      ))}
     </Fragment>
   );
 };
-
-export default ModulesList;

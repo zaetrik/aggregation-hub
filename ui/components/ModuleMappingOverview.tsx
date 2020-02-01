@@ -1,66 +1,46 @@
-import { Box, DataTable, Text } from "grommet";
-import { DataModule } from "../types/dataModule";
-import axios from "axios";
-import { useEffect, Fragment, Dispatch, SetStateAction } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { getMapping } from "../loaders/store";
 
-const ModuleMappingOverview = ({
-  module,
-  mapping,
-  setMapping
-}: {
-  module: DataModule;
-  mapping: {
+// Components
+import BasicTable from "./BasicTable";
+import Text from "./Text";
+
+// Types
+import { DataModule } from "../types/dataModule";
+
+export default ({ module }: { module: DataModule }) => {
+  const [mapping, setMapping] = useState<{
     properties: { [field: string]: { type: string } };
-  };
-  setMapping: Dispatch<
-    SetStateAction<{
-      properties: { [field: string]: { type: string } };
-    }>
-  >;
-}) => {
+  }>({ properties: {} });
+
+  const [data, setData] = useState<{ field: string; type: string }[]>([]);
+
   useEffect(() => {
-    axios
-      .get(
-        process.env.NODE_ENV === "development"
-          ? `${process.env.STORE_SERVICE_DEV}/index/mapping/${module.id}`
-          : `${process.env.STORE_SERVICE_PROD}/index/mapping/${module.id}`
-      )
-      .then(response => setMapping(response.data.mapping));
+    getMapping(module.id).then(response => {
+      setMapping(response.data.mapping);
+    });
   }, [module]);
+
+  useEffect(() => {
+    setData(
+      Object.keys(mapping.properties).map(field => {
+        return { field: field, type: mapping.properties[field].type };
+      })
+    );
+  }, [mapping]);
+
+  const columns = [
+    { Header: "Field", accessor: "field" },
+    { Header: "Type", accessor: "type" }
+  ];
 
   return (
     <Fragment>
       {Object.keys(mapping.properties).length > 0 ? (
-        <Box pad="medium">
-          <DataTable
-            resizeable
-            sortable
-            columns={[
-              {
-                property: "field",
-                header: <Text>Field</Text>,
-                primary: true,
-                search: true
-              },
-              {
-                property: "type",
-                header: "Type",
-                search: true,
-                render: datum => <Text>{datum.type}</Text>
-              }
-            ]}
-            data={Object.keys(mapping.properties).map(field => {
-              return { field: field, type: mapping.properties[field].type };
-            })}
-          />
-        </Box>
+        <BasicTable data={data} columns={columns} />
       ) : (
-        <Box pad="medium">
-          <Text>No mapping available</Text>
-        </Box>
+        <Text>No mapping available</Text>
       )}
     </Fragment>
   );
 };
-
-export default ModuleMappingOverview;

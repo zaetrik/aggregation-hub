@@ -1,39 +1,38 @@
-import { Box, Text } from "grommet";
-import { DataModule } from "../types/dataModule";
-import axios from "axios";
 import { useState, useEffect } from "react";
-import * as Icons from "grommet-icons";
+import { getDocumentCount } from "../loaders/store";
 
-const ModuleDocumentCount = ({ module }: { module: DataModule }) => {
+// Components
+import Text from "./Text";
+
+// Types
+import { DataModule } from "../types/dataModule";
+
+export default ({
+  module,
+  containerStyle
+}: {
+  module: DataModule;
+  containerStyle?: { [style: string]: string };
+}) => {
   const [count, setCount] = useState<number>(0);
 
-  const getDocumentCount = async () => {
-    const responseDocumentCount = await axios.get(
-      process.env.NODE_ENV === "development"
-        ? `${process.env.STORE_SERVICE_DEV}/index/count/${module.id}`
-        : `${process.env.STORE_SERVICE_PROD}/index/count/${module.id}`
-    );
+  const getDocumentCountForModule = async () => {
+    const responseDocumentCount = await getDocumentCount(module.id);
 
     setCount(responseDocumentCount.data.count);
   };
 
   useEffect(() => {
-    getDocumentCount();
+    getDocumentCountForModule();
     const interval = setInterval(async () => {
-      await getDocumentCount();
+      await getDocumentCountForModule();
     }, 5000);
 
     return () => clearInterval(interval);
   }, [module]);
-
   return (
-    <Box pad="medium" direction="row" align="center">
-      <Icons.DocumentStore />
-      <Text style={{ marginLeft: "10px" }}>
-        <strong>{count}</strong> Documents
-      </Text>
-    </Box>
+    <div style={containerStyle ? containerStyle : {}}>
+      <Text size="large">{count} Documents Aggregated</Text>
+    </div>
   );
 };
-
-export default ModuleDocumentCount;

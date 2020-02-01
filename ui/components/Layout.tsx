@@ -1,10 +1,15 @@
-import { Fragment } from "react";
-import Headers from "./Header";
 import Head from "next/head";
-import Footer from "./Footer";
-import { ResponsiveContext, Box, Grid } from "grommet";
+import { Fragment } from "react";
+import theme from "../theme";
 
-const Layout = (props): JSX.Element => {
+// Components
+import Menu from "./Menu";
+import Heading from "./Heading";
+
+export default (props: {
+  activeMenuItem?: string;
+  children?: any;
+}): JSX.Element => {
   return (
     <Fragment>
       <Head>
@@ -16,40 +21,53 @@ const Layout = (props): JSX.Element => {
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
         <meta name="theme-color" content="#000"></meta>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-        />
         <link rel="stylesheet" href="/css/main.css" />
+        <link
+          href="https://fonts.googleapis.com/css?family=Assistant&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
-      <ResponsiveContext.Consumer>
-        {size => (
-          <Grid
-            rows={["min-content", "auto", "min-content"]}
-            columns={["auto"]}
-            fill="horizontal"
-            style={{ minHeight: "100%" }}
-            // gap="small"
-            areas={[
-              { name: "header", start: [0, 0], end: [0, 0] },
-              { name: "main", start: [0, 1], end: [0, 1] },
-              { name: "footer", start: [0, 2], end: [0, 2] }
-            ]}
+      <div className="container">
+        <div className="sidebar">
+          <Heading
+            size="large"
+            fontWeight={600}
+            padding="medium"
+            textAlign="center"
           >
-            <Box gridArea="header" background="brand">
-              <Headers></Headers>
-            </Box>
-            <Box gridArea="main" background="light-1">
-              {props.children}
-            </Box>
-            <Box gridArea="footer" justify="end" background="light-3">
-              <Footer></Footer>
-            </Box>
-          </Grid>
-        )}
-      </ResponsiveContext.Consumer>
+            Aggregation Hub
+          </Heading>
+          <Menu activeItem={props.activeMenuItem} />
+        </div>
+        <div className="content">{props.children}</div>
+      </div>
+      <style jsx>
+        {`
+          .sidebar {
+            width: 15%;
+            min-width: 200px;
+            max-width: 250px;
+          }
+
+          .container {
+            display: flex;
+            height: 100%;
+            min-height: 100%;
+          }
+
+          .content {
+            width: 100%;
+            padding: 2em;
+          }
+
+          header {
+            padding: ${theme.padding.large};
+            font-size: ${theme.fonts.large};
+            font-weight: bold;
+            text-align: center;
+          }
+        `}
+      </style>
     </Fragment>
   );
 };
-
-export default Layout;

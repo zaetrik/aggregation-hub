@@ -1,15 +1,20 @@
-import { DataModule } from "../../types/dataModule";
+import { useState, useEffect } from "react";
+import { getModuleById, getJobByModuleId } from "../../loaders/modules";
+import theme from "../../theme";
+
+// Components
+import PageTitle from "../../components/PageTitle";
 import Layout from "../../components/Layout";
-import { Heading, Box, Button } from "grommet";
-import axios from "axios";
+import CreateJob from "../../components/CreateJob";
 import ModuleOverview from "../../components/ModuleOverview";
 import JobOverview from "../../components/JobOverview";
-import CreateJob from "../../components/CreateJob";
-import { useState, useEffect } from "react";
-import * as Icons from "grommet-icons";
-import EditJob from "../../components/EditJob";
+import Button from "../../components/Button";
+import { FaChartBar } from "react-icons/fa";
 
-const Module = ({
+// Types
+import { DataModule } from "../../types/dataModule";
+
+const ModulePage = ({
   module,
   job,
   query
@@ -19,89 +24,55 @@ const Module = ({
   query?: { moduleId: string };
 }) => {
   const [jobState, setJobState] = useState<Job>(job);
-  const [editJob, setEditJob] = useState<boolean>(false);
   const [moduleState, setModuleState] = useState<DataModule>(module);
 
   if (process.env.NODE_ENV === "development") {
     useEffect(() => {
-      axios
-        .get(`${process.env.MODULES_SERVICE_DEV}/modules/id/${query.moduleId}`)
-        .then(response => setModuleState(response.data.modules[0]));
+      getModuleById(query.moduleId).then(response =>
+        setModuleState(response.data.modules[0])
+      );
 
-      axios
-        .get(`${process.env.MODULES_SERVICE_DEV}/jobs/id/${query.moduleId}`)
-        .then(response => setJobState(response.data.jobs[0]));
+      getJobByModuleId(query.moduleId).then(response =>
+        setJobState(response.data.jobs[0] ? response.data.jobs[0] : {})
+      );
     }, []);
   }
 
-  const startJob = async () => {
-    await axios.post(
-      process.env.NODE_ENV === "development"
-        ? `${process.env.MODULES_SERVICE_DEV}/aggregation/${query.moduleId}/start`
-        : `${process.env.MODULES_SERVICE_DEV}/aggregation/${query.moduleId}/start`,
-      {}
-    );
-  };
-
   return moduleState ? (
     <Layout>
-      <Box pad="medium" gap="small">
-        <Box direction="row">
-          <Heading alignSelf="start">{moduleState.name}</Heading>
-          <Button
-            alignSelf="end"
-            margin="auto"
-            icon={<Icons.Play />}
-            label="Execute Job"
-            hoverIndicator
-            primary
-            onClick={startJob}
+      <div style={{ display: "flex" }}>
+        <PageTitle title={moduleState.name} />
+        <Button
+          containerStyle={{ height: "min-content", alignSelf: "center" }}
+          title="Go to Dashboard"
+          onClick={e => (location.href = `/dashboards/${moduleState.id}`)}
+          icon={<FaChartBar />}
+        />
+      </div>
+      {jobState.moduleId ? (
+        <JobOverview
+          job={jobState}
+          setJob={setJobState}
+          moduleId={moduleState.id}
+        />
+      ) : (
+        <div style={{ marginLeft: theme.margin.large }}>
+          <CreateJob
+            moduleId={moduleState.id}
+            setJob={setJobState}
+            currentInterval={jobState.interval}
           />
-          <Button
-            alignSelf="end"
-            margin="auto"
-            icon={<Icons.PieChart />}
-            label="Go to Dashboard"
-            hoverIndicator
-            primary
-            onClick={() =>
-              (location.href = "http://localhost:5601/app/kibana#/discover")
-            }
-          />
-        </Box>
-        {jobState ? (
-          editJob ? (
-            <EditJob
-              setEditJob={setEditJob}
-              job={jobState}
-              setJobState={setJobState}
-            ></EditJob>
-          ) : (
-            <JobOverview
-              setEditJob={setEditJob}
-              job={jobState}
-              setJobState={setJobState}
-            ></JobOverview>
-          )
-        ) : (
-          <CreateJob setJobState={setJobState} module={moduleState}></CreateJob>
-        )}
-
-        <ModuleOverview module={moduleState} setModuleState={setModuleState} />
-      </Box>
+        </div>
+      )}
+      <ModuleOverview module={moduleState} />
     </Layout>
   ) : null;
 };
 
-Module.getInitialProps = async ({ res, query }) => {
+ModulePage.getInitialProps = async ({ res, query }) => {
   if (process.env.NODE_ENV !== "development") {
-    const responseModule = await axios.get(
-      `${process.env.MODULES_SERVICE_PROD}/modules/id/${query.moduleId}`
-    );
-
-    const responseJob = await axios.get(
-      `${process.env.MODULES_SERVICE_PROD}/jobs/id/${query.moduleId}`
-    );
+    const responseModule = await getModuleById(query.moduleId);
+    const responseJob = await getJobByModuleId(query.moduleId);
 
     return {
       module: responseModule.data.modules[0],
@@ -109,8 +80,8 @@ Module.getInitialProps = async ({ res, query }) => {
       query
     };
   } else {
-    return { module: undefined, job: undefined, query };
+    return { module: {}, job: {}, query };
   }
 };
 
-export default Module;
+export default ModulePage;

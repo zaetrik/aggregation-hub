@@ -1,78 +1,58 @@
-import { DataModule } from "../types/dataModule";
-import { Box, Heading, Accordion, AccordionPanel } from "grommet";
-import ModuleAggregationSettings from "./ModuleAggregationSettings";
-import ModuleDescription from "./ModuleDescription";
+import { Fragment } from "react";
+import theme from "../theme";
+
+// Components
 import ModuleDocumentCount from "./ModuleDocumentCount";
+import AccordionPanel from "./AccordionPanel";
+import ModuleAggregationSettings from "./ModuleAggregationSettings";
 import ModuleMappingOverview from "./ModuleMappingOverview";
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
-import ModuleAggregatedDataOverview from "./ModuleAggregatedDataOverview";
-import axios from "axios";
-import * as Icons from "grommet-icons";
+import ModuleDataExample from "./ModuleDataExample";
+import { FaDatabase } from "react-icons/fa";
+import Heading from "./Heading";
+import Text from "./Text";
 
-const ModuleOverview = ({
-  module,
-  setModuleState
-}: {
-  module: DataModule;
-  setModuleState: Dispatch<SetStateAction<DataModule>>;
-}) => {
-  const [mapping, setMapping] = useState<{
-    properties: { [field: string]: { type: string } };
-  }>({ properties: {} });
+// Types
+import { DataModule } from "../types/dataModule";
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const responseModule = await axios.get(
-        process.env.NODE_ENV === "development"
-          ? `${process.env.MODULES_SERVICE_DEV}/modules/id/${module.id}`
-          : `${process.env.MODULES_SERVICE_PROD}/modules/id/${module.id}`
-      );
-      setModuleState(responseModule.data.modules[0]);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [module]);
-
-  return (
-    <Box pad="small">
-      <Heading size="xxsmall">Module</Heading>
-      <Accordion>
-        <AccordionPanel label="Description">
-          <ModuleDescription module={module} />
+export default ({ module }: { module: DataModule }) => {
+  return module.config ? (
+    <Fragment>
+      <Heading size="large" fontWeight={200}>
+        Module
+      </Heading>
+      <ModuleDocumentCount
+        containerStyle={{
+          marginBottom: theme.margin.large
+        }}
+        module={module}
+      />
+      <div style={{ marginLeft: theme.margin.medium }}>
+        <AccordionPanel title="Description" open={true}>
+          <Text size="medium">{module.config.description}</Text>
         </AccordionPanel>
-        <AccordionPanel label="Settings">
-          {Object.keys(module.config.routes).filter(
-            route =>
-              Object.keys(module.config.routes[route].body).length > 0 ||
-              Object.keys(module.config.routes[route].query).length > 0
-          ).length > 0 ? (
-            <ModuleAggregationSettings module={module} />
-          ) : null}
+        <AccordionPanel title="Settings">
+          <ModuleAggregationSettings module={module} />
         </AccordionPanel>
-        <AccordionPanel label="Mapping">
-          {" "}
-          <ModuleMappingOverview
-            module={module}
-            mapping={mapping}
-            setMapping={setMapping}
-          />
+        <AccordionPanel title="Mapping">
+          <ModuleMappingOverview module={module} />
         </AccordionPanel>
         <AccordionPanel
-          label={
-            <Box direction="row" style={{ paddingLeft: "6px" }}>
-              <Heading level="4">Data</Heading>
-              <Box justify="center" style={{ paddingLeft: "24px" }}>
-                <Icons.LinkNext />
-              </Box>
-              <ModuleDocumentCount module={module} />
-            </Box>
+          title={
+            <Fragment>
+              <FaDatabase
+                size={20}
+                style={{
+                  paddingRight: theme.padding.medium,
+                  verticalAlign: "sub"
+                }}
+              />
+              Example Data
+            </Fragment>
           }
         >
-          <ModuleAggregatedDataOverview mapping={mapping} module={module} />
+          <ModuleDataExample module={module} />
         </AccordionPanel>
-      </Accordion>
-    </Box>
-  );
+      </div>
+    </Fragment>
+  ) : null;
 };
-
-export default ModuleOverview;
