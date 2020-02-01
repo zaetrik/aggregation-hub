@@ -1,0 +1,34 @@
+version: "3.3"
+
+networks:
+  public:
+    external:
+      name: traefik_webgateway
+
+services:
+  ui:
+    build:
+      context: .
+      args:
+        PORT: ${PORT}
+    container_name: ui
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.backend=ui
+      - traefik.docker.network=traefik_webgateway
+      - traefik.frontend.rule=Host:ui.localhost
+      - traefik.port=${PORT}
+      - traefik.frontend.rateLimit.rateSet.test.period=10s
+      - traefik.frontend.rateLimit.rateSet.test.burst=100
+      - traefik.frontend.rateLimit.rateSet.test.average=50
+    volumes:
+      - ./logs/:/home/dockeruser/app/logs/
+    networks:
+      - public
