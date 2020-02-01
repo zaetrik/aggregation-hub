@@ -21,7 +21,7 @@ export default (props: {
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
         <meta name="theme-color" content="#000"></meta>
-        <link rel="stylesheet" href="/css/main.css" />
+
         <link
           href="https://fonts.googleapis.com/css?family=Assistant&display=swap"
           rel="stylesheet"
