@@ -4,6 +4,7 @@ import theme from "../theme";
 
 // Components
 import { FaChartBar, FaThLarge } from "react-icons/fa";
+import Icon from "./Icon";
 
 export default ({
   activeItem,
@@ -23,7 +24,11 @@ export default ({
         {menuItems.map((menuItem, key) => (
           <Link href={menuItem.link} key={key}>
             <div className={`menu-item cursor-pointer ${menuItem.title}`}>
-              <div className="menu-icon">{menuItem.icon}</div>
+              <Icon
+                icon={menuItem.icon}
+                margin={`0 ${theme.margin.medium}`}
+                padding="small"
+              />
               {menuItem.title}
             </div>
           </Link>
@@ -42,13 +47,6 @@ export default ({
 
         .menu-item.${activeItem} {
           cursor: default;
-        }
-
-        .menu-icon {
-          display: inline-block;
-          vertical-align: middle;
-          margin-right: ${theme.margin.medium};
-          padding: ${theme.padding.small};
         }
       `}</style>
     </Fragment>

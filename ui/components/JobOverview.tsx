@@ -42,6 +42,7 @@ export default ({
         ) : (
           <Fragment>
             <Button
+              containerStyle={{ marginLeft: theme.margin.small }}
               onClick={async e => {
                 const event = e.currentTarget;
                 event.disabled = true;
@@ -54,14 +55,16 @@ export default ({
               icon={<FaPlay />}
             />
             <Button
+              containerStyle={{ marginLeft: theme.margin.medium }}
               onClick={async e => {
                 await setExecute(!job.execute);
               }}
               title={job.execute ? "Stop Job" : "Start Job"}
               icon={job.execute ? <FaStop /> : <FaPlay />}
             />
+
             <Button
-              containerStyle={{ marginLeft: "10px" }}
+              containerStyle={{ marginLeft: theme.margin.medium }}
               onClick={async e => {
                 setEditJob(true);
               }}

@@ -4,6 +4,7 @@ import theme from "../theme";
 // Components
 import { FaAngleRight, FaAngleDown } from "react-icons/fa";
 import Heading from "./Heading";
+import Icon from "./Icon";
 
 export default (props: {
   open?: boolean;
@@ -18,20 +19,10 @@ export default (props: {
       <div style={props.containerStyle} className="accordion-panel-container">
         <div className="header" onClick={e => setOpen(!open)}>
           <Heading padding="medium" className="cursor-pointer" fontWeight={200}>
-            <span className="icon">
-              {open ? (
-                <FaAngleDown
-                  size={theme.fonts.medium.split("px")[0]}
-                  style={{ marginRight: theme.margin.medium }}
-                />
-              ) : (
-                <FaAngleRight
-                  className="icon"
-                  size={theme.fonts.medium.split("px")[0]}
-                  style={{ marginRight: theme.margin.medium }}
-                />
-              )}
-            </span>
+            <Icon
+              size={theme.fonts.medium.split("px")[0]}
+              icon={open ? <FaAngleDown /> : <FaAngleRight />}
+            />
             {props.title}
           </Heading>
         </div>
@@ -46,10 +37,6 @@ export default (props: {
         </div>
       </div>
       <style jsx>{`
-        .icon {
-          vertical-align: middle;
-        }
-
         .accordion-panel-container {
           border-bottom: 1px solid ${theme.colors.hoverColor};
         }

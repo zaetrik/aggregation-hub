@@ -3,6 +3,7 @@ import theme from "../theme";
 
 // Components
 import Text from "./Text";
+import Icon from "./Icon";
 
 export default ({
   type,
@@ -29,18 +30,12 @@ export default ({
           if (onClick) onClick(e);
         }}
       >
-        {icon ? <span className="icon">{icon}</span> : null}
+        {icon ? <Icon icon={icon} /> : null}
         <Text size="small" padding="none" margin="none">
           {title}
         </Text>
       </button>
       <style jsx>{`
-        .icon {
-          font-size: ${theme.fonts.medium};
-          padding: 0 ${theme.padding.small};
-          vertical-align: sub;
-        }
-
         button {
           font-size: 100%;
           border: 0;

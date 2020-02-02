@@ -4,6 +4,8 @@ import theme from "../theme";
 // Components
 import Text from "./Text";
 import Box from "./Box";
+import { FaClock, FaCalendarAlt, FaCalendarCheck } from "react-icons/fa";
+import Icon from "./Icon";
 
 export default ({ job }: { job: Job }) => {
   const getTimeUntilNextJobExecution = () => {
@@ -66,6 +68,7 @@ export default ({ job }: { job: Job }) => {
               style={{ margin: `${theme.margin.medium} 0` }}
             >
               <Text>
+                <Icon icon={<FaCalendarCheck />} />
                 Next execution{" "}
                 <Text margin="none" padding="none" fontWeight={800}>
                   {`${new Date(Number(nextExecution)).toDateString()}, ${
@@ -86,6 +89,7 @@ export default ({ job }: { job: Job }) => {
           style={{ margin: `${theme.margin.medium} 0` }}
         >
           <Text>
+            <Icon icon={<FaClock />} />
             Job is executed in a{" "}
             <Text padding="none" margin="none" fontWeight={800}>
               {job.interval} {job.interval < 2 ? "minute" : "minutes"} interval
@@ -100,10 +104,12 @@ export default ({ job }: { job: Job }) => {
           {new Date(Number(job.lastExecuted)).toDateString() ===
           "Tue Sep 23 1969" ? (
             <Text padding="none" margin="none" fontWeight={800}>
+              <Icon icon={<FaCalendarAlt />} />
               Never executed
             </Text>
           ) : (
             <Text>
+              <Icon icon={<FaCalendarAlt />} />
               Last execution{" "}
               <Text padding="none" margin="none" fontWeight={800}>
                 {`${new Date(Number(job.lastExecuted)).toDateString()}, ${
