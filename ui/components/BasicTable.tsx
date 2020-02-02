@@ -54,15 +54,15 @@ export default ({
           width: 100%;
           ${theme.borderRadius}
           border-spacing: 0;
-          border: 1px solid #fff;
+          border: 1px solid transparent;
         }
 
         th,
         td {
           margin: 0;
           padding: 0.5rem;
-          border-bottom: 1px solid #fff;
-          border-right: 1px solid #fff;
+          border-bottom: 1px solid transparent;
+          border-right: 1px solid transparent;
         }
 
         th:last-child,

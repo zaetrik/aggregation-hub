@@ -1,12 +1,14 @@
-import { Fragment, Dispatch, useState, SetStateAction } from "react";
-import { startJob } from "../loaders/modules";
+import { Fragment, Dispatch, useState, SetStateAction, useEffect } from "react";
+import { startJob, updateJob } from "../loaders/modules";
 import theme from "../theme";
 
 // Components
-import { FaPlay, FaEdit } from "react-icons/fa";
+import { FaPlay, FaEdit, FaStop } from "react-icons/fa";
 import Button from "./Button";
 import UpdateJob from "./UpdateJob";
 import Heading from "./Heading";
+import JobInfos from "./JobInfos";
+import Box from "./Box";
 
 export default ({
   job,
@@ -19,12 +21,22 @@ export default ({
 }) => {
   const [editJob, setEditJob] = useState<boolean>(false);
 
+  const setExecute = async (execute: boolean) => {
+    await updateJob({
+      execute: execute,
+      interval: job.interval,
+      moduleId: moduleId
+    });
+
+    setJob({ ...job, execute: execute });
+  };
+
   return (
     <Fragment>
       <Heading size="large" fontWeight={200}>
         {!editJob ? "Job" : "Update Job"}
       </Heading>
-      <div style={{ marginLeft: theme.margin.large }}>
+      <Box style={{ borderBottom: `1px solid ${theme.colors.hoverColor}` }}>
         {editJob ? (
           <UpdateJob job={job} setJob={setJob} setEditJob={setEditJob} />
         ) : (
@@ -38,8 +50,15 @@ export default ({
                 }, 5000);
                 await startJob(moduleId);
               }}
-              title="Execute Job"
+              title="Start an aggregation process"
               icon={<FaPlay />}
+            />
+            <Button
+              onClick={async e => {
+                await setExecute(!job.execute);
+              }}
+              title={job.execute ? "Stop Job" : "Start Job"}
+              icon={job.execute ? <FaStop /> : <FaPlay />}
             />
             <Button
               containerStyle={{ marginLeft: "10px" }}
@@ -49,9 +68,10 @@ export default ({
               title="Edit Job"
               icon={<FaEdit />}
             />
+            <JobInfos job={job} />
           </Fragment>
         )}
-      </div>
+      </Box>
     </Fragment>
   );
 };

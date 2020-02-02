@@ -1,11 +1,10 @@
-import theme from "../theme";
 import { Fragment } from "react";
+import theme from "../theme";
 
 export default (props: {
-  children: any;
-  className?: string;
+  children?: any;
   onClick?: any;
-  textAlign?: "left" | "right" | "center" | "inherit";
+  className?: string;
   margin?:
     | "none"
     | "xxsmall"
@@ -32,30 +31,8 @@ export default (props: {
     | "large"
     | "xlarge"
     | "xxlarge";
-  containerStyle?: { [style: string]: string };
-  fontWeight?: any | string;
+  style?: { [style: string]: string };
 }) => {
-  const getFontSize = () => {
-    switch (props.size) {
-      case "xxsmall":
-        return theme.fonts.xxsmall;
-      case "xsmall":
-        return theme.fonts.xsmall;
-      case "small":
-        return theme.fonts.small;
-      case "medium":
-        return theme.fonts.medium;
-      case "large":
-        return theme.fonts.large;
-      case "xlarge":
-        return theme.fonts.xlarge;
-      case "xxlarge":
-        return theme.fonts.xxlarge;
-      default:
-        return theme.fonts.medium;
-    }
-  };
-
   const getPadding = () => {
     switch (props.padding) {
       case "none":
@@ -104,22 +81,19 @@ export default (props: {
 
   return (
     <Fragment>
-      <h1
+      <div
         className={props.className ? props.className : ""}
-        onClick={props.onClick ? props.onClick : e => {}}
+        onClick={props.onClick ? e => props.onClick(e) : e => {}}
         style={{
-          ...props.containerStyle
+          ...props.style
         }}
       >
         {props.children}
-      </h1>
+      </div>
       <style jsx>{`
-        h1 {
-          font-size: ${getFontSize()};
+        div {
           margin: ${getMargin()};
           padding: ${getPadding()};
-          text-align: ${props.textAlign ? props.textAlign : "left"};
-          font-weight: ${props.fontWeight ? props.fontWeight : "inherit"};
         }
       `}</style>
     </Fragment>

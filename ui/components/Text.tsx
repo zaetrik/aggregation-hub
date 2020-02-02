@@ -1,4 +1,5 @@
 import theme from "../theme";
+import { Fragment } from "react";
 
 export default (props: {
   children: any;
@@ -74,7 +75,7 @@ export default (props: {
       case "xxlarge":
         return theme.padding.xxlarge;
       default:
-        return theme.padding.medium;
+        return theme.padding.small;
     }
   };
 
@@ -97,24 +98,30 @@ export default (props: {
       case "xxlarge":
         return theme.margin.xxlarge;
       default:
-        return theme.margin.medium;
+        return theme.margin.small;
     }
   };
 
   return (
-    <span
-      className={props.className ? props.className : ""}
-      onClick={props.onClick ? props.onClick : e => {}}
-      style={{
-        ...props.containerStyle,
-        fontSize: getFontSize(),
-        margin: getMargin(),
-        padding: getPadding(),
-        textAlign: props.textAlign ? props.textAlign : "left",
-        fontWeight: props.fontWeight ? props.fontWeight : "inherit"
-      }}
-    >
-      {props.children}
-    </span>
+    <Fragment>
+      <span
+        className={props.className ? props.className : ""}
+        onClick={props.onClick ? props.onClick : e => {}}
+        style={{
+          ...props.containerStyle
+        }}
+      >
+        {props.children}
+      </span>
+      <style jsx>{`
+        span {
+          font-size: ${getFontSize()};
+          margin: ${getMargin()};
+          padding: ${getPadding()};
+          text-align: ${props.textAlign ? props.textAlign : "left"};
+          font-weight: ${props.fontWeight ? props.fontWeight : "inherit"};
+        }
+      `}</style>
+    </Fragment>
   );
 };

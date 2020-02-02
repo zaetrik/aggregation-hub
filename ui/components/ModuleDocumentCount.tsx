@@ -3,6 +3,7 @@ import { getDocumentCount } from "../loaders/store";
 
 // Components
 import Text from "./Text";
+import Box from "./Box";
 
 // Types
 import { DataModule } from "../types/dataModule";
@@ -31,8 +32,17 @@ export default ({
     return () => clearInterval(interval);
   }, [module]);
   return (
-    <div style={containerStyle ? containerStyle : {}}>
-      <Text size="large">{count} Documents Aggregated</Text>
-    </div>
+    <Box
+      padding="none"
+      margin="none"
+      style={containerStyle ? containerStyle : {}}
+    >
+      <Text>
+        <Text margin="none" padding="none" fontWeight={800}>
+          {count}
+        </Text>{" "}
+        Documents Aggregated
+      </Text>
+    </Box>
   );
 };

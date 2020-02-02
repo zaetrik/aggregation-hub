@@ -10,6 +10,7 @@ import ModuleDataExample from "./ModuleDataExample";
 import { FaDatabase } from "react-icons/fa";
 import Heading from "./Heading";
 import Text from "./Text";
+import Box from "./Box";
 
 // Types
 import { DataModule } from "../types/dataModule";
@@ -20,13 +21,10 @@ export default ({ module }: { module: DataModule }) => {
       <Heading size="large" fontWeight={200}>
         Module
       </Heading>
-      <ModuleDocumentCount
-        containerStyle={{
-          marginBottom: theme.margin.large
-        }}
-        module={module}
-      />
-      <div style={{ marginLeft: theme.margin.medium }}>
+      <Box>
+        <ModuleDocumentCount module={module} />
+      </Box>
+      <Box>
         <AccordionPanel title="Description" open={true}>
           <Text size="medium">{module.config.description}</Text>
         </AccordionPanel>
@@ -52,7 +50,7 @@ export default ({ module }: { module: DataModule }) => {
         >
           <ModuleDataExample module={module} />
         </AccordionPanel>
-      </div>
+      </Box>
     </Fragment>
   ) : null;
 };

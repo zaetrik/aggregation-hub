@@ -38,9 +38,23 @@ const ModulePage = ({
     }, []);
   }
 
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const responseGetJob = await getJobByModuleId(query.moduleId);
+      setJobState(responseGetJob.data.jobs[0]);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [job]);
+
   return moduleState ? (
     <Layout>
-      <div style={{ display: "flex" }}>
+      <div
+        style={{
+          display: "flex",
+          borderBottom: `1px solid ${theme.colors.hoverColor}`
+        }}
+      >
         <PageTitle title={moduleState.name} />
         <Button
           containerStyle={{ height: "min-content", alignSelf: "center" }}
