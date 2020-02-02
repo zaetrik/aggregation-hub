@@ -6,6 +6,7 @@ import theme from "../theme";
 import Input from "./Input";
 import Button from "./Button";
 import Heading from "./Heading";
+import Box from "./Box";
 
 export default ({
   moduleId,
@@ -40,30 +41,32 @@ export default ({
   };
   return (
     <Fragment>
-      <Heading margin="none" size="large" padding="none" fontWeight={200}>
+      <Heading size="large" fontWeight={200}>
         Create Job
       </Heading>
-      <Input
-        type="number"
-        onChange={e => setInterval(e.currentTarget.value)}
-        placeholder="Enter the Job Interval"
-        label="Interval"
-        value={interval}
-      />
-      <label>
-        Execute Job
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={e => setChecked(!checked)}
+      <Box style={{ borderBottom: `1px solid ${theme.colors.hoverColor}` }}>
+        <Input
+          type="number"
+          onChange={e => setInterval(e.currentTarget.value)}
+          placeholder="Enter the Job Interval"
+          label="Interval"
+          value={interval}
         />
-      </label>
-      <Button
-        type="submit"
-        containerStyle={{ margin: theme.margin.small }}
-        title="Create Job"
-        onClick={e => createNewJob()}
-      />
+        <label>
+          Execute Job
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={e => setChecked(!checked)}
+          />
+        </label>
+        <Button
+          type="submit"
+          containerStyle={{ margin: theme.margin.small }}
+          title="Create Job"
+          onClick={e => createNewJob()}
+        />
+      </Box>
       <style jsx>{`
         label {
           margin: ${theme.margin.small};

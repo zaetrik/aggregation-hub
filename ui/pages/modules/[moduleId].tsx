@@ -39,12 +39,14 @@ const ModulePage = ({
   }
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      const responseGetJob = await getJobByModuleId(query.moduleId);
-      setJobState(responseGetJob.data.jobs[0]);
-    }, 5000);
+    if (job.moduleId) {
+      const interval = setInterval(async () => {
+        const responseGetJob = await getJobByModuleId(query.moduleId);
+        setJobState(responseGetJob.data.jobs[0]);
+      }, 5000);
 
-    return () => clearInterval(interval);
+      return () => clearInterval(interval);
+    }
   }, [job]);
 
   return moduleState ? (
@@ -70,13 +72,11 @@ const ModulePage = ({
           moduleId={moduleState.id}
         />
       ) : (
-        <div style={{ marginLeft: theme.margin.large }}>
-          <CreateJob
-            moduleId={moduleState.id}
-            setJob={setJobState}
-            currentInterval={jobState.interval}
-          />
-        </div>
+        <CreateJob
+          moduleId={moduleState.id}
+          setJob={setJobState}
+          currentInterval={jobState.interval}
+        />
       )}
       <ModuleOverview module={moduleState} />
     </Layout>

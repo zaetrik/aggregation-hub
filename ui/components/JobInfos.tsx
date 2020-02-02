@@ -103,9 +103,12 @@ export default ({ job }: { job: Job }) => {
         >
           {new Date(Number(job.lastExecuted)).toDateString() ===
           "Tue Sep 23 1969" ? (
-            <Text padding="none" margin="none" fontWeight={800}>
+            <Text>
               <Icon icon={<FaCalendarAlt />} />
-              Never executed
+              <Text padding="none" margin="none" fontWeight={800}>
+                Never
+              </Text>{" "}
+              executed
             </Text>
           ) : (
             <Text>
