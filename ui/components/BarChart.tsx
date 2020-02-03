@@ -19,7 +19,7 @@ export default ({
   xAxisKey: string;
   data: { [field: string]: any }[];
 }) => {
-  return (
+  return data.length > 0 ? (
     <BarChart
       width={800}
       height={300}
@@ -40,5 +40,5 @@ export default ({
         <Bar key={index} dataKey={yAxisKey} fill={theme.colors.red} />
       ))}
     </BarChart>
-  );
+  ) : null;
 };

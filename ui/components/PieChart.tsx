@@ -11,7 +11,7 @@ export default ({ data }: { data: { name: string; value: number }[] }) => {
     setActiveIndex(index);
   };
 
-  return (
+  return data.length > 0 ? (
     <PieChart width={400} height={400}>
       <Pie
         activeIndex={activeIndex}
@@ -26,7 +26,7 @@ export default ({ data }: { data: { name: string; value: number }[] }) => {
         onMouseEnter={onPieEnter}
       />
     </PieChart>
-  );
+  ) : null;
 };
 
 const renderActiveShape = props => {
