@@ -5,7 +5,7 @@ import PageTitle from "../../components/PageTitle";
 const DashboardsPage = ({ query }: { query: { moduleId: string } }) => {
   return (
     <Layout activeMenuItem="dashboards">
-      <PageTitle title="Dashboards" />
+      <PageTitle subHeading="List of your dashboards" title="Dashboards" />
     </Layout>
   );
 };

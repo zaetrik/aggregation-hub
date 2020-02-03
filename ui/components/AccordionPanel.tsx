@@ -11,6 +11,7 @@ export default (props: {
   children?: JSX.Element;
   title?: JSX.Element | string;
   containerStyle?: { [style: string]: string };
+  subHeading?: string;
 }) => {
   const [open, setOpen] = useState<boolean>(props.open ? props.open : false);
 
@@ -18,7 +19,12 @@ export default (props: {
     <Fragment>
       <div style={props.containerStyle} className="accordion-panel-container">
         <div className="header" onClick={e => setOpen(!open)}>
-          <Heading padding="medium" className="cursor-pointer" fontWeight={200}>
+          <Heading
+            padding="medium"
+            subHeading={props.subHeading ? props.subHeading : undefined}
+            className="cursor-pointer"
+            fontWeight={200}
+          >
             <Icon
               size={theme.fonts.medium.split("px")[0]}
               icon={open ? <FaAngleDown /> : <FaAngleRight />}

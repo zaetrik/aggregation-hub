@@ -1,13 +1,40 @@
 import { getModuleById, getJobByModuleId } from "../../loaders/modules";
+import { useEffect, useState } from "react";
 
 // Components
 import Layout from "../../components/Layout";
 import PageTitle from "../../components/PageTitle";
 
-const ModuleDashboardPage = ({ query }: { query: { moduleId: string } }) => {
+// Types
+import { DataModule } from "../../types/dataModule";
+
+const ModuleDashboardPage = ({
+  query,
+  module,
+  job
+}: {
+  query: { moduleId: string };
+  module: DataModule;
+  job: Job;
+}) => {
+  const [moduleState, setModuleState] = useState<DataModule>(module);
+  const [jobState, setJobState] = useState<Job>(job);
+
+  if (process.env.NODE_ENV === "development") {
+    useEffect(() => {
+      getModuleById(query.moduleId).then(response =>
+        setModuleState(response.data.modules[0])
+      );
+
+      getJobByModuleId(query.moduleId).then(response =>
+        setJobState(response.data.jobs[0] ? response.data.jobs[0] : {})
+      );
+    }, []);
+  }
+
   return (
     <Layout activeMenuItem="">
-      <PageTitle title="Dashboard" />
+      <PageTitle title={`Dashboard for ${moduleState.name}`} />
     </Layout>
   );
 };

@@ -1,6 +1,16 @@
 // Components
 import Heading from "./Heading";
 
-export default ({ title }: { title: string }) => {
-  return <Heading size="xxlarge">{title}</Heading>;
+export default ({
+  title,
+  subHeading
+}: {
+  title: string;
+  subHeading?: string;
+}) => {
+  return (
+    <Heading subHeading={subHeading ? subHeading : undefined} size="xxlarge">
+      {title}
+    </Heading>
+  );
 };

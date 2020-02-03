@@ -10,6 +10,7 @@ import ModuleOverview from "../../components/ModuleOverview";
 import JobOverview from "../../components/JobOverview";
 import Button from "../../components/Button";
 import { FaChartBar } from "react-icons/fa";
+import Box from "../../components/Box";
 
 // Types
 import { DataModule } from "../../types/dataModule";
@@ -53,17 +54,33 @@ const ModulePage = ({
     <Layout>
       <div
         style={{
+          flexDirection: "row",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
           display: "flex",
           borderBottom: `1px solid ${theme.colors.hoverColor}`
         }}
       >
-        <PageTitle title={moduleState.name} />
-        <Button
-          containerStyle={{ height: "min-content", alignSelf: "center" }}
-          title="Go to Dashboard"
-          onClick={e => (location.href = `/dashboards/${moduleState.id}`)}
-          icon={<FaChartBar />}
-        />
+        <Box padding="none" margin="none">
+          <PageTitle
+            title={moduleState.name}
+            subHeading={moduleState.address}
+          />
+        </Box>
+        <Box
+          padding="none"
+          margin="none"
+          style={{
+            alignSelf: "center",
+            justifySelf: "end"
+          }}
+        >
+          <Button
+            title="Go to Dashboard"
+            onClick={e => (location.href = `/dashboards/${moduleState.id}`)}
+            icon={<FaChartBar />}
+          />
+        </Box>
       </div>
       {jobState.moduleId ? (
         <JobOverview

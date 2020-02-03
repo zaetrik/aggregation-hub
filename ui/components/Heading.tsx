@@ -4,6 +4,7 @@ import { Fragment } from "react";
 export default (props: {
   children: any;
   className?: string;
+  subHeading?: string;
   onClick?: any;
   textAlign?: "left" | "right" | "center" | "inherit";
   margin?:
@@ -113,13 +114,25 @@ export default (props: {
       >
         {props.children}
       </h1>
+      {props.subHeading ? <h4>{props.subHeading}</h4> : null}
       <style jsx>{`
         h1 {
+          color: ${theme.fonts.headingColor};
           font-size: ${getFontSize()};
           margin: ${getMargin()};
           padding: ${getPadding()};
           text-align: ${props.textAlign ? props.textAlign : "left"};
           font-weight: ${props.fontWeight ? props.fontWeight : "inherit"};
+        }
+
+        h4 {
+          color: ${theme.fonts.subHeadingColor};
+          font-size: ${theme.fonts.small};
+          text-align: ${props.textAlign ? props.textAlign : "left"};
+          padding: 0 ${getPadding()} ${getPadding()} ${getPadding()};
+          margin: ${`-${Number(getMargin().split("px")[0]) * 2}px`}
+            ${getMargin()} ${getMargin()} ${getMargin()};
+          opacity: 0.7;
         }
       `}</style>
     </Fragment>

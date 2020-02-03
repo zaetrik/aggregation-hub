@@ -37,7 +37,6 @@ export default (props: {
             size="large"
             fontWeight={200}
             padding="medium"
-            margin="none"
             textAlign="center"
             containerStyle={{
               borderBottom: `1px solid ${theme.colors.hoverColor}`
@@ -58,6 +57,7 @@ export default (props: {
             background: #fff;
             height: 100%;
             overflow: auto;
+            box-shadow: 0 1px 20px 1px rgba(0, 0, 0, 0.11);
           }
 
           .container {
@@ -69,7 +69,7 @@ export default (props: {
 
           .content {
             width: 100%;
-            padding: 2em;
+            padding: 2em 3em;
             overflow: auto;
           }
 

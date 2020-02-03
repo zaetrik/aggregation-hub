@@ -29,6 +29,7 @@ export default ({
       {modules.map((module, key) => (
         <div key={key}>
           <Card
+            subHeading={module.address}
             containerStyle={{ maxWidth: "600px" }}
             title={module.name}
             onClick={e => (location.href = `/modules/${module.id}`)}

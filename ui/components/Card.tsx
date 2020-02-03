@@ -8,17 +8,20 @@ export default ({
   title,
   children,
   containerStyle,
-  onClick
+  onClick,
+  subHeading
 }: {
   title: string;
   onClick?: any;
   children?: any;
   containerStyle?: { [style: string]: string };
+  subHeading?: string;
 }) => {
   return (
     <Fragment>
       <div className="card-container" style={containerStyle}>
         <Heading
+          subHeading={subHeading ? subHeading : undefined}
           fontWeight={200}
           size="medium"
           padding="none"
@@ -39,7 +42,7 @@ export default ({
           position: relative;
           margin-bottom: ${theme.margin.xlarge};
           padding: ${theme.padding.medium} ${theme.padding.large};
-          background: hsla(0, 0%, 100%, 0.33);
+          background: #fff;
           ${theme.borderRadius}
           ${theme.boxShadow}
         }

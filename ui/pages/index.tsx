@@ -23,7 +23,7 @@ export default () => {
   return (
     <Fragment>
       <Layout activeMenuItem="Modules">
-        <PageTitle title="Modules" />
+        <PageTitle title="Modules" subHeading="List of registered modules" />
         <AccordionPanel
           title="Create New Module"
           containerStyle={{ maxWidth: "600px" }}
