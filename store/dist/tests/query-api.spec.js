@@ -16,12 +16,12 @@ const supertest_1 = __importDefault(require("supertest"));
 describe("Query API", () => {
     const api = supertest_1.default(`localhost:${process.env.PORT}`);
     it("gets all documents from index", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield api.get("/query/all?moduleId=1&start=0");
+        const response = yield api.post("/query/all?moduleId=1&start=0");
         expect(response.body.status).toEqual(200);
         expect(response.body.data).toBeDefined();
     }));
     it("query indices", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield api.get("/query").send({
+        const response = yield api.post("/query").send({
             moduleIds: ["1"],
             start: 0,
             size: 10,

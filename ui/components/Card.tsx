@@ -9,8 +9,10 @@ export default ({
   children,
   containerStyle,
   onClick,
-  subHeading
+  subHeading,
+  alignContent
 }: {
+  alignContent?: "start" | "center" | "end";
   title: string;
   onClick?: any;
   children?: any;
@@ -53,6 +55,9 @@ export default ({
 
         .card-content {
           margin-top: ${theme.margin.medium};
+          ${alignContent
+            ? `display: flex; justify-content: ${alignContent};`
+            : ""}
         }
       `}</style>
     </Fragment>

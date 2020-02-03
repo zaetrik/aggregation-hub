@@ -26,7 +26,7 @@ export = (app: express.Application, repository: Repository) => {
     }
   );
 
-  app.get("/query", validateQuery, async (req: Request, res: Response) => {
+  app.post("/query", validateQuery, async (req: Request, res: Response) => {
     try {
       const queryOperation: {
         status: number;

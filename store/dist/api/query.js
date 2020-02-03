@@ -25,7 +25,7 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.get("/query", validators_1.validateQuery, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    app.post("/query", validators_1.validateQuery, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const queryOperation = yield repository.query(req.body.moduleIds, req.body.size, req.body.start, req.body.query);
             return res.status(http_status_1.default.OK).send(queryOperation);

@@ -11,7 +11,7 @@ describe("Query API", () => {
   });
 
   it("query indices", async () => {
-    const response = await api.get("/query").send({
+    const response = await api.post("/query").send({
       moduleIds: ["1"],
       start: 0,
       size: 10,

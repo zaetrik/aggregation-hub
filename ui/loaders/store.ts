@@ -33,4 +33,20 @@ const getMapping = async (moduleId: string): Promise<AxiosResponse> => {
   );
 };
 
-export { getModuleDataFromStore, getDocumentCount, getMapping };
+const queryData = async (query: {
+  moduleIds: string[];
+  size?: number;
+  start?: number;
+  query: { [field: string]: any };
+}): Promise<AxiosResponse> => {
+  return await axios.post(
+    `${
+      process.env.NODE_ENV === "development"
+        ? process.env.STORE_SERVICE_DEV
+        : process.env.STORE_SERVICE_PROD
+    }/query`,
+    query
+  );
+};
+
+export { getModuleDataFromStore, getDocumentCount, getMapping, queryData };

@@ -1,9 +1,14 @@
 import { getModuleById, getJobByModuleId } from "../../loaders/modules";
 import { useEffect, useState } from "react";
+import { queryData } from "../../loaders/store";
 
 // Components
 import Layout from "../../components/Layout";
 import PageTitle from "../../components/PageTitle";
+import BarChart from "../../components/BarChart";
+import PieChart from "../../components/PieChart";
+import Card from "../../components/Card";
+import Box from "../../components/Box";
 
 // Types
 import { DataModule } from "../../types/dataModule";
@@ -19,6 +24,10 @@ const ModuleDashboardPage = ({
 }) => {
   const [moduleState, setModuleState] = useState<DataModule>(module);
   const [jobState, setJobState] = useState<Job>(job);
+  const [data, setData] = useState<{
+    pieChart: { name: string; value: number }[];
+    barChart: any[];
+  }>({ pieChart: [], barChart: [] });
 
   if (process.env.NODE_ENV === "development") {
     useEffect(() => {
@@ -32,9 +41,49 @@ const ModuleDashboardPage = ({
     }, []);
   }
 
+  useEffect(() => {
+    queryData({
+      moduleIds: [query.moduleId],
+      query: {},
+      size: 1000
+    }).then(response => {
+      const dataWithCount = response.data.data.reduce(
+        (b, c) => (
+          (
+            b[b.findIndex(d => d.hostname === c.hostname)] ||
+            b[b.push({ hostname: c.hostname, count: 0 }) - 1]
+          ).count++,
+          b
+        ),
+        []
+      );
+
+      const fiveTopValues = dataWithCount
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+
+      setData({
+        pieChart: fiveTopValues.map(item => {
+          return { name: item.hostname, count: item.count };
+        }),
+        barChart: fiveTopValues
+      });
+    });
+  }, []);
+
   return (
     <Layout activeMenuItem="">
       <PageTitle title={`Dashboard for ${moduleState.name}`} />
+      <Card alignContent="center" title="Bar Chart" subHeading="Hostnames">
+        <BarChart
+          yAxisKeys={["count"]}
+          xAxisKey="hostname"
+          data={data.barChart}
+        />
+      </Card>
+      <Card alignContent="center" title="Pie Chart" subHeading="Hostnames">
+        <PieChart data={data.pieChart} />
+      </Card>
     </Layout>
   );
 };
