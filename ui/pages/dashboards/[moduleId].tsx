@@ -10,6 +10,7 @@ import BarChart from "../../components/BarChart";
 import PieChart from "../../components/PieChart";
 import Card from "../../components/Card";
 import Box from "../../components/Box";
+import { Resizable } from "re-resizable";
 
 // Types
 import { DataModule } from "../../types/dataModule";
@@ -80,36 +81,48 @@ const ModuleDashboardPage = ({
         margin="none"
         padding="none"
       >
-        <Card
-          containerStyle={{
-            width: "100%",
-            maxWidth: "500px",
-            margin: `${theme.margin.medium} ${theme.margin.medium} 0 ${theme.margin.medium}`
+        <Resizable
+          maxWidth="100%"
+          defaultSize={{
+            width: "50%",
+            height: "auto"
           }}
-          hover={false}
-          justifyContent="center"
-          title="Bar Chart"
-          subHeading="Hostnames"
         >
-          <BarChart
-            yAxisKeys={["count"]}
-            xAxisKey="hostname"
-            data={data.barChart}
-          />
-        </Card>
-        <Card
-          containerStyle={{
-            width: "100%",
-            maxWidth: "500px",
-            margin: `${theme.margin.medium} ${theme.margin.medium} 0 ${theme.margin.medium}`
+          <Card
+            hover={false}
+            justifyContent="center"
+            title="Bar Chart"
+            subHeading="Hostnames"
+            containerStyle={{
+              margin: theme.margin.medium
+            }}
+          >
+            <BarChart
+              yAxisKeys={["count"]}
+              xAxisKey="hostname"
+              data={data.barChart}
+            />
+          </Card>
+        </Resizable>
+        <Resizable
+          maxWidth="100%"
+          defaultSize={{
+            width: "50%",
+            height: "auto"
           }}
-          hover={false}
-          justifyContent="center"
-          title="Pie Chart"
-          subHeading="Hostnames"
         >
-          <PieChart data={data.pieChart} />
-        </Card>
+          <Card
+            hover={false}
+            justifyContent="center"
+            title="Pie Chart"
+            subHeading="Hostnames"
+            containerStyle={{
+              margin: theme.margin.medium
+            }}
+          >
+            <PieChart data={data.pieChart} />
+          </Card>
+        </Resizable>
       </Box>
     </Layout>
   );
