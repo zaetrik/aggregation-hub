@@ -22,15 +22,7 @@ export default ({
 }) => {
   return data.length > 0 ? (
     <ResponsiveContainer height={300}>
-      <BarChart
-        data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5
-        }}
-      >
+      <BarChart data={data}>
         <CartesianGrid strokeDasharray="2 2" />
         <XAxis dataKey={xAxisKey} />
         <YAxis />
