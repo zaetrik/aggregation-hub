@@ -10,14 +10,18 @@ export default ({
   containerStyle,
   onClick,
   subHeading,
-  alignContent
+  alignContent,
+  justifyContent,
+  hover
 }: {
   alignContent?: "start" | "center" | "end";
+  justifyContent?: "start" | "center" | "end";
   title: string;
   onClick?: any;
   children?: any;
   containerStyle?: { [style: string]: string };
   subHeading?: string;
+  hover?: boolean;
 }) => {
   return (
     <Fragment>
@@ -49,14 +53,19 @@ export default ({
           ${theme.boxShadow}
         }
 
-        .card-container:hover {
+        ${hover === true || hover === undefined
+          ? `.card-container:hover {
           ${theme.hoverIn}
-        }
+        }`
+          : ""}
 
         .card-content {
           margin-top: ${theme.margin.medium};
+          ${justifyContent
+            ? `display: flex; justify-content: ${justifyContent};`
+            : ""}
           ${alignContent
-            ? `display: flex; justify-content: ${alignContent};`
+            ? `display: flex; align-content: ${alignContent};`
             : ""}
         }
       `}</style>

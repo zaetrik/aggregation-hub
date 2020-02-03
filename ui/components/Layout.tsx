@@ -56,7 +56,6 @@ export default (props: {
             max-width: 250px;
             background: #fff;
             height: 100%;
-            overflow: auto;
             box-shadow: 0 1px 20px 1px rgba(0, 0, 0, 0.11);
           }
 

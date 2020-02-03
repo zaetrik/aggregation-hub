@@ -2,7 +2,7 @@ import { useState } from "react";
 import theme from "../theme";
 
 // Components
-import { PieChart, Pie, Sector } from "recharts";
+import { PieChart, Pie, Sector, ResponsiveContainer } from "recharts";
 
 export default ({ data }: { data: { name: string; value: number }[] }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -12,20 +12,20 @@ export default ({ data }: { data: { name: string; value: number }[] }) => {
   };
 
   return data.length > 0 ? (
-    <PieChart width={400} height={400}>
-      <Pie
-        activeIndex={activeIndex}
-        activeShape={renderActiveShape}
-        data={data}
-        cx={200}
-        cy={200}
-        innerRadius={100}
-        outerRadius={120}
-        fill={theme.colors.turquoise}
-        dataKey="count"
-        onMouseEnter={onPieEnter}
-      />
-    </PieChart>
+    <ResponsiveContainer height={300}>
+      <PieChart>
+        <Pie
+          activeIndex={activeIndex}
+          activeShape={renderActiveShape}
+          data={data}
+          innerRadius={80}
+          outerRadius={85}
+          fill={theme.colors.turquoise}
+          dataKey="count"
+          onMouseEnter={onPieEnter}
+        />
+      </PieChart>
+    </ResponsiveContainer>
   ) : null;
 };
 

@@ -1,6 +1,7 @@
 import { getModuleById, getJobByModuleId } from "../../loaders/modules";
 import { useEffect, useState } from "react";
 import { queryData } from "../../loaders/store";
+import theme from "../../theme";
 
 // Components
 import Layout from "../../components/Layout";
@@ -74,16 +75,42 @@ const ModuleDashboardPage = ({
   return (
     <Layout activeMenuItem="">
       <PageTitle title={`Dashboard for ${moduleState.name}`} />
-      <Card alignContent="center" title="Bar Chart" subHeading="Hostnames">
-        <BarChart
-          yAxisKeys={["count"]}
-          xAxisKey="hostname"
-          data={data.barChart}
-        />
-      </Card>
-      <Card alignContent="center" title="Pie Chart" subHeading="Hostnames">
-        <PieChart data={data.pieChart} />
-      </Card>
+      <Box
+        style={{ display: "flex", flexWrap: "wrap" }}
+        margin="none"
+        padding="none"
+      >
+        <Card
+          containerStyle={{
+            width: "100%",
+            maxWidth: "500px",
+            margin: `${theme.margin.medium} ${theme.margin.medium} 0 ${theme.margin.medium}`
+          }}
+          hover={false}
+          justifyContent="center"
+          title="Bar Chart"
+          subHeading="Hostnames"
+        >
+          <BarChart
+            yAxisKeys={["count"]}
+            xAxisKey="hostname"
+            data={data.barChart}
+          />
+        </Card>
+        <Card
+          containerStyle={{
+            width: "100%",
+            maxWidth: "500px",
+            margin: `${theme.margin.medium} ${theme.margin.medium} 0 ${theme.margin.medium}`
+          }}
+          hover={false}
+          justifyContent="center"
+          title="Pie Chart"
+          subHeading="Hostnames"
+        >
+          <PieChart data={data.pieChart} />
+        </Card>
+      </Box>
     </Layout>
   );
 };

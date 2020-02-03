@@ -6,7 +6,8 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend
+  Legend,
+  ResponsiveContainer
 } from "recharts";
 import theme from "../theme";
 
@@ -20,25 +21,25 @@ export default ({
   data: { [field: string]: any }[];
 }) => {
   return data.length > 0 ? (
-    <BarChart
-      width={800}
-      height={300}
-      data={data}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 5
-      }}
-    >
-      <CartesianGrid strokeDasharray="2 2" />
-      <XAxis dataKey={xAxisKey} />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      {yAxisKeys.map((yAxisKey, index) => (
-        <Bar key={index} dataKey={yAxisKey} fill={theme.colors.red} />
-      ))}
-    </BarChart>
+    <ResponsiveContainer height={300}>
+      <BarChart
+        data={data}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5
+        }}
+      >
+        <CartesianGrid strokeDasharray="2 2" />
+        <XAxis dataKey={xAxisKey} />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        {yAxisKeys.map((yAxisKey, index) => (
+          <Bar key={index} dataKey={yAxisKey} fill={theme.colors.redLight} />
+        ))}
+      </BarChart>
+    </ResponsiveContainer>
   ) : null;
 };
