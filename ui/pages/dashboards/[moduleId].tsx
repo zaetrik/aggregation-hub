@@ -84,8 +84,12 @@ const ModuleDashboardPage = ({
         <Resizable
           maxWidth="100%"
           defaultSize={{
-            width: "50%",
+            width: "45%",
             height: "auto"
+          }}
+          style={{
+            marginLeft: theme.margin.medium,
+            marginRight: theme.margin.medium
           }}
         >
           <Card
@@ -93,9 +97,6 @@ const ModuleDashboardPage = ({
             justifyContent="center"
             title="Bar Chart"
             subHeading="Hostnames"
-            containerStyle={{
-              margin: theme.margin.medium
-            }}
           >
             <BarChart
               yAxisKeys={["count"]}
@@ -105,9 +106,13 @@ const ModuleDashboardPage = ({
           </Card>
         </Resizable>
         <Resizable
+          style={{
+            marginLeft: theme.margin.medium,
+            marginRight: theme.margin.medium
+          }}
           maxWidth="100%"
           defaultSize={{
-            width: "50%",
+            width: "45%",
             height: "auto"
           }}
         >
@@ -116,9 +121,6 @@ const ModuleDashboardPage = ({
             justifyContent="center"
             title="Pie Chart"
             subHeading="Hostnames"
-            containerStyle={{
-              margin: theme.margin.medium
-            }}
           >
             <PieChart data={data.pieChart} />
           </Card>
