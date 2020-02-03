@@ -37,6 +37,7 @@ export default ({
       </button>
       <style jsx>{`
         button {
+          ${theme.boxShadow}
           font-size: 100%;
           border: 0;
           font-family: inherit;

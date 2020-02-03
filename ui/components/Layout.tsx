@@ -26,14 +26,22 @@ export default (props: {
           href="https://fonts.googleapis.com/css?family=Assistant&display=swap"
           rel="stylesheet"
         ></link>
+        <link
+          href="//fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,700i"
+          rel="stylesheet"
+        ></link>
       </Head>
       <div className="container">
         <div className="sidebar">
           <Heading
             size="large"
-            fontWeight={600}
+            fontWeight={200}
             padding="medium"
+            margin="none"
             textAlign="center"
+            containerStyle={{
+              borderBottom: `1px solid ${theme.colors.hoverColor}`
+            }}
           >
             Aggregation Hub
           </Heading>
@@ -47,17 +55,22 @@ export default (props: {
             width: 15%;
             min-width: 200px;
             max-width: 250px;
+            background: #fff;
+            height: 100%;
+            overflow: auto;
           }
 
           .container {
             display: flex;
-            height: 100%;
             min-height: 100%;
+            height: 100%;
+            overflow: auto;
           }
 
           .content {
             width: 100%;
             padding: 2em;
+            overflow: auto;
           }
 
           header {

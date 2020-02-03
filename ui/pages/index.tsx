@@ -35,14 +35,14 @@ export default () => {
             <ModulesList modules={modules} setModules={setModules} />
           </div>
         ) : (
-          <div style={{ marginTop: theme.margin.large }}>
+          <div className="modules-list">
             <Text size="large">No Modules Available</Text>
           </div>
         )}
       </Layout>
       <style jsx>{`
         .modules-list {
-          margin-top: 40px;
+          margin-top: ${theme.margin.xxlarge};
         }
       `}</style>
     </Fragment>

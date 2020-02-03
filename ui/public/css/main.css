@@ -1,5 +1,6 @@
 * {
-  font-family: "Assistant", sans-serif;
+  /*font-family: "Assistant", sans-serif;*/
+  font-family: Nunito Sans, sans-serif;
   font-size: 13px;
 }
 
@@ -8,6 +9,7 @@
   min-height: 100%;
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
 
 html,
@@ -15,23 +17,13 @@ body {
   -webkit-font-smoothing: antialiased;
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
 
 body {
   margin: 0;
   color: #444;
-
-  background-position-x: initial, initial;
-  background-position-y: initial, initial;
-  background-size: cover;
-  background-attachment: fixed;
-  background-origin: initial, initial;
-  background-clip: initial, initial;
-  background-color: initial;
-  background-attachment: fixed;
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: relative;
+  background: #f2f4f7;
 }
 
 .cursor-pointer {

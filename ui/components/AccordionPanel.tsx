@@ -42,12 +42,11 @@ export default (props: {
         }
 
         .accordion-panel-open {
-          max-height: 500px;
+          max-height: 1000px;
         }
 
         .accordion-panel-closed {
           display: none;
-          max-height: 0;
         }
 
         .accordion-content {
