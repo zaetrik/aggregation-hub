@@ -6,7 +6,7 @@
 
 A platform to aggregate data from all kinds of different sources.
 
-![Aggregation Hub Gif](./assets/aggregationhub.gif)
+![Aggregation Hub Modules List](./assets/modules-list.png)
 ![Aggregation Hub Module Overview](./assets/module-overview.png)
 
 ## How does Aggregation Hub work?
