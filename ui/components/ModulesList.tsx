@@ -42,7 +42,9 @@ export default ({
             />
             <Button
               title="Go to Dashboard"
-              onClick={e => (location.href = `/dashboards/${module.id}`)}
+              onClick={e =>
+                (location.href = `/dashboards/modules/${module.id}`)
+              }
               icon={<FaChartBar />}
             />
           </Card>

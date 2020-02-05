@@ -1,4 +1,5 @@
 interface Dashboard {
+  id: string;
   name: string; // Custom dashboard name
   moduleId?: string;
   components: DashboardComponent[];

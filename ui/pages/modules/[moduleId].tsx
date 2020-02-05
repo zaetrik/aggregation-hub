@@ -77,7 +77,9 @@ const ModulePage = ({
         >
           <Button
             title="Go to Dashboard"
-            onClick={e => (location.href = `/dashboards/${moduleState.id}`)}
+            onClick={e =>
+              (location.href = `/dashboards/modules/${moduleState.id}`)
+            }
             icon={<FaChartBar />}
           />
         </Box>
