@@ -1,3 +1,6 @@
+import theme from "../theme";
+
+// Components
 import {
   LineChart,
   Line,
@@ -8,7 +11,6 @@ import {
   Legend,
   ResponsiveContainer
 } from "recharts";
-import theme from "../theme";
 
 export default ({
   data,

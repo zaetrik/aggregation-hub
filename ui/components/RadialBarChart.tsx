@@ -1,3 +1,5 @@
+import theme from "../theme";
+
 // Components
 import {
   RadialBarChart,
@@ -6,7 +8,6 @@ import {
   Tooltip,
   ResponsiveContainer
 } from "recharts";
-import theme from "../theme";
 
 export default ({
   data

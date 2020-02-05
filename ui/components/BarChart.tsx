@@ -1,3 +1,5 @@
+import theme from "../theme";
+
 // Components
 import {
   BarChart,
@@ -9,7 +11,6 @@ import {
   Legend,
   ResponsiveContainer
 } from "recharts";
-import theme from "../theme";
 
 export default ({
   data,
