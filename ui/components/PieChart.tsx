@@ -4,7 +4,11 @@ import theme from "../theme";
 // Components
 import { PieChart, Pie, Sector, ResponsiveContainer } from "recharts";
 
-export default ({ data }: { data: { name: string; value: number }[] }) => {
+export default ({
+  data
+}: {
+  data: { name: string; value: number | string }[];
+}) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const onPieEnter = (data, index) => {
@@ -21,7 +25,7 @@ export default ({ data }: { data: { name: string; value: number }[] }) => {
           innerRadius={70}
           outerRadius={80}
           fill={theme.colors.turquoise}
-          dataKey="count"
+          dataKey="value"
           onMouseEnter={onPieEnter}
         />
       </PieChart>

@@ -1,16 +1,17 @@
 import { getModuleById, getJobByModuleId } from "../../loaders/modules";
 import { useEffect, useState } from "react";
 import { queryData } from "../../loaders/store";
-import theme from "../../theme";
 
 // Components
 import Layout from "../../components/Layout";
 import PageTitle from "../../components/PageTitle";
 import BarChart from "../../components/BarChart";
 import PieChart from "../../components/PieChart";
-import Card from "../../components/Card";
 import Box from "../../components/Box";
-import { Resizable } from "re-resizable";
+import RadialBarChart from "../../components/RadialBarChart";
+import FunnelChart from "../../components/FunnelChart";
+import LineChart from "../../components/LineChart";
+import ChartCard from "../../components/ChartCard";
 
 // Types
 import { DataModule } from "../../types/dataModule";
@@ -26,10 +27,7 @@ const ModuleDashboardPage = ({
 }) => {
   const [moduleState, setModuleState] = useState<DataModule>(module);
   const [jobState, setJobState] = useState<Job>(job);
-  const [data, setData] = useState<{
-    pieChart: { name: string; value: number }[];
-    barChart: any[];
-  }>({ pieChart: [], barChart: [] });
+  const [data, setData] = useState<{ name: string; value: number }[]>([]);
 
   if (process.env.NODE_ENV === "development") {
     useEffect(() => {
@@ -52,24 +50,19 @@ const ModuleDashboardPage = ({
       const dataWithCount = response.data.data.reduce(
         (b, c) => (
           (
-            b[b.findIndex(d => d.hostname === c.hostname)] ||
-            b[b.push({ hostname: c.hostname, count: 0 }) - 1]
-          ).count++,
+            b[b.findIndex(d => d.name === c.hostname)] ||
+            b[b.push({ name: c.hostname, value: 0 }) - 1]
+          ).value++,
           b
         ),
         []
       );
 
       const fiveTopValues = dataWithCount
-        .sort((a, b) => b.count - a.count)
+        .sort((a, b) => b.value - a.value)
         .slice(0, 5);
 
-      setData({
-        pieChart: fiveTopValues.map(item => {
-          return { name: item.hostname, count: item.count };
-        }),
-        barChart: fiveTopValues
-      });
+      setData(fiveTopValues);
     });
   }, []);
 
@@ -81,50 +74,31 @@ const ModuleDashboardPage = ({
         margin="none"
         padding="none"
       >
-        <Resizable
-          maxWidth="100%"
-          defaultSize={{
-            width: "45%",
-            height: "auto"
-          }}
-          style={{
-            marginLeft: theme.margin.medium,
-            marginRight: theme.margin.medium
-          }}
-        >
-          <Card
-            hover={false}
-            justifyContent="center"
-            title="Bar Chart"
-            subHeading="Hostnames"
-          >
-            <BarChart
-              yAxisKeys={["count"]}
-              xAxisKey="hostname"
-              data={data.barChart}
-            />
-          </Card>
-        </Resizable>
-        <Resizable
-          style={{
-            marginLeft: theme.margin.medium,
-            marginRight: theme.margin.medium
-          }}
-          maxWidth="100%"
-          defaultSize={{
-            width: "45%",
-            height: "auto"
-          }}
-        >
-          <Card
-            hover={false}
-            justifyContent="center"
-            title="Pie Chart"
-            subHeading="Hostnames"
-          >
-            <PieChart data={data.pieChart} />
-          </Card>
-        </Resizable>
+        <ChartCard
+          title="Bar Chart"
+          subHeading="Hostnames"
+          chart={<BarChart yAxisKeys={["value"]} xAxisKey="name" data={data} />}
+        />
+        <ChartCard
+          title="Pie Chart"
+          subHeading="Hostnames"
+          chart={<PieChart data={data} />}
+        />
+        <ChartCard
+          title="Radial Bar Chart"
+          subHeading="Hostnames"
+          chart={<RadialBarChart data={data} />}
+        />
+        <ChartCard
+          title="Funnel Chart"
+          subHeading="Hostnames"
+          chart={<FunnelChart data={data} />}
+        />
+        <ChartCard
+          title="Line Chart"
+          subHeading="Hostnames"
+          chart={<LineChart lines={[{ dataKey: "value" }]} data={data} />}
+        />
       </Box>
     </Layout>
   );

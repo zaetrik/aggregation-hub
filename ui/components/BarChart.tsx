@@ -18,7 +18,7 @@ export default ({
 }: {
   yAxisKeys: string[];
   xAxisKey: string;
-  data: { [field: string]: any }[];
+  data: { name: string; value: number | string }[];
 }) => {
   return data.length > 0 ? (
     <ResponsiveContainer height={300}>
