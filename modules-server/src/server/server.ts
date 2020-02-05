@@ -7,6 +7,7 @@ import helmet from "helmet";
 import { serverSettings } from "../config/config";
 import modulesAPI from "../api/modules";
 import moduleCommunicationAPI from "../api/moduleCommunication";
+import dashboardsAPI from "../api/dashboards";
 import jobsAPI from "../api/jobs";
 import logger from "../utils/logger";
 
@@ -65,6 +66,7 @@ const start = (repositoryConnection): Promise<express.Application> => {
     modulesAPI(app, repositoryConnection);
     moduleCommunicationAPI(app, repositoryConnection);
     jobsAPI(app, repositoryConnection);
+    dashboardsAPI(app, repositoryConnection);
 
     // finally we start the server, and return the newly created server
     const server = app.listen(serverSettings.port, () => resolve(server));

@@ -49,7 +49,6 @@ describe("Modules API", () => {
     }));
     it("updates a module config", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield api.post("/modules/id/1/config").send({
-            moduleId: 1,
             moduleConfig: {
                 routes: {
                     testRoute: {

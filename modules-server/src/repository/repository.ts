@@ -6,7 +6,10 @@ import {
   InsertDeleteModuleResponse,
   GetJobsResponse,
   AddModifyJobResponse,
-  DeleteJobResponse
+  DeleteJobResponse,
+  AddModifyDashboardResponse,
+  DeleteDashboardResponse,
+  GetDashboardsResponse
 } from "responses";
 import axios from "axios";
 
@@ -163,6 +166,64 @@ const repository = (client: PostgresPool): Repository => {
     return { status: 200, jobs: jobs.rows };
   };
 
+  /**
+   * Dashboards
+   */
+
+  const addDashboard = async (
+    newDashboard: Dashboard
+  ): Promise<AddModifyDashboardResponse> => {
+    await client.query(`INSERT INTO dashboards (dashboard) VALUES ($1);`, [
+      newDashboard
+    ]);
+
+    return { status: 200, dashboards: [newDashboard] };
+  };
+
+  const updateDashboard = async (
+    dashboardId: string,
+    updatedDashboard: Dashboard
+  ): Promise<AddModifyDashboardResponse> => {
+    await client.query(
+      `UPDATE dashboards SET dashboard = COALESCE($1, dashboard) WHERE id = $2;`,
+      [updatedDashboard, dashboardId]
+    );
+
+    return { status: 200, dashboards: [updatedDashboard] };
+  };
+
+  const deleteDashboardById = async (
+    dashboardId: string
+  ): Promise<DeleteDashboardResponse> => {
+    await client.query(`DELETE FROM dashboards WHERE id = $1`, [dashboardId]);
+    return { status: 200 };
+  };
+
+  const getAllDashboards = async (): Promise<GetDashboardsResponse> => {
+    const dashboards = await client.query("SELECT * FROM dashboards");
+    return { status: 200, dashboards: dashboards.rows };
+  };
+
+  const getDashboardById = async (
+    dashboardId: string
+  ): Promise<GetDashboardsResponse> => {
+    const dashboards = await client.query(
+      `SELECT * FROM dashboards WHERE id = $1`,
+      [dashboardId]
+    );
+    return { status: 200, dashboards: dashboards.rows };
+  };
+
+  const getDashboardByModuleId = async (
+    moduleId: string
+  ): Promise<GetDashboardsResponse> => {
+    const dashboards = await client.query(
+      `SELECT * FROM dashboards WHERE dashboard->>'moduleId' = $1`,
+      [moduleId]
+    );
+    return { status: 200, dashboards: dashboards.rows };
+  };
+
   return {
     getAllModules,
     getModules,
@@ -177,7 +238,13 @@ const repository = (client: PostgresPool): Repository => {
     addJob,
     updateJob,
     deleteJobByModuleId,
-    getJobByModuleId
+    getJobByModuleId,
+    addDashboard,
+    updateDashboard,
+    deleteDashboardById,
+    getAllDashboards,
+    getDashboardById,
+    getDashboardByModuleId
   };
 };
 

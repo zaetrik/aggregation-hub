@@ -36,6 +36,17 @@ const createTables = async (pool: pg.Pool): Promise<void> => {
       `CREATE TABLE jobs(id SERIAL PRIMARY KEY, "moduleId" SERIAL UNIQUE NOT NULL, interval INT NOT NULL, "lastExecuted" BIGINT NOT NULL, execute BOOLEAN NOT NULL, running BOOLEAN NOT NULL)`
     );
   }
+
+  const dashboardsTableExists: boolean = await checkTableExists(
+    "dashboards",
+    pool
+  );
+
+  if (!dashboardsTableExists) {
+    await pool.query(
+      `CREATE TABLE dashboards(id SERIAL PRIMARY KEY, dashboard JSON NOT NULL)`
+    );
+  }
 };
 
 const checkTableExists = async (

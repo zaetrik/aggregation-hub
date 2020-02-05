@@ -4,7 +4,10 @@ import {
   GetModulesResponse,
   GetJobsResponse,
   AddModifyJobResponse,
-  DeleteJobResponse
+  DeleteJobResponse,
+  AddModifyDashboardResponse,
+  DeleteDashboardResponse,
+  GetDashboardsResponse
 } from "responses";
 
 interface Repository {
@@ -42,4 +45,21 @@ interface Repository {
   updateJob: (updatedJob: Job) => Promise<AddModifyJobResponse>;
   deleteJobByModuleId: (moduleId: string) => Promise<DeleteJobResponse>;
   getJobByModuleId: (moduleId: string) => Promise<GetJobsResponse>;
+
+  /**
+   * Dashboards
+   */
+  addDashboard: (
+    newDashboard: Dashboard
+  ) => Promise<AddModifyDashboardResponse>;
+  updateDashboard: (
+    dashboardId: string,
+    updatedDashboard: Dashboard
+  ) => Promise<AddModifyDashboardResponse>;
+  deleteDashboardById: (
+    dashboardId: string
+  ) => Promise<DeleteDashboardResponse>;
+  getAllDashboards: () => Promise<GetDashboardsResponse>;
+  getDashboardById: (dashboardId: string) => Promise<GetDashboardsResponse>;
+  getDashboardByModuleId: (moduleId: string) => Promise<GetDashboardsResponse>;
 }

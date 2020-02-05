@@ -45,7 +45,6 @@ describe("Modules API", () => {
 
   it("updates a module config", async () => {
     const response = await api.post("/modules/id/1/config").send({
-      moduleId: 1,
       moduleConfig: {
         routes: {
           testRoute: {

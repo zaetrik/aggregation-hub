@@ -12,6 +12,7 @@ const helmet_1 = __importDefault(require("helmet"));
 const config_1 = require("../config/config");
 const modules_1 = __importDefault(require("../api/modules"));
 const moduleCommunication_1 = __importDefault(require("../api/moduleCommunication"));
+const dashboards_1 = __importDefault(require("../api/dashboards"));
 const jobs_1 = __importDefault(require("../api/jobs"));
 const logger_1 = __importDefault(require("../utils/logger"));
 const start = (repositoryConnection) => {
@@ -59,6 +60,7 @@ const start = (repositoryConnection) => {
         modules_1.default(app, repositoryConnection);
         moduleCommunication_1.default(app, repositoryConnection);
         jobs_1.default(app, repositoryConnection);
+        dashboards_1.default(app, repositoryConnection);
         // finally we start the server, and return the newly created server
         const server = app.listen(config_1.serverSettings.port, () => resolve(server));
     });

@@ -41,6 +41,10 @@ const createTables = (pool) => __awaiter(void 0, void 0, void 0, function* () {
     if (!jobsTableExists) {
         yield pool.query(`CREATE TABLE jobs(id SERIAL PRIMARY KEY, "moduleId" SERIAL UNIQUE NOT NULL, interval INT NOT NULL, "lastExecuted" BIGINT NOT NULL, execute BOOLEAN NOT NULL, running BOOLEAN NOT NULL)`);
     }
+    const dashboardsTableExists = yield checkTableExists("dashboards", pool);
+    if (!dashboardsTableExists) {
+        yield pool.query(`CREATE TABLE dashboards(id SERIAL PRIMARY KEY, dashboard JSON NOT NULL)`);
+    }
 });
 const checkTableExists = (tableName, pool) => __awaiter(void 0, void 0, void 0, function* () {
     try {

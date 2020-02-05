@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import * as JoiTypes from "joi";
 import logger from "../../utils/logger";
 import { Request, Response } from "express";
+import deepmerge from "deepmerge";
 
 const validate = (
   req: Request,
@@ -44,7 +45,7 @@ const validateDeleteModuleById = (req: Request, res: Response, next) => {
     deleteData: Joi.boolean()
   });
 
-  validate(req, res, next, schema, { ...req.params, ...req.query });
+  validate(req, res, next, schema, deepmerge(req.params, req.query));
 };
 
 const validateGetModuleById = (req: Request, res: Response, next) => {
@@ -70,8 +71,7 @@ const validateAddModule = (req: Request, res: Response, next) => {
     // req.query
     manual: Joi.boolean()
   });
-
-  validate(req, res, next, schema, { ...req.body, ...req.query });
+  validate(req, res, next, schema, deepmerge(req.query, req.body));
 };
 
 const validateModifyRouteSettings = (req: Request, res: Response, next) => {
@@ -82,7 +82,7 @@ const validateModifyRouteSettings = (req: Request, res: Response, next) => {
       .unknown()
   });
 
-  validate(req, res, next, schema, { ...req.body, ...req.params });
+  validate(req, res, next, schema, deepmerge(req.params, req.body));
 };
 
 const validateModifyModuleConfig = (req: Request, res: Response, next) => {
@@ -99,7 +99,7 @@ const validateModifyModuleConfig = (req: Request, res: Response, next) => {
       .unknown()
   });
 
-  validate(req, res, next, schema, { ...req.body, ...req.params });
+  validate(req, res, next, schema, deepmerge(req.params, req.body));
 };
 
 /**
@@ -146,6 +146,86 @@ const validateGetJobByModuleId = (req: Request, res: Response, next) => {
   validate(req, res, next, schema, req.params);
 };
 
+// Dashboards
+
+const validateModifyDashboard = (req: Request, res: Response, next) => {
+  const schema: JoiTypes.Schema = Joi.object({
+    // Params
+    dashboardId: Joi.string().required(),
+
+    // Body
+    name: Joi.string().required(),
+    moduleId: Joi.string(), // only needed, if the dashboard is set for a specific module
+    components: Joi.array()
+      .items(
+        Joi.object({
+          name: Joi.string().required(),
+          searchQueries: Joi.array()
+            .items(
+              Joi.object({
+                moduleIds: Joi.array()
+                  .items(Joi.string())
+                  .required(),
+                size: Joi.number().required(),
+                query: Joi.object()
+                  .unknown()
+                  .required()
+              })
+            )
+            .required()
+        })
+      )
+      .required()
+  });
+
+  validate(req, res, next, schema, deepmerge(req.params, req.body));
+};
+
+const validateAddDashboard = (req: Request, res: Response, next) => {
+  const schema: JoiTypes.Schema = Joi.object({
+    name: Joi.string().required(),
+    moduleId: Joi.string(), // only needed, if the dashboard is set for a specific module
+    components: Joi.array()
+      .items(
+        Joi.object({
+          name: Joi.string().required(),
+          searchQueries: Joi.array()
+            .items(
+              Joi.object({
+                moduleIds: Joi.array()
+                  .items(Joi.string())
+                  .required(),
+                size: Joi.number().required(),
+                query: Joi.object()
+                  .unknown()
+                  .required()
+              })
+            )
+            .required()
+        })
+      )
+      .required()
+  });
+
+  validate(req, res, next, schema, req.body);
+};
+
+const validateGetDeleteDashboardById = (req: Request, res: Response, next) => {
+  const schema: JoiTypes.Schema = Joi.object({
+    dashboardId: Joi.string().required()
+  });
+
+  validate(req, res, next, schema, req.params);
+};
+
+const validateGetDashboardByModuleId = (req: Request, res: Response, next) => {
+  const schema: JoiTypes.Schema = Joi.object({
+    moduleId: Joi.string().required()
+  });
+
+  validate(req, res, next, schema, req.params);
+};
+
 export {
   validateGetModules,
   validateAddModule,
@@ -156,5 +236,9 @@ export {
   validateStartModuleDataAggregation,
   validateAddModifyJob,
   validateDeleteJob,
-  validateGetJobByModuleId
+  validateGetJobByModuleId,
+  validateAddDashboard,
+  validateModifyDashboard,
+  validateGetDeleteDashboardById,
+  validateGetDashboardByModuleId
 };

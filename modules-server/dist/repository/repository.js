@@ -93,6 +93,35 @@ const repository = (client) => {
         const jobs = yield client.query(`SELECT * FROM jobs WHERE "moduleId" = $1`, [moduleId]);
         return { status: 200, jobs: jobs.rows };
     });
+    /**
+     * Dashboards
+     */
+    const addDashboard = (newDashboard) => __awaiter(void 0, void 0, void 0, function* () {
+        yield client.query(`INSERT INTO dashboards (dashboard) VALUES ($1);`, [
+            newDashboard
+        ]);
+        return { status: 200, dashboards: [newDashboard] };
+    });
+    const updateDashboard = (dashboardId, updatedDashboard) => __awaiter(void 0, void 0, void 0, function* () {
+        yield client.query(`UPDATE dashboards SET dashboard = COALESCE($1, dashboard) WHERE id = $2;`, [updatedDashboard, dashboardId]);
+        return { status: 200, dashboards: [updatedDashboard] };
+    });
+    const deleteDashboardById = (dashboardId) => __awaiter(void 0, void 0, void 0, function* () {
+        yield client.query(`DELETE FROM dashboards WHERE id = $1`, [dashboardId]);
+        return { status: 200 };
+    });
+    const getAllDashboards = () => __awaiter(void 0, void 0, void 0, function* () {
+        const dashboards = yield client.query("SELECT * FROM dashboards");
+        return { status: 200, dashboards: dashboards.rows };
+    });
+    const getDashboardById = (dashboardId) => __awaiter(void 0, void 0, void 0, function* () {
+        const dashboards = yield client.query(`SELECT * FROM dashboards WHERE id = $1`, [dashboardId]);
+        return { status: 200, dashboards: dashboards.rows };
+    });
+    const getDashboardByModuleId = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
+        const dashboards = yield client.query(`SELECT * FROM dashboards WHERE dashboard->>'moduleId' = $1`, [moduleId]);
+        return { status: 200, dashboards: dashboards.rows };
+    });
     return {
         getAllModules,
         getModules,
@@ -107,7 +136,13 @@ const repository = (client) => {
         addJob,
         updateJob,
         deleteJobByModuleId,
-        getJobByModuleId
+        getJobByModuleId,
+        addDashboard,
+        updateDashboard,
+        deleteDashboardById,
+        getAllDashboards,
+        getDashboardById,
+        getDashboardByModuleId
     };
 };
 const connect = (databaseConnection) => {
