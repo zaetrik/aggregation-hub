@@ -5,7 +5,7 @@ interface DeleteDocumentRequestData {
 
 interface InsertDocumentRequestData {
   moduleId: string;
-  data: object;
+  data: { [field: string]: any };
 }
 
 interface UpdateDocumentRequestData {

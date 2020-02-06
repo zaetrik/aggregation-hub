@@ -13,14 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const buildQuery_1 = __importDefault(require("../utils/buildQuery"));
+const deepmerge_1 = __importDefault(require("deepmerge"));
 const repository = (client) => {
     /**
      * Document API
      */
     const insertDocument = (dataToAdd) => __awaiter(void 0, void 0, void 0, function* () {
+        const dataToAddWithTimestamp = dataToAdd.data.timestamp
+            ? dataToAdd.data
+            : deepmerge_1.default({ timestamp: new Date().toISOString() }, dataToAdd.data);
         const insertOperation = yield client.index({
             index: `module-${dataToAdd.moduleId}`,
-            body: dataToAdd.data
+            body: dataToAddWithTimestamp
         });
         return {
             status: insertOperation.statusCode,

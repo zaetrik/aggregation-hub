@@ -4,6 +4,7 @@ import {
 } from "@elastic/elasticsearch";
 import { RequestBodySearch } from "elastic-builder";
 import buildQuery from "../utils/buildQuery";
+import deepmerge from "deepmerge";
 
 const repository = (client: ElasticsearchClient): Repository => {
   /**
@@ -12,9 +13,13 @@ const repository = (client: ElasticsearchClient): Repository => {
   const insertDocument = async (
     dataToAdd: InsertDocumentRequestData
   ): Promise<InsertUpdateDocumentResponse> => {
+    const dataToAddWithTimestamp = dataToAdd.data.timestamp
+      ? dataToAdd.data
+      : deepmerge({ timestamp: new Date().toISOString() }, dataToAdd.data);
+
     const insertOperation = await client.index({
       index: `module-${dataToAdd.moduleId}`,
-      body: dataToAdd.data
+      body: dataToAddWithTimestamp
     });
 
     return {
