@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import { useEffect, useState, Fragment } from "react";
 import { queryData } from "../../../loaders/store";
 import checkIfDashboardExistsOrCreateANewOne from "../../../shared/checkIfDashboardExistsOrCreateANewOne";
+import theme from "../../../theme";
 
 // Components
 import Layout from "../../../components/Layout";
@@ -14,6 +15,8 @@ import RadialBarChart from "../../../components/RadialBarChart";
 import FunnelChart from "../../../components/FunnelChart";
 import LineChart from "../../../components/LineChart";
 import ChartCard from "../../../components/ChartCard";
+import Button from "../../../components/Button";
+import { FaThLarge } from "react-icons/fa";
 
 // Types
 import { DataModule } from "../../../types/dataModule";
@@ -141,12 +144,42 @@ const DashboardPageForModule = ({
 
   return (
     <Layout activeMenuItem="">
-      <PageTitle
-        title={
-          moduleState.name ? `Dashboard for ${moduleState.name}` : "Dashboard"
-        }
-        subHeading="Module Dashboard"
-      />
+      <div
+        style={{
+          flexDirection: "row",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          display: "flex",
+          borderBottom: `1px solid ${theme.colors.hoverColor}`,
+          marginBottom: theme.margin.xlarge
+        }}
+      >
+        <Box padding="none" margin="none">
+          <PageTitle
+            title={
+              moduleState.name
+                ? `Dashboard for ${moduleState.name}`
+                : "Dashboard"
+            }
+            subHeading="Module Dashboard"
+          />
+        </Box>
+        <Box
+          padding="none"
+          margin="none"
+          style={{
+            alignSelf: "center",
+            justifySelf: "end"
+          }}
+        >
+          <Button
+            title="Go to Module"
+            onClick={e => (location.href = `/modules/${moduleState.id}`)}
+            icon={<FaThLarge />}
+          />
+        </Box>
+      </div>
+
       <Box
         style={{ display: "flex", flexWrap: "wrap" }}
         margin="none"
