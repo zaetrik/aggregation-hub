@@ -151,15 +151,19 @@ const validateGetJobByModuleId = (req: Request, res: Response, next) => {
 const validateModifyDashboard = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
     // Params
-    dashboardId: Joi.string().required(),
+    dashboardId: Joi.alternatives()
+      .try(Joi.string(), Joi.number())
+      .required(),
 
     // Body
     name: Joi.string().required(),
-    moduleId: Joi.string(), // only needed, if the dashboard is set for a specific module
+    moduleId: Joi.alternatives().try(Joi.string(), Joi.number()), // only needed, if the dashboard is set for a specific module
     components: Joi.array()
       .items(
         Joi.object({
           name: Joi.string().required(),
+          chartHeading: Joi.string(),
+          chartSubHeading: Joi.string(),
           searchQueries: Joi.array()
             .items(
               Joi.object({
@@ -181,10 +185,54 @@ const validateModifyDashboard = (req: Request, res: Response, next) => {
   validate(req, res, next, schema, deepmerge(req.params, req.body));
 };
 
+const validateModifyDashboardByModuleId = (
+  req: Request,
+  res: Response,
+  next
+) => {
+  const schema: JoiTypes.Schema = Joi.object({
+    params: Joi.object({
+      moduleId: Joi.alternatives()
+        .try(Joi.string(), Joi.number())
+        .required()
+    }).required(),
+    body: Joi.object({
+      name: Joi.string().required(),
+      moduleId: Joi.alternatives()
+        .try(Joi.string(), Joi.number())
+        .required(), // only needed, if the dashboard is set for a specific module
+      components: Joi.array()
+        .items(
+          Joi.object({
+            name: Joi.string().required(),
+            chartHeading: Joi.string(),
+            chartSubHeading: Joi.string(),
+            searchQueries: Joi.array()
+              .items(
+                Joi.object({
+                  moduleIds: Joi.array()
+                    .items(Joi.string())
+                    .required(),
+                  size: Joi.number().required(),
+                  query: Joi.object()
+                    .unknown()
+                    .required()
+                })
+              )
+              .required()
+          })
+        )
+        .required()
+    }).required()
+  });
+
+  validate(req, res, next, schema, { params: req.params, body: req.body });
+};
+
 const validateAddDashboard = (req: Request, res: Response, next) => {
   const schema: JoiTypes.Schema = Joi.object({
     name: Joi.string().required(),
-    moduleId: Joi.string(), // only needed, if the dashboard is set for a specific module
+    moduleId: Joi.alternatives().try(Joi.string(), Joi.number()), // only needed, if the dashboard is set for a specific module
     components: Joi.array()
       .items(
         Joi.object({
@@ -218,7 +266,11 @@ const validateGetDeleteDashboardById = (req: Request, res: Response, next) => {
   validate(req, res, next, schema, req.params);
 };
 
-const validateGetDashboardByModuleId = (req: Request, res: Response, next) => {
+const validateGetDeleteDashboardByModuleId = (
+  req: Request,
+  res: Response,
+  next
+) => {
   const schema: JoiTypes.Schema = Joi.object({
     moduleId: Joi.string().required()
   });
@@ -240,5 +292,6 @@ export {
   validateAddDashboard,
   validateModifyDashboard,
   validateGetDeleteDashboardById,
-  validateGetDashboardByModuleId
+  validateGetDeleteDashboardByModuleId,
+  validateModifyDashboardByModuleId
 };

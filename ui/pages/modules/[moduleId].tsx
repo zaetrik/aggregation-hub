@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 import { getModuleById, getJobByModuleId } from "../../loaders/modules";
+import {
+  createNewDashboard,
+  getDashboardByModuleId
+} from "../../loaders/dashboards";
 import theme from "../../theme";
 
 // Components
@@ -29,9 +33,11 @@ const ModulePage = ({
 
   if (process.env.NODE_ENV === "development") {
     useEffect(() => {
-      getModuleById(query.moduleId).then(response =>
-        setModuleState(response.data.modules[0])
-      );
+      getModuleById(query.moduleId).then(response => {
+        const module: DataModule = response.data.modules[0];
+        setModuleState(module);
+        checkIfDashboardExistsOrCreateANewOne(module);
+      });
 
       getJobByModuleId(query.moduleId).then(response =>
         setJobState(response.data.jobs[0] ? response.data.jobs[0] : {})
@@ -105,15 +111,32 @@ const ModulePage = ({
 ModulePage.getInitialProps = async ({ res, query }) => {
   if (process.env.NODE_ENV !== "development") {
     const responseModule = await getModuleById(query.moduleId);
+    const module: DataModule = responseModule.data.modules[0];
+
     const responseJob = await getJobByModuleId(query.moduleId);
+    const job: Job = responseJob.data.jobs[0];
+
+    await checkIfDashboardExistsOrCreateANewOne(module);
 
     return {
-      module: responseModule.data.modules[0],
-      job: responseJob.data.jobs[0],
+      module: module,
+      job: job,
       query
     };
   } else {
     return { module: {}, job: {}, query };
+  }
+};
+
+const checkIfDashboardExistsOrCreateANewOne = async (module: DataModule) => {
+  const responseGetModuleDashboard = await getDashboardByModuleId(module.id);
+
+  if (!responseGetModuleDashboard.data.dashboards[0]) {
+    await createNewDashboard({
+      moduleId: module.id,
+      name: module.name,
+      components: []
+    });
   }
 };
 

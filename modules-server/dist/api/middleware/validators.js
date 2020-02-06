@@ -126,13 +126,17 @@ exports.validateGetJobByModuleId = validateGetJobByModuleId;
 const validateModifyDashboard = (req, res, next) => {
     const schema = joi_1.default.object({
         // Params
-        dashboardId: joi_1.default.string().required(),
+        dashboardId: joi_1.default.alternatives()
+            .try(joi_1.default.string(), joi_1.default.number())
+            .required(),
         // Body
         name: joi_1.default.string().required(),
-        moduleId: joi_1.default.string(),
+        moduleId: joi_1.default.alternatives().try(joi_1.default.string(), joi_1.default.number()),
         components: joi_1.default.array()
             .items(joi_1.default.object({
             name: joi_1.default.string().required(),
+            chartHeading: joi_1.default.string(),
+            chartSubHeading: joi_1.default.string(),
             searchQueries: joi_1.default.array()
                 .items(joi_1.default.object({
                 moduleIds: joi_1.default.array()
@@ -150,10 +154,45 @@ const validateModifyDashboard = (req, res, next) => {
     validate(req, res, next, schema, deepmerge_1.default(req.params, req.body));
 };
 exports.validateModifyDashboard = validateModifyDashboard;
+const validateModifyDashboardByModuleId = (req, res, next) => {
+    const schema = joi_1.default.object({
+        params: joi_1.default.object({
+            moduleId: joi_1.default.alternatives()
+                .try(joi_1.default.string(), joi_1.default.number())
+                .required()
+        }).required(),
+        body: joi_1.default.object({
+            name: joi_1.default.string().required(),
+            moduleId: joi_1.default.alternatives()
+                .try(joi_1.default.string(), joi_1.default.number())
+                .required(),
+            components: joi_1.default.array()
+                .items(joi_1.default.object({
+                name: joi_1.default.string().required(),
+                chartHeading: joi_1.default.string(),
+                chartSubHeading: joi_1.default.string(),
+                searchQueries: joi_1.default.array()
+                    .items(joi_1.default.object({
+                    moduleIds: joi_1.default.array()
+                        .items(joi_1.default.string())
+                        .required(),
+                    size: joi_1.default.number().required(),
+                    query: joi_1.default.object()
+                        .unknown()
+                        .required()
+                }))
+                    .required()
+            }))
+                .required()
+        }).required()
+    });
+    validate(req, res, next, schema, { params: req.params, body: req.body });
+};
+exports.validateModifyDashboardByModuleId = validateModifyDashboardByModuleId;
 const validateAddDashboard = (req, res, next) => {
     const schema = joi_1.default.object({
         name: joi_1.default.string().required(),
-        moduleId: joi_1.default.string(),
+        moduleId: joi_1.default.alternatives().try(joi_1.default.string(), joi_1.default.number()),
         components: joi_1.default.array()
             .items(joi_1.default.object({
             name: joi_1.default.string().required(),
@@ -181,10 +220,10 @@ const validateGetDeleteDashboardById = (req, res, next) => {
     validate(req, res, next, schema, req.params);
 };
 exports.validateGetDeleteDashboardById = validateGetDeleteDashboardById;
-const validateGetDashboardByModuleId = (req, res, next) => {
+const validateGetDeleteDashboardByModuleId = (req, res, next) => {
     const schema = joi_1.default.object({
         moduleId: joi_1.default.string().required()
     });
     validate(req, res, next, schema, req.params);
 };
-exports.validateGetDashboardByModuleId = validateGetDashboardByModuleId;
+exports.validateGetDeleteDashboardByModuleId = validateGetDeleteDashboardByModuleId;

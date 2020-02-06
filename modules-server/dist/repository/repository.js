@@ -102,12 +102,20 @@ const repository = (client) => {
         ]);
         return { status: 200, dashboards: [newDashboard] };
     });
-    const updateDashboard = (dashboardId, updatedDashboard) => __awaiter(void 0, void 0, void 0, function* () {
+    const updateDashboardById = (dashboardId, updatedDashboard) => __awaiter(void 0, void 0, void 0, function* () {
         yield client.query(`UPDATE dashboards SET dashboard = COALESCE($1, dashboard) WHERE id = $2;`, [updatedDashboard, dashboardId]);
+        return { status: 200, dashboards: [updatedDashboard] };
+    });
+    const updateDashboardByModuleId = (moduleId, updatedDashboard) => __awaiter(void 0, void 0, void 0, function* () {
+        yield client.query(`UPDATE dashboards SET dashboard = COALESCE($1, dashboard) WHERE dashboard->>'moduleId' = $2;`, [updatedDashboard, moduleId]);
         return { status: 200, dashboards: [updatedDashboard] };
     });
     const deleteDashboardById = (dashboardId) => __awaiter(void 0, void 0, void 0, function* () {
         yield client.query(`DELETE FROM dashboards WHERE id = $1`, [dashboardId]);
+        return { status: 200 };
+    });
+    const deleteDashboardByModuleId = (moduleId) => __awaiter(void 0, void 0, void 0, function* () {
+        yield client.query(`DELETE FROM dashboards WHERE dashboard->>'moduleId' = $1`, [moduleId]);
         return { status: 200 };
     });
     const getAllDashboards = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -138,8 +146,10 @@ const repository = (client) => {
         deleteJobByModuleId,
         getJobByModuleId,
         addDashboard,
-        updateDashboard,
+        updateDashboardById,
+        updateDashboardByModuleId,
         deleteDashboardById,
+        deleteDashboardByModuleId,
         getAllDashboards,
         getDashboardById,
         getDashboardByModuleId

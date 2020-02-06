@@ -1,4 +1,4 @@
-import { getModuleById, getJobByModuleId } from "../../loaders/modules";
+import { getDashboardById } from "../../loaders/dashboards";
 import { useEffect, useState } from "react";
 import { queryData } from "../../loaders/store";
 
@@ -13,37 +13,31 @@ import FunnelChart from "../../components/FunnelChart";
 import LineChart from "../../components/LineChart";
 import ChartCard from "../../components/ChartCard";
 
-// Types
-import { DataModule } from "../../types/dataModule";
-
-const ModuleDashboardPage = ({
+const DashboardPage = ({
   query,
-  module,
-  job
+  dashboard
 }: {
-  query: { moduleId: string };
-  module: DataModule;
-  job: Job;
+  query: { dashboardId: string };
+  dashboard: Dashboard;
 }) => {
-  const [moduleState, setModuleState] = useState<DataModule>(module);
-  const [jobState, setJobState] = useState<Job>(job);
+  const [dashboardState, setDashboardState] = useState<Dashboard>(dashboard);
   const [data, setData] = useState<{ name: string; value: number }[]>([]);
 
   if (process.env.NODE_ENV === "development") {
     useEffect(() => {
-      getModuleById(query.moduleId).then(response =>
-        setModuleState(response.data.modules[0])
-      );
-
-      getJobByModuleId(query.moduleId).then(response =>
-        setJobState(response.data.jobs[0] ? response.data.jobs[0] : {})
+      getDashboardById(query.dashboardId).then(response =>
+        setDashboardState(response.data.dashboards[0])
       );
     }, []);
   }
 
   useEffect(() => {
     queryData({
-      moduleIds: [query.moduleId],
+      moduleIds: dashboard.components.flatMap(component => {
+        return component.searchQueries.flatMap(
+          searchQuery => searchQuery.moduleIds
+        );
+      }),
       query: {},
       size: 1000
     }).then(response => {
@@ -64,16 +58,26 @@ const ModuleDashboardPage = ({
 
       setData(fiveTopValues);
     });
-  }, []);
+  }, [dashboardState]);
 
   return (
     <Layout activeMenuItem="">
-      <PageTitle title={`Dashboard for ${moduleState.name}`} />
+      <PageTitle title={dashboard.name} />
       <Box
         style={{ display: "flex", flexWrap: "wrap" }}
         margin="none"
         padding="none"
       >
+        {dashboard.components.map(
+          async (component: DashboardComponent, key) => {
+            const queryPromises = component.searchQueries.map(
+              (serchQuery: DashboardSearchQuery) => queryData(serchQuery)
+            );
+
+            const responses = await Promise.all(queryPromises);
+            console.log(responses);
+          }
+        )}
         <ChartCard
           title="Bar Chart"
           subHeading="Hostnames"
@@ -104,19 +108,17 @@ const ModuleDashboardPage = ({
   );
 };
 
-ModuleDashboardPage.getInitialProps = async ({ res, query }) => {
+DashboardPage.getInitialProps = async ({ res, query }) => {
   if (process.env.NODE_ENV !== "development") {
-    const responseModule = await getModuleById(query.moduleId);
-    const responseJob = await getJobByModuleId(query.moduleId);
+    const responseGetDashboard = await getDashboardById(query.dashboardId);
 
     return {
-      module: responseModule.data.modules[0],
-      job: responseJob.data.jobs[0],
+      dashboard: responseGetDashboard.data.dashboards[0],
       query
     };
   } else {
-    return { module: {}, job: {}, query };
+    return { dashboard: {}, query };
   }
 };
 
-export default ModuleDashboardPage;
+export default DashboardPage;

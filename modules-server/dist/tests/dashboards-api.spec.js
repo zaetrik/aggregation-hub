@@ -75,7 +75,7 @@ describe("Dashboards API", () => {
         expect(response.body.status).toEqual(200);
         expect(response.body.dashboards).toBeDefined();
     }));
-    it("updates a dashboard", () => __awaiter(void 0, void 0, void 0, function* () {
+    it("updates a dashboard by dashboardId", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield api.post("/dashboards/id/1/update").send({
             name: "Test Dashboard Updated",
             components: [
@@ -96,8 +96,34 @@ describe("Dashboards API", () => {
         expect(response.body.status).toEqual(200);
         expect(response.body.dashboards).toBeDefined();
     }));
-    it("deletes a dashboard", () => __awaiter(void 0, void 0, void 0, function* () {
+    it("updates a dashboard by moduleId", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield api.post("/dashboards/moduleId/11/update").send({
+            name: "Test Dashboard Updated",
+            moduleId: "11",
+            components: [
+                {
+                    name: "BarChart",
+                    searchQueries: [
+                        {
+                            moduleIds: ["1", "10"],
+                            size: 10,
+                            query: {
+                                hostname: "test.de"
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+        expect(response.body.status).toEqual(200);
+        expect(response.body.dashboards).toBeDefined();
+    }));
+    it("deletes a dashboard by dashboardId", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield api.delete("/dashboards/id/1");
+        expect(response.body.status).toEqual(200);
+    }));
+    it("deletes a dashboard by moduleId", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield api.delete("/dashboards/moduleId/11");
         expect(response.body.status).toEqual(200);
     }));
 });

@@ -6,7 +6,8 @@ import {
   validateAddDashboard,
   validateModifyDashboard,
   validateGetDeleteDashboardById,
-  validateGetDashboardByModuleId
+  validateGetDeleteDashboardByModuleId,
+  validateModifyDashboardByModuleId
 } from "./middleware/validators";
 import {
   AddModifyDashboardResponse,
@@ -38,12 +39,30 @@ export = (app: express.Application, repository: Repository) => {
     validateModifyDashboard,
     async (req: Request, res: Response) => {
       try {
-        const updateDashboardOperation: AddModifyDashboardResponse = await repository.updateDashboard(
+        const updateDashboardByIdOperation: AddModifyDashboardResponse = await repository.updateDashboardById(
           req.params.dashboardId,
           req.body
         );
 
-        return res.send(updateDashboardOperation);
+        return res.send(updateDashboardByIdOperation);
+      } catch (err) {
+        logger.log("error", err, { route: req.originalUrl });
+        res.sendStatus(httpStatus.BAD_REQUEST);
+      }
+    }
+  );
+
+  app.post(
+    "/dashboards/moduleId/:moduleId/update",
+    validateModifyDashboardByModuleId,
+    async (req: Request, res: Response) => {
+      try {
+        const updateDashboardByModuleIdOperation: AddModifyDashboardResponse = await repository.updateDashboardByModuleId(
+          req.params.moduleId,
+          req.body
+        );
+
+        return res.send(updateDashboardByModuleIdOperation);
       } catch (err) {
         logger.log("error", err, { route: req.originalUrl });
         res.sendStatus(httpStatus.BAD_REQUEST);
@@ -97,7 +116,7 @@ export = (app: express.Application, repository: Repository) => {
 
   app.get(
     "/dashboards/moduleId/:moduleId",
-    validateGetDashboardByModuleId,
+    validateGetDeleteDashboardByModuleId,
     async (req: Request, res: Response) => {
       try {
         const getDashboardByModuleIdOperation: GetDashboardsResponse = await repository.getDashboardByModuleId(
@@ -105,6 +124,23 @@ export = (app: express.Application, repository: Repository) => {
         );
 
         return res.send(getDashboardByModuleIdOperation);
+      } catch (err) {
+        logger.log("error", err, { route: req.originalUrl });
+        res.sendStatus(httpStatus.BAD_REQUEST);
+      }
+    }
+  );
+
+  app.delete(
+    "/dashboards/moduleId/:moduleId",
+    validateGetDeleteDashboardByModuleId,
+    async (req: Request, res: Response) => {
+      try {
+        const deleteDashboardByModuleIdOperation: DeleteDashboardResponse = await repository.deleteDashboardByModuleId(
+          req.params.moduleId
+        );
+
+        return res.send(deleteDashboardByModuleIdOperation);
       } catch (err) {
         logger.log("error", err, { route: req.originalUrl });
         res.sendStatus(httpStatus.BAD_REQUEST);

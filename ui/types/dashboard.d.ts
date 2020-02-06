@@ -1,5 +1,5 @@
 interface Dashboard {
-  id: string;
+  id?: string;
   name: string; // Custom dashboard name
   moduleId?: string;
   components: DashboardComponent[];
@@ -7,6 +7,8 @@ interface Dashboard {
 
 interface DashboardComponent {
   name: string; // React component name, e.g. LineChart or RadialBarChart
+  chartHeading?: string;
+  chartSubHeading?: string;
   searchQueries: DashboardSearchQuery[]; // One or more search queries; data will be merged into one array
 }
 

@@ -30,6 +30,7 @@ module.exports = (app, repository) => {
         try {
             const deleteModuleByIdOperation = yield repository.deleteModuleById(req.params.moduleId);
             const deleteJobsFromModuleOperation = yield repository.deleteJobByModuleId(req.params.moduleId);
+            const deleteDashboardFromModuleOperation = yield repository.deleteDashboardByModuleId(req.params.moduleId);
             const deleteData = req.query.deleteData || false;
             if (deleteData) {
                 yield axios_1.default

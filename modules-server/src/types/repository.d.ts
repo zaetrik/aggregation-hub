@@ -52,12 +52,19 @@ interface Repository {
   addDashboard: (
     newDashboard: Dashboard
   ) => Promise<AddModifyDashboardResponse>;
-  updateDashboard: (
+  updateDashboardById: (
     dashboardId: string,
+    updatedDashboard: Dashboard
+  ) => Promise<AddModifyDashboardResponse>;
+  updateDashboardByModuleId: (
+    moduleId: string,
     updatedDashboard: Dashboard
   ) => Promise<AddModifyDashboardResponse>;
   deleteDashboardById: (
     dashboardId: string
+  ) => Promise<DeleteDashboardResponse>;
+  deleteDashboardByModuleId: (
+    moduleId: string
   ) => Promise<DeleteDashboardResponse>;
   getAllDashboards: () => Promise<GetDashboardsResponse>;
   getDashboardById: (dashboardId: string) => Promise<GetDashboardsResponse>;

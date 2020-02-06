@@ -13,7 +13,8 @@ import {
 import {
   InsertDeleteModuleResponse,
   GetModulesResponse,
-  DeleteJobResponse
+  DeleteJobResponse,
+  DeleteDashboardResponse
 } from "responses";
 import axios from "axios";
 
@@ -44,6 +45,10 @@ export = (app: express.Application, repository: Repository) => {
           req.params.moduleId
         );
         const deleteJobsFromModuleOperation: DeleteJobResponse = await repository.deleteJobByModuleId(
+          req.params.moduleId
+        );
+
+        const deleteDashboardFromModuleOperation: DeleteDashboardResponse = await repository.deleteDashboardByModuleId(
           req.params.moduleId
         );
 

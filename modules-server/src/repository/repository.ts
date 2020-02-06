@@ -180,7 +180,7 @@ const repository = (client: PostgresPool): Repository => {
     return { status: 200, dashboards: [newDashboard] };
   };
 
-  const updateDashboard = async (
+  const updateDashboardById = async (
     dashboardId: string,
     updatedDashboard: Dashboard
   ): Promise<AddModifyDashboardResponse> => {
@@ -192,10 +192,32 @@ const repository = (client: PostgresPool): Repository => {
     return { status: 200, dashboards: [updatedDashboard] };
   };
 
+  const updateDashboardByModuleId = async (
+    moduleId: string,
+    updatedDashboard: Dashboard
+  ): Promise<AddModifyDashboardResponse> => {
+    await client.query(
+      `UPDATE dashboards SET dashboard = COALESCE($1, dashboard) WHERE dashboard->>'moduleId' = $2;`,
+      [updatedDashboard, moduleId]
+    );
+
+    return { status: 200, dashboards: [updatedDashboard] };
+  };
+
   const deleteDashboardById = async (
     dashboardId: string
   ): Promise<DeleteDashboardResponse> => {
     await client.query(`DELETE FROM dashboards WHERE id = $1`, [dashboardId]);
+    return { status: 200 };
+  };
+
+  const deleteDashboardByModuleId = async (
+    moduleId: string
+  ): Promise<DeleteDashboardResponse> => {
+    await client.query(
+      `DELETE FROM dashboards WHERE dashboard->>'moduleId' = $1`,
+      [moduleId]
+    );
     return { status: 200 };
   };
 
@@ -240,8 +262,10 @@ const repository = (client: PostgresPool): Repository => {
     deleteJobByModuleId,
     getJobByModuleId,
     addDashboard,
-    updateDashboard,
+    updateDashboardById,
+    updateDashboardByModuleId,
     deleteDashboardById,
+    deleteDashboardByModuleId,
     getAllDashboards,
     getDashboardById,
     getDashboardByModuleId

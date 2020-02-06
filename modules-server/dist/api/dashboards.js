@@ -27,8 +27,18 @@ module.exports = (app, repository) => {
     }));
     app.post("/dashboards/id/:dashboardId/update", validators_1.validateModifyDashboard, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const updateDashboardOperation = yield repository.updateDashboard(req.params.dashboardId, req.body);
-            return res.send(updateDashboardOperation);
+            const updateDashboardByIdOperation = yield repository.updateDashboardById(req.params.dashboardId, req.body);
+            return res.send(updateDashboardByIdOperation);
+        }
+        catch (err) {
+            logger_1.default.log("error", err, { route: req.originalUrl });
+            res.sendStatus(http_status_1.default.BAD_REQUEST);
+        }
+    }));
+    app.post("/dashboards/moduleId/:moduleId/update", validators_1.validateModifyDashboardByModuleId, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const updateDashboardByModuleIdOperation = yield repository.updateDashboardByModuleId(req.params.moduleId, req.body);
+            return res.send(updateDashboardByModuleIdOperation);
         }
         catch (err) {
             logger_1.default.log("error", err, { route: req.originalUrl });
@@ -65,10 +75,20 @@ module.exports = (app, repository) => {
             res.sendStatus(http_status_1.default.BAD_REQUEST);
         }
     }));
-    app.get("/dashboards/moduleId/:moduleId", validators_1.validateGetDashboardByModuleId, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    app.get("/dashboards/moduleId/:moduleId", validators_1.validateGetDeleteDashboardByModuleId, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const getDashboardByModuleIdOperation = yield repository.getDashboardByModuleId(req.params.moduleId);
             return res.send(getDashboardByModuleIdOperation);
+        }
+        catch (err) {
+            logger_1.default.log("error", err, { route: req.originalUrl });
+            res.sendStatus(http_status_1.default.BAD_REQUEST);
+        }
+    }));
+    app.delete("/dashboards/moduleId/:moduleId", validators_1.validateGetDeleteDashboardByModuleId, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const deleteDashboardByModuleIdOperation = yield repository.deleteDashboardByModuleId(req.params.moduleId);
+            return res.send(deleteDashboardByModuleIdOperation);
         }
         catch (err) {
             logger_1.default.log("error", err, { route: req.originalUrl });
