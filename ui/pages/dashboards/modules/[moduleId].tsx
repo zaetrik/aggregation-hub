@@ -1,10 +1,8 @@
 import { getModuleById, getJobByModuleId } from "../../../loaders/modules";
+import { AxiosResponse } from "axios";
 import { useEffect, useState, Fragment } from "react";
 import { queryData } from "../../../loaders/store";
-import {
-  createNewDashboard,
-  getDashboardByModuleId
-} from "../../../loaders/dashboards";
+import checkIfDashboardExistsOrCreateANewOne from "../../../shared/checkIfDashboardExistsOrCreateANewOne";
 
 // Components
 import Layout from "../../../components/Layout";
@@ -35,7 +33,6 @@ const DashboardPageForModule = ({
   const [jobState, setJobState] = useState<Job>(job);
   const [dashboardState, setDashboardState] = useState<Dashboard>(dashboard);
   const [charts, setCharts] = useState<JSX.Element[]>([]);
-  const [data, setData] = useState<{ name: string; value: number }[]>([]);
 
   if (process.env.NODE_ENV === "development") {
     useEffect(() => {
@@ -55,19 +52,23 @@ const DashboardPageForModule = ({
 
   useEffect(() => {
     if (dashboardState.components) {
-      getChartComponents().then(charts => setCharts(charts));
+      getChartCardComponents().then(charts => setCharts(charts));
     }
   }, [dashboardState]);
 
-  const getChartComponents = async () => {
-    const promises = dashboardState.components.map(
-      async (component: DashboardComponent, key) => {
-        const queryPromises = component.searchQueries.map(
-          (serchQuery: DashboardSearchQuery) => queryData(serchQuery)
+  const getChartCardComponents = async () => {
+    const promises: Promise<JSX.Element>[] = dashboardState.components.map(
+      async (component: DashboardComponent, key: number) => {
+        const queryPromises: Promise<
+          AxiosResponse<any>
+        >[] = component.searchQueries.map((serchQuery: DashboardSearchQuery) =>
+          queryData(serchQuery)
         );
 
         const responses = await Promise.all(queryPromises);
-        const mergedData = responses.flatMap(response => response.data.data);
+        const mergedData = responses
+          .map(response => response.data.data)
+          .flat(100);
 
         const dataWithCount = mergedData.reduce(
           (b, c) => (
@@ -140,7 +141,12 @@ const DashboardPageForModule = ({
 
   return (
     <Layout activeMenuItem="">
-      <PageTitle title={`Dashboard for ${moduleState.name}`} />
+      <PageTitle
+        title={
+          moduleState.name ? `Dashboard for ${moduleState.name}` : "Dashboard"
+        }
+        subHeading="Module Dashboard"
+      />
       <Box
         style={{ display: "flex", flexWrap: "wrap" }}
         margin="none"
@@ -174,22 +180,6 @@ DashboardPageForModule.getInitialProps = async ({ res, query }) => {
     };
   } else {
     return { module: {}, job: {}, dashboard: {}, query };
-  }
-};
-
-const checkIfDashboardExistsOrCreateANewOne = async (module: DataModule) => {
-  const responseGetModuleDashboard = await getDashboardByModuleId(module.id);
-
-  if (!responseGetModuleDashboard.data.dashboards[0]) {
-    const newDashboard: Dashboard = {
-      moduleId: module.id,
-      name: module.name,
-      components: []
-    };
-    await createNewDashboard(newDashboard);
-    return newDashboard;
-  } else {
-    return responseGetModuleDashboard.data.dashboards[0].dashboard;
   }
 };
 

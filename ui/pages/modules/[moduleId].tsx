@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { getModuleById, getJobByModuleId } from "../../loaders/modules";
-import {
-  createNewDashboard,
-  getDashboardByModuleId
-} from "../../loaders/dashboards";
 import theme from "../../theme";
+import checkIfDashboardExistsOrCreateANewOne from "../../shared/checkIfDashboardExistsOrCreateANewOne";
 
 // Components
 import PageTitle from "../../components/PageTitle";
@@ -125,18 +122,6 @@ ModulePage.getInitialProps = async ({ res, query }) => {
     };
   } else {
     return { module: {}, job: {}, query };
-  }
-};
-
-const checkIfDashboardExistsOrCreateANewOne = async (module: DataModule) => {
-  const responseGetModuleDashboard = await getDashboardByModuleId(module.id);
-
-  if (!responseGetModuleDashboard.data.dashboards[0]) {
-    await createNewDashboard({
-      moduleId: module.id,
-      name: module.name,
-      components: []
-    });
   }
 };
 
